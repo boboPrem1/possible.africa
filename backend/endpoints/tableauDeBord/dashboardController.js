@@ -107,19 +107,19 @@ exports.getAllTotaux = async (req, res) => {
         all: Math.round(posts / 2),
         year: {
           evolution: Math.round((lastYearPosts / posts) * 100),
-          length: lastYearPosts / 2,
+          length: Math.round(lastYearPosts / 2),
         },
         month: {
           evolution: Math.round((lastMonthPosts / posts) * 100),
-          length: lastMonthPosts / 2,
+          length: Math.round(lastMonthPosts / 2),
         },
         week: {
           evolution: Math.round((lastWeekPosts / posts) * 100),
-          length: lastWeekPosts / 2,
+          length: Math.round(lastWeekPosts / 2),
         },
         day: {
           evolution: Math.round((todayPosts / posts) * 100),
-          length: todayPosts / 2,
+          length: Math.round(todayPosts / 2),
         },
       },
     });
