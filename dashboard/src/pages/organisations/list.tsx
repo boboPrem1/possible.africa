@@ -161,6 +161,7 @@ export const OrganisationList: React.FC<IResourceComponentsProps> = () => {
     "http://localhost:4534/storage/logos/facebookcom.jpg",
     "http://localhost:4534/storage/logos/wwwinstagramcom.jpg",
     "http://localhost:4534/storage/logos/instagramcom.jpg",
+    "https://logo.clearbit.com/"
   ];
   const logoPlaceholder =
     "https://api.possible.africa/storage/logos/placeholder_org.jpeg";

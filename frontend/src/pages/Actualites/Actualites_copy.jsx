@@ -58,6 +58,7 @@ function ActualitesCopy() {
     "https://api.possible.africa/storage/logos/facebookcom.jpg",
     "https://api.possible.africa/storage/logos/wwwinstagramcom.jpg",
     "https://api.possible.africa/storage/logos/instagramcom.jpg",
+    "https://logo.clearbit.com/",
   ];
   const logoPlaceholder =
     "https://api.possible.africa/storage/logos/placeholder_org.jpeg";
