@@ -88,15 +88,15 @@ export default function CustomDashboard() {
           margin: 15,
           size: "70%",
         },
-        track: {
-          dropShadow: {
-            enabled: true,
-            top: 0,
-            left: 0,
-            blur: 2,
-            opacity: 0.1,
-          },
-        },
+        // track: {
+        //   dropShadow: {
+        //     enabled: true,
+        //     top: 0,
+        //     left: 0,
+        //     blur: 2,
+        //     opacity: 0.1,
+        //   },
+        // },
         dataLabels: {
           showOn: "always",
           name: {
@@ -141,15 +141,15 @@ export default function CustomDashboard() {
           margin: 15,
           size: "70%",
         },
-        track: {
-          dropShadow: {
-            enabled: true,
-            top: 0,
-            left: 0,
-            blur: 2,
-            opacity: 0.1,
-          },
-        },
+        // track: {
+        //   dropShadow: {
+        //     enabled: true,
+        //     top: 0,
+        //     left: 0,
+        //     blur: 2,
+        //     opacity: 0.1,
+        //   },
+        // },
         dataLabels: {
           showOn: "always",
           name: {
