@@ -445,7 +445,7 @@ export default function CustomDashboard() {
       </Row> */}
       {/* Add more cards and statistics as needed */}
       <div className="grid grid-cols-12 2xl:grid-cols-12 gap-x-5">
-        <div className="col-span-12 md:order-3 lg:col-span-6 2xl:col-span-3 rounded-lg shadow-lg p-3">
+        <div className="col-span-12 md:order-3 lg:col-span-6 2xl:col-span-3 rounded-lg shadow-lg p-3 card">
           <div className="card-body">
             <div className="grid grid-cols-12">
               <div className="col-span-7 md:col-span-7">
@@ -533,7 +533,7 @@ export default function CustomDashboard() {
             </div>
           </div>
         </div>
-        <div className="col-span-12 md:order-3 lg:col-span-6 2xl:col-span-3 rounded-lg shadow-lg p-3">
+        <div className="col-span-12 md:order-3 lg:col-span-6 2xl:col-span-3 rounded-lg shadow-lg p-3 card">
           <div className="card-body">
             <div className="grid grid-cols-12">
               <div className="col-span-7 md:col-span-7">
