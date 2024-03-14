@@ -20,12 +20,35 @@ import { useContextSelector } from "use-context-selector";
 import { userContext } from "../../UserContext";
 import ReactApexChart from "react-apexcharts";
 import RadialBarChart from "../../custom-components/RadialBarChart";
+import { ImageField } from "@refinedev/antd";
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 function CustomSpiner(props) {
   return <Spin {...props} indicator={antIcon} />;
 }
+
+ const socialMedias = [
+   "https://api.possible.africa/storage/logos/wwwlinkedincom.jpg",
+   "https://api.possible.africa/storage/logos/linkedincom.jpg",
+   "https://api.possible.africa/storage/logos/wwwtwittercom.jpg",
+   "https://api.possible.africa/storage/logos/twittercom.jpg",
+   "https://api.possible.africa/storage/logos/wwwfacebookcom.jpg",
+   "https://api.possible.africa/storage/logos/facebookcom.jpg",
+   "https://api.possible.africa/storage/logos/wwwinstagramcom.jpg",
+   "https://api.possible.africa/storage/logos/instagramcom.jpg",
+   "http://localhost:4534/storage/logos/wwwlinkedincom.jpg",
+   "http://localhost:4534/storage/logos/linkedincom.jpg",
+   "http://localhost:4534/storage/logos/wwwtwittercom.jpg",
+   "http://localhost:4534/storage/logos/twittercom.jpg",
+   "http://localhost:4534/storage/logos/wwwfacebookcom.jpg",
+   "http://localhost:4534/storage/logos/facebookcom.jpg",
+   "http://localhost:4534/storage/logos/wwwinstagramcom.jpg",
+   "http://localhost:4534/storage/logos/instagramcom.jpg",
+   "https://logo.clearbit.com/",
+ ];
+ const logoPlaceholder =
+   "https://api.possible.africa/storage/logos/placeholder_org.jpeg";
 
 export default function CustomDashboard() {
   const apiUrl = useApiUrl();
@@ -124,7 +147,7 @@ export default function CustomDashboard() {
             top: 0,
             left: 0,
             blur: 2,
-            opacity: .1,
+            opacity: 0.1,
           },
         },
         dataLabels: {
@@ -431,7 +454,7 @@ export default function CustomDashboard() {
                 </p>
                 <h5 className="mt-3 mb-4">
                   <span
-                    className="counter-value text-[#6cd9cb] text-5xl"
+                    className="counter-value text-primary text-5xl"
                     data-target="615"
                   >
                     {dashboardData?.organisations?.all || 0}
@@ -487,7 +510,7 @@ export default function CustomDashboard() {
             </div>
             <div className="flex items-center gap-3 mt-3">
               <p className="text-slate-900 font-semibold grow">
-                <span className="font-semibold text-xl text-[#6cd9cb] mr-2">
+                <span className="font-semibold text-xl text-primary mr-2">
                   {dashboardData?.organisations[organisationPeriode].length ||
                     0}
                 </span>
@@ -496,7 +519,7 @@ export default function CustomDashboard() {
               <p className="text-slate-500 dark:text-slate-200">
                 <select
                   name="periode"
-                  className="bg-transparent border border-[#6cd9cb] px-2 py-1 rounded-md text-slate-900 font-semibold"
+                  className="bg-transparent border border-primary px-2 py-1 rounded-md text-slate-900 font-semibold"
                   id=""
                   value={organisationPeriode}
                   onChange={(e) => setOrganisationsPeriode(e.target.value)}
@@ -517,7 +540,7 @@ export default function CustomDashboard() {
                 <p className="text-slate-900 font-semibold">Total Articles</p>
                 <h5 className="mt-3 mb-4">
                   <span
-                    className="counter-value text-[#6cd9cb] text-5xl"
+                    className="counter-value text-primary text-5xl"
                     data-target="615"
                   >
                     {dashboardData?.posts?.all || 0}
@@ -574,7 +597,7 @@ export default function CustomDashboard() {
             </div>
             <div className="flex items-center gap-3 mt-3 text-slate-900 font-semibold">
               <p className="grow">
-                <span className="font-semibold text-xl text-[#6cd9cb]">
+                <span className="font-semibold text-xl text-primary">
                   {dashboardData?.posts[postsPeriode].length || 0}
                 </span>{" "}
                 Nouveaux Articles
@@ -582,7 +605,7 @@ export default function CustomDashboard() {
               <p className="">
                 <select
                   name="periode"
-                  className="bg-transparent border border-[#6cd9cb] px-2 py-1 rounded-md"
+                  className="bg-transparent border border-primary px-2 py-1 rounded-md"
                   id=""
                   value={postsPeriode}
                   onChange={(e) => setPostsPeriode(e.target.value)}
@@ -594,6 +617,275 @@ export default function CustomDashboard() {
                 </select>
               </p>
             </div>
+          </div>
+        </div>
+      </div>
+      <div className="col-span-12 md:order-8 2xl:col-span-9 card mt-10">
+        <div className="card-body">
+          <div className="grid items-center grid-cols-1 gap-3 mb-5 xl:grid-cols-12">
+            <div className="xl:col-span-5">
+              <h6 className="text-xl font-semibold">
+                Les dernières organisations
+              </h6>
+            </div>
+            {/* <div className="xl:col-span-4 xl:col-start-10">
+              <div className="flex gap-3">
+                <div className="relative grow">
+                  <input
+                    type="text"
+                    className="ltr:pl-8 rtl:pr-8 search form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
+                    placeholder="Search for ..."
+                  />
+                  <i
+                    data-lucide="search"
+                    className="inline-block size-4 absolute ltr:left-2.5 rtl:right-2.5 top-2.5 text-slate-500 dark:text-zink-200 fill-slate-100 dark:fill-zink-600"
+                  ></i>
+                </div>
+                <button
+                  type="button"
+                  className="bg-white border-dashed shrink-0 text-custom-500 btn border-custom-500 hover:text-custom-500 hover:bg-custom-50 hover:border-custom-600 focus:text-custom-600 focus:bg-custom-50 focus:border-custom-600 active:text-custom-600 active:bg-custom-50 active:border-custom-600 dark:bg-zink-700 dark:ring-custom-400/20 dark:hover:bg-custom-800/20 dark:focus:bg-custom-800/20 dark:active:bg-custom-800/20"
+                >
+                  <i className="align-baseline ltr:pr-1 rtl:pl-1 ri-download-2-line"></i>{" "}
+                  Export
+                </button>
+              </div>
+            </div> */}
+          </div>
+          <div className="-mx-5 overflow-x-auto">
+            {dashboardData?.organisations?.last.length ? (
+              <table className="w-full whitespace-nowrap">
+                <thead className="ltr:text-left rtl:text-right bg-primary/5 text-primary dark:text-zink-200 dark:bg-zink-600">
+                  <tr>
+                    <th className="px-3.5 py-2.5 first:pl-5 last:pr-5 font-semibold border-y border-primary/20 dark:border-zink-500 text-left">
+                      Logo
+                    </th>
+                    <th className="px-3.5 py-2.5 first:pl-5 last:pr-5 font-semibold border-y border-primary/20 dark:border-zink-500 text-left">
+                      Nom/Source
+                    </th>
+                    <th className="px-3.5 py-2.5 first:pl-5 last:pr-5 font-semibold border-y border-primary/20 dark:border-zink-500 text-left">
+                      Description
+                    </th>
+                    <th className="px-3.5 py-2.5 first:pl-5 last:pr-5 font-semibold border-y border-primary/20 dark:border-zink-500 text-left">
+                      Secteur
+                    </th>
+                    <th className="px-3.5 py-2.5 first:pl-5 last:pr-5 font-semibold border-y border-primary/20 dark:border-zink-500 text-left">
+                      Siège
+                    </th>
+                    {/* <th className="px-3.5 py-2.5 first:pl-5 last:pr-5 font-semibold border-y border-primary/20 dark:border-zink-500">
+                    Action
+                  </th> */}
+                  </tr>
+                </thead>
+                <tbody>
+                  {dashboardData?.organisations?.last?.map((organisation) => {
+                    return (
+                      <tr>
+                        <td className="px-3.5 py-2.5 first:pl-5 last:pr-5 border-y border-primary/20 dark:border-zink-500">
+                          <ImageField
+                            style={{ maxWidth: "50px" }}
+                            value={
+                              socialMedias.includes(organisation?.logo) ||
+                              !organisation?.logo?.length
+                                ? logoPlaceholder
+                                : organisation?.logo
+                            }
+                          />
+                        </td>
+                        <td className="px-3.5 py-2.5 first:pl-5 last:pr-5 border-y border-primary/20 dark:border-zink-500">
+                          <div className="flex gap-2">
+                            <div className="grow">
+                              <h6>
+                                {organisation?.name?.length > 30
+                                  ? organisation?.name?.slice(0, 30) + "..."
+                                  : organisation?.name}
+                              </h6>
+                              <p className="text-primary dark:text-zink-200">
+                                {organisation?.airSource?.length > 30
+                                  ? organisation?.airSource?.slice(0, 30) +
+                                    "..."
+                                  : organisation?.airSource}
+                              </p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-3.5 py-2.5 first:pl-5 last:pr-5 border-y border-primary/20 dark:border-zink-500">
+                          {organisation?.airDescription?.length > 30
+                            ? organisation?.airDescription?.slice(0, 30) + "..."
+                            : organisation?.airDescription}
+                        </td>
+                        <td className="px-3.5 py-2.5 first:pl-5 last:pr-5 border-y border-primary/20 dark:border-zink-500 text-green-500">
+                          {organisation?.airSector?.length > 30
+                            ? organisation?.airSector?.slice(0, 30) + "..."
+                            : organisation?.airSector}
+                        </td>
+                        <td className="px-3.5 py-2.5 first:pl-5 last:pr-5 border-y border-primary/20 dark:border-zink-500">
+                          <span className="px-2.5 py-0.5 text-xs inline-block font-medium rounded border bg-green-100 border-green-200 text-green-500 dark:bg-green-500/20 dark:border-green-500/20">
+                            {organisation?.airHeadquarter?.length > 30
+                              ? organisation?.airHeadquarter?.slice(0, 30) +
+                                "..."
+                              : organisation?.airHeadquarter}
+                          </span>
+                        </td>
+                        {/* <td className="px-3.5 py-2.5 first:pl-5 last:pr-5 border-y border-primary/20 dark:border-zink-500">
+                    <div className="flex gap-2">
+                      <a
+                        href="#!"
+                        className="flex items-center justify-center transition-all duration-200 ease-linear rounded-md size-8 bg-primary/10 dark:bg-zink-600 dark:text-zink-200 text-primary/50 hover:text-custom-500 dark:hover:text-custom-500 hover:bg-custom-100 dark:hover:bg-custom-500/20"
+                      >
+                        <i data-lucide="pencil" className="size-4"></i>
+                      </a>
+                      <a
+                        href="#!"
+                        className="flex items-center justify-center transition-all duration-200 ease-linear rounded-md size-8 bg-primary/10 dark:bg-zink-600 dark:text-zink-200 text-primary/50 hover:text-red-500 dark:hover:text-red-500 hover:bg-red-100 dark:hover:bg-red-500/20"
+                      >
+                        <i data-lucide="trash-2" className="size-4"></i>
+                      </a>
+                    </div>
+                  </td> */}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            ) : (
+              <p className="px-5">Chargement ...</p>
+            )}
+          </div>
+          <div className="flex flex-col items-center mt-5 md:flex-row">
+            <div className="mb-4 grow md:mb-0"></div>
+            <ul className="flex flex-wrap items-center gap-2 shrink-0">
+              <li>
+                <a
+                  href="/organisations"
+                  className="inline-flex items-center justify-center bg-white dark:bg-zink-700 h-8 px-3 transition-all duration-150 ease-linear border rounded border-primary dark:border-zink-500 text-primary dark:text-zink-200 hover:text-dark-primary dark:hover:text-custom-500 hover:bg-primary/5 dark:hover:bg-custom-500/10 focus:bg-custom-50 dark:focus:bg-custom-500/10 focus:text-custom-500 dark:focus:text-custom-500 [&.active]:text-custom-500 dark:[&.active]:text-custom-500 [&.active]:bg-custom-50 dark:[&.active]:bg-custom-500/10 [&.active]:border-custom-50 dark:[&.active]:border-custom-500/10 [&.active]:hover:text-custom-700 dark:[&.active]:hover:text-custom-700 [&.disabled]:text-primary/40 dark:[&.disabled]:text-zink-300 [&.disabled]:cursor-auto"
+                >
+                  Voir toutes les organisations
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div className="col-span-12 md:order-8 2xl:col-span-9 card mt-10">
+        <div className="card-body">
+          <div className="grid items-center grid-cols-1 gap-3 mb-5 xl:grid-cols-12">
+            <div className="xl:col-span-5">
+              <h6 className="text-xl font-semibold">Les dernières articles</h6>
+            </div>
+            {/* <div className="xl:col-span-4 xl:col-start-10">
+              <div className="flex gap-3">
+                <div className="relative grow">
+                  <input
+                    type="text"
+                    className="ltr:pl-8 rtl:pr-8 search form-input border-slate-200 dark:border-zink-500 focus:outline-none focus:border-custom-500 disabled:bg-slate-100 dark:disabled:bg-zink-600 disabled:border-slate-300 dark:disabled:border-zink-500 dark:disabled:text-zink-200 disabled:text-slate-500 dark:text-zink-100 dark:bg-zink-700 dark:focus:border-custom-800 placeholder:text-slate-400 dark:placeholder:text-zink-200"
+                    placeholder="Search for ..."
+                  />
+                  <i
+                    data-lucide="search"
+                    className="inline-block size-4 absolute ltr:left-2.5 rtl:right-2.5 top-2.5 text-slate-500 dark:text-zink-200 fill-slate-100 dark:fill-zink-600"
+                  ></i>
+                </div>
+                <button
+                  type="button"
+                  className="bg-white border-dashed shrink-0 text-custom-500 btn border-custom-500 hover:text-custom-500 hover:bg-custom-50 hover:border-custom-600 focus:text-custom-600 focus:bg-custom-50 focus:border-custom-600 active:text-custom-600 active:bg-custom-50 active:border-custom-600 dark:bg-zink-700 dark:ring-custom-400/20 dark:hover:bg-custom-800/20 dark:focus:bg-custom-800/20 dark:active:bg-custom-800/20"
+                >
+                  <i className="align-baseline ltr:pr-1 rtl:pl-1 ri-download-2-line"></i>{" "}
+                  Export
+                </button>
+              </div>
+            </div> */}
+          </div>
+          <div className="-mx-5 overflow-x-auto">
+            {dashboardData?.posts?.last?.length ? (
+              <table className="w-full whitespace-nowrap">
+                <thead className="ltr:text-left rtl:text-right bg-primary/5 text-primary dark:text-zink-200 dark:bg-zink-600">
+                  <tr>
+                    <th className="px-3.5 py-2.5 first:pl-5 last:pr-5 font-semibold border-y border-primary/20 dark:border-zink-500 text-left">
+                      Titre
+                    </th>
+                    <th className="px-3.5 py-2.5 first:pl-5 last:pr-5 font-semibold border-y border-primary/20 dark:border-zink-500 text-left">
+                      Etiquettes
+                    </th>
+                    <th className="px-3.5 py-2.5 first:pl-5 last:pr-5 font-semibold border-y border-primary/20 dark:border-zink-500 text-left">
+                      Média
+                    </th>
+                    <th className="px-3.5 py-2.5 first:pl-5 last:pr-5 font-semibold border-y border-primary/20 dark:border-zink-500 text-left">
+                      Langue de publication
+                    </th>
+                    {/* <th className="px-3.5 py-2.5 first:pl-5 last:pr-5 font-semibold border-y border-primary/20 dark:border-zink-500">
+                    Action
+                  </th> */}
+                  </tr>
+                </thead>
+                <tbody>
+                  {dashboardData?.posts?.last?.map((post) => {
+                    return (
+                      <tr>
+                        <td className="px-3.5 py-2.5 first:pl-5 last:pr-5 border-y border-primary/20 dark:border-zink-500">
+                          <div className="flex gap-2">
+                            <div className="grow">
+                              <h6>
+                                {post?.title?.length > 30
+                                  ? post?.title?.slice(0, 30) + "..."
+                                  : post?.title}
+                              </h6>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-3.5 py-2.5 first:pl-5 last:pr-5 border-y border-primary/20 dark:border-zink-500">
+                          {post?.airTags?.length > 30
+                            ? post?.airTags?.slice(0, 30) + "..."
+                            : post?.airTags}
+                        </td>
+                        <td className="px-3.5 py-2.5 first:pl-5 last:pr-5 border-y border-primary/20 dark:border-zink-500 text-green-500">
+                          {post?.airMedia?.length > 30
+                            ? post?.airMedia?.slice(0, 30) + "..."
+                            : post?.airMedia}
+                        </td>
+                        <td className="px-3.5 py-2.5 first:pl-5 last:pr-5 border-y border-primary/20 dark:border-zink-500">
+                          <span className="px-2.5 py-0.5 text-xs inline-block font-medium rounded border bg-green-100 border-green-200 text-green-500 dark:bg-green-500/20 dark:border-green-500/20">
+                            {post?.airLanguage === "FR"
+                              ? "Français"
+                              : "Anglais"}
+                          </span>
+                        </td>
+                        {/* <td className="px-3.5 py-2.5 first:pl-5 last:pr-5 border-y border-primary/20 dark:border-zink-500">
+                    <div className="flex gap-2">
+                      <a
+                        href="#!"
+                        className="flex items-center justify-center transition-all duration-200 ease-linear rounded-md size-8 bg-primary/10 dark:bg-zink-600 dark:text-zink-200 text-primary/50 hover:text-custom-500 dark:hover:text-custom-500 hover:bg-custom-100 dark:hover:bg-custom-500/20"
+                      >
+                        <i data-lucide="pencil" className="size-4"></i>
+                      </a>
+                      <a
+                        href="#!"
+                        className="flex items-center justify-center transition-all duration-200 ease-linear rounded-md size-8 bg-primary/10 dark:bg-zink-600 dark:text-zink-200 text-primary/50 hover:text-red-500 dark:hover:text-red-500 hover:bg-red-100 dark:hover:bg-red-500/20"
+                      >
+                        <i data-lucide="trash-2" className="size-4"></i>
+                      </a>
+                    </div>
+                  </td> */}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            ) : (
+              <p className="px-5">Chargement ...</p>
+            )}
+          </div>
+          <div className="flex flex-col items-center mt-5 md:flex-row">
+            <div className="mb-4 grow md:mb-0"></div>
+            <ul className="flex flex-wrap items-center gap-2 shrink-0">
+              <li>
+                <a
+                  href="/posts"
+                  className="inline-flex items-center justify-center bg-white dark:bg-zink-700 h-8 px-3 transition-all duration-150 ease-linear border rounded border-primary dark:border-zink-500 text-primary dark:text-zink-200 hover:text-dark-primary dark:hover:text-custom-500 hover:bg-primary/5 dark:hover:bg-custom-500/10 focus:bg-custom-50 dark:focus:bg-custom-500/10 focus:text-custom-500 dark:focus:text-custom-500 [&.active]:text-custom-500 dark:[&.active]:text-custom-500 [&.active]:bg-custom-50 dark:[&.active]:bg-custom-500/10 [&.active]:border-custom-50 dark:[&.active]:border-custom-500/10 [&.active]:hover:text-custom-700 dark:[&.active]:hover:text-custom-700 [&.disabled]:text-primary/40 dark:[&.disabled]:text-zink-300 [&.disabled]:cursor-auto"
+                >
+                  Voir tous les articles
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
       </div>

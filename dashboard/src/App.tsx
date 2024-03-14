@@ -253,147 +253,148 @@ function App() {
         },
       },
       {
-        name: "Publications",
-        meta: {
-          label: "Publications",
-          icon: <CustomIconArticle />,
-        },
-      },
-      {
+        // name: "Publications",
         name: "posts",
         list: "/posts",
         show: "/posts/show/:id",
         create: "/posts/create",
         edit: "/posts/edit/:id",
         meta: {
-          label: "Répertoire",
-          parent: "Publications",
+          label: "Publications",
+          icon: <CustomIconArticle />,
           canDelete: true,
         },
       },
-      {
-        name: "post_categories",
-        list: "/post_categories",
-        show: "/post_categories/show/:id",
-        create: "/post_categories/create",
-        edit: "/post_categories/edit/:id",
-        meta: {
-          label: "Catégories",
-          parent: "Publications",
-          canDelete: true,
-        },
-      },
-      {
-        name: "post_labels",
-        list: "/post_labels",
-        show: "/post_labels/show/:id",
-        create: "/post_labels/create",
-        edit: "/post_labels/edit/:id",
-        meta: {
-          label: "Etiquettes",
-          parent: "Publications",
-          canDelete: true,
-        },
-      },
-      {
-        name: "Evènements",
-        meta: {
-          label: "Evènements",
-          icon: <CustomIconEvent />,
-        },
-      },
-      {
-        name: "events",
-        list: "/events",
-        show: "/events/show/:id",
-        create: "/events/create",
-        edit: "/events/edit/:id",
-        meta: {
-          label: "Répertoire",
-          parent: "Evènements",
-          canDelete: true,
-        },
-      },
-      {
-        name: "event_types",
-        list: "/event_types",
-        show: "/event_types/show/:id",
-        create: "/event_types/create",
-        edit: "/event_types/edit/:id",
-        meta: {
-          label: "Catégories",
-          parent: "Evènements",
-          canDelete: true,
-        },
-      },
-      {
-        name: "Opportunités",
-        meta: {
-          label: "Opportunités",
-          icon: <CustomIconOpportunity />,
-        },
-      },
-      {
-        name: "opportunities",
-        list: "/opportunities",
-        show: "/opportunities/show/:id",
-        create: "/opportunities/create",
-        edit: "/opportunities/edit/:id",
-        meta: {
-          label: "Répertoire",
-          parent: "Opportunités",
-          canDelete: true,
-        },
-      },
-      {
-        name: "opportunity_types",
-        list: "/opportunity_types",
-        show: "/opportunity_types/show/:id",
-        create: "/opportunity_types/create",
-        edit: "/opportunity_types/edit/:id",
-        meta: {
-          label: "Catégories",
-          parent: "Opportunités",
-          canDelete: true,
-        },
-      },
-      {
-        name: "opportunity_targets",
-        list: "/opportunity_targets",
-        show: "/opportunity_targets/show/:id",
-        create: "/opportunity_targets/create",
-        edit: "/opportunity_targets/edit/:id",
-        meta: {
-          label: "Cibles",
-          parent: "Opportunités",
-          canDelete: true,
-        },
-      },
-      {
-        name: "Offres d'emplois",
-        meta: {
-          label: "Offres d'emplois",
-          icon: <CustomIconJob />,
-        },
-      },
-      {
-        name: "jobs",
-        list: "/jobs",
-        show: "/jobs/show/:id",
-        create: "/jobs/create",
-        edit: "/jobs/edit/:id",
-        meta: {
-          canDelete: true,
-          label: "Répertoire",
-          parent: "Offres d'emplois",
-        },
-      },
-      {
-        name: "Organisations",
-        meta: {
-          icon: <CustomIconOrganisation />,
-        },
-      },
+
+      // {
+      //   name: "posts",
+      //   list: "/posts",
+      //   show: "/posts/show/:id",
+      //   create: "/posts/create",
+      //   edit: "/posts/edit/:id",
+      //   meta: {
+      //     label: "Répertoire",
+      //     parent: "Publications",
+      //     canDelete: true,
+      //   },
+      // },
+      // {
+      //   name: "post_categories",
+      //   list: "/post_categories",
+      //   show: "/post_categories/show/:id",
+      //   create: "/post_categories/create",
+      //   edit: "/post_categories/edit/:id",
+      //   meta: {
+      //     label: "Catégories",
+      //     parent: "Publications",
+      //     canDelete: true,
+      //   },
+      // },
+      // {
+      //   name: "post_labels",
+      //   list: "/post_labels",
+      //   show: "/post_labels/show/:id",
+      //   create: "/post_labels/create",
+      //   edit: "/post_labels/edit/:id",
+      //   meta: {
+      //     label: "Etiquettes",
+      //     parent: "Publications",
+      //     canDelete: true,
+      //   },
+      // },
+      // {
+      //   name: "Evènements",
+      //   meta: {
+      //     label: "Evènements",
+      //     icon: <CustomIconEvent />,
+      //   },
+      // },
+      // {
+      //   name: "events",
+      //   list: "/events",
+      //   show: "/events/show/:id",
+      //   create: "/events/create",
+      //   edit: "/events/edit/:id",
+      //   meta: {
+      //     label: "Répertoire",
+      //     parent: "Evènements",
+      //     canDelete: true,
+      //   },
+      // },
+      // {
+      //   name: "event_types",
+      //   list: "/event_types",
+      //   show: "/event_types/show/:id",
+      //   create: "/event_types/create",
+      //   edit: "/event_types/edit/:id",
+      //   meta: {
+      //     label: "Catégories",
+      //     parent: "Evènements",
+      //     canDelete: true,
+      //   },
+      // },
+      // {
+      //   name: "Opportunités",
+      //   meta: {
+      //     label: "Opportunités",
+      //     icon: <CustomIconOpportunity />,
+      //   },
+      // },
+      // {
+      //   name: "opportunities",
+      //   list: "/opportunities",
+      //   show: "/opportunities/show/:id",
+      //   create: "/opportunities/create",
+      //   edit: "/opportunities/edit/:id",
+      //   meta: {
+      //     label: "Répertoire",
+      //     parent: "Opportunités",
+      //     canDelete: true,
+      //   },
+      // },
+      // {
+      //   name: "opportunity_types",
+      //   list: "/opportunity_types",
+      //   show: "/opportunity_types/show/:id",
+      //   create: "/opportunity_types/create",
+      //   edit: "/opportunity_types/edit/:id",
+      //   meta: {
+      //     label: "Catégories",
+      //     parent: "Opportunités",
+      //     canDelete: true,
+      //   },
+      // },
+      // {
+      //   name: "opportunity_targets",
+      //   list: "/opportunity_targets",
+      //   show: "/opportunity_targets/show/:id",
+      //   create: "/opportunity_targets/create",
+      //   edit: "/opportunity_targets/edit/:id",
+      //   meta: {
+      //     label: "Cibles",
+      //     parent: "Opportunités",
+      //     canDelete: true,
+      //   },
+      // },
+      // {
+      //   name: "Offres d'emplois",
+      //   meta: {
+      //     label: "Offres d'emplois",
+      //     icon: <CustomIconJob />,
+      //   },
+      // },
+      // {
+      //   name: "jobs",
+      //   list: "/jobs",
+      //   show: "/jobs/show/:id",
+      //   create: "/jobs/create",
+      //   edit: "/jobs/edit/:id",
+      //   meta: {
+      //     canDelete: true,
+      //     label: "Répertoire",
+      //     parent: "Offres d'emplois",
+      //   },
+      // },
       {
         name: "organisations",
         list: "/organisations",
@@ -401,23 +402,35 @@ function App() {
         create: "/organisations/create",
         edit: "/organisations/edit/:id",
         meta: {
-          label: "Répertoire",
-          parent: "Organisations",
+          icon: <CustomIconOrganisation />,
           canDelete: true,
+          label: "Organisations",
         },
       },
-      {
-        name: "organisation_types",
-        list: "/organisation_types",
-        show: "/organisation_types/show/:id",
-        create: "/organisation_types/create",
-        edit: "/organisation_types/edit/:id",
-        meta: {
-          label: "Catégories",
-          parent: "Organisations",
-          canDelete: true,
-        },
-      },
+      // {
+      //   name: "organisations",
+      //   list: "/organisations",
+      //   show: "/organisations/show/:id",
+      //   create: "/organisations/create",
+      //   edit: "/organisations/edit/:id",
+      //   meta: {
+      //     label: "Répertoire",
+      //     parent: "Organisations",
+      //     canDelete: true,
+      //   },
+      // },
+      // {
+      //   name: "organisation_types",
+      //   list: "/organisation_types",
+      //   show: "/organisation_types/show/:id",
+      //   create: "/organisation_types/create",
+      //   edit: "/organisation_types/edit/:id",
+      //   meta: {
+      //     label: "Catégories",
+      //     parent: "Organisations",
+      //     canDelete: true,
+      //   },
+      // },
       {
         name: "Utilisateurs",
         meta: {
@@ -460,25 +473,25 @@ function App() {
           parent: "Utilisateurs",
         },
       },
-      {
-        name: "Champs & Propriétés",
-        meta: {
-          label: "Champs & Propriétés",
-          icon: <SettingOutlined />,
-        },
-      },
-      {
-        name: "activity_areas",
-        list: "/activity_areas",
-        show: "/activity_areas/show/:id",
-        create: "/activity_areas/create",
-        edit: "/activity_areas/edit/:id",
-        meta: {
-          label: "Secteurs d'activités",
-          parent: "Champs & Propriétés",
-          canDelete: true,
-        },
-      },
+      // {
+      //   name: "Champs & Propriétés",
+      //   meta: {
+      //     label: "Champs & Propriétés",
+      //     icon: <SettingOutlined />,
+      //   },
+      // },
+      // {
+      //   name: "activity_areas",
+      //   list: "/activity_areas",
+      //   show: "/activity_areas/show/:id",
+      //   create: "/activity_areas/create",
+      //   edit: "/activity_areas/edit/:id",
+      //   meta: {
+      //     label: "Secteurs d'activités",
+      //     parent: "Champs & Propriétés",
+      //     canDelete: true,
+      //   },
+      // },
       {
         name: "profil",
         list: "/profil",
@@ -501,147 +514,153 @@ function App() {
         },
       },
       {
-        name: "Publications",
-        meta: {
-          label: "Publications",
-          icon: <CustomIconArticle />,
-        },
-      },
-      {
+        // name: "Publications",
         name: "posts",
         list: "/posts",
         show: "/posts/show/:id",
         create: "/posts/create",
         edit: "/posts/edit/:id",
         meta: {
-          label: "Répertoire",
-          parent: "Publications",
+          label: "Publications",
+          icon: <CustomIconArticle />,
           canDelete: true,
         },
       },
-      {
-        name: "post_categories",
-        list: "/post_categories",
-        show: "/post_categories/show/:id",
-        create: "/post_categories/create",
-        edit: "/post_categories/edit/:id",
-        meta: {
-          label: "Catégories",
-          parent: "Publications",
-          canDelete: true,
-        },
-      },
-      {
-        name: "post_labels",
-        list: "/post_labels",
-        show: "/post_labels/show/:id",
-        create: "/post_labels/create",
-        edit: "/post_labels/edit/:id",
-        meta: {
-          label: "Etiquettes",
-          parent: "Publications",
-          canDelete: true,
-        },
-      },
-      {
-        name: "Evènements",
-        meta: {
-          label: "Evènements",
-          icon: <CustomIconEvent />,
-        },
-      },
-      {
-        name: "events",
-        list: "/events",
-        show: "/events/show/:id",
-        create: "/events/create",
-        edit: "/events/edit/:id",
-        meta: {
-          label: "Répertoire",
-          parent: "Evènements",
-          canDelete: true,
-        },
-      },
-      {
-        name: "event_types",
-        list: "/event_types",
-        show: "/event_types/show/:id",
-        create: "/event_types/create",
-        edit: "/event_types/edit/:id",
-        meta: {
-          label: "Catégories",
-          parent: "Evènements",
-          canDelete: true,
-        },
-      },
-      {
-        name: "Opportunités",
-        meta: {
-          label: "Opportunités",
-          icon: <CustomIconOpportunity />,
-        },
-      },
-      {
-        name: "opportunities",
-        list: "/opportunities",
-        show: "/opportunities/show/:id",
-        create: "/opportunities/create",
-        edit: "/opportunities/edit/:id",
-        meta: {
-          label: "Répertoire",
-          parent: "Opportunités",
-          canDelete: true,
-        },
-      },
-      {
-        name: "opportunity_types",
-        list: "/opportunity_types",
-        show: "/opportunity_types/show/:id",
-        create: "/opportunity_types/create",
-        edit: "/opportunity_types/edit/:id",
-        meta: {
-          label: "Catégories",
-          parent: "Opportunités",
-          canDelete: true,
-        },
-      },
-      {
-        name: "opportunity_targets",
-        list: "/opportunity_targets",
-        show: "/opportunity_targets/show/:id",
-        create: "/opportunity_targets/create",
-        edit: "/opportunity_targets/edit/:id",
-        meta: {
-          label: "Cibles",
-          parent: "Opportunités",
-          canDelete: true,
-        },
-      },
-      {
-        name: "Offres d'emplois",
-        meta: {
-          label: "Offres d'emplois",
-          icon: <CustomIconJob />,
-        },
-      },
-      {
-        name: "jobs",
-        list: "/jobs",
-        show: "/jobs/show/:id",
-        create: "/jobs/create",
-        edit: "/jobs/edit/:id",
-        meta: {
-          canDelete: true,
-          label: "Répertoire",
-          parent: "Offres d'emplois",
-        },
-      },
-      {
-        name: "Organisations",
-        meta: {
-          icon: <CustomIconOrganisation />,
-        },
-      },
+      // {
+      //   name: "posts",
+      //   list: "/posts",
+      //   show: "/posts/show/:id",
+      //   create: "/posts/create",
+      //   edit: "/posts/edit/:id",
+      //   meta: {
+      //     label: "Répertoire",
+      //     parent: "Publications",
+      //     canDelete: true,
+      //   },
+      // },
+      // {
+      //   name: "post_categories",
+      //   list: "/post_categories",
+      //   show: "/post_categories/show/:id",
+      //   create: "/post_categories/create",
+      //   edit: "/post_categories/edit/:id",
+      //   meta: {
+      //     label: "Catégories",
+      //     parent: "Publications",
+      //     canDelete: true,
+      //   },
+      // },
+      // {
+      //   name: "post_labels",
+      //   list: "/post_labels",
+      //   show: "/post_labels/show/:id",
+      //   create: "/post_labels/create",
+      //   edit: "/post_labels/edit/:id",
+      //   meta: {
+      //     label: "Etiquettes",
+      //     parent: "Publications",
+      //     canDelete: true,
+      //   },
+      // },
+      // {
+      //   name: "Evènements",
+      //   meta: {
+      //     label: "Evènements",
+      //     icon: <CustomIconEvent />,
+      //   },
+      // },
+      // {
+      //   name: "events",
+      //   list: "/events",
+      //   show: "/events/show/:id",
+      //   create: "/events/create",
+      //   edit: "/events/edit/:id",
+      //   meta: {
+      //     label: "Répertoire",
+      //     parent: "Evènements",
+      //     canDelete: true,
+      //   },
+      // },
+      // {
+      //   name: "event_types",
+      //   list: "/event_types",
+      //   show: "/event_types/show/:id",
+      //   create: "/event_types/create",
+      //   edit: "/event_types/edit/:id",
+      //   meta: {
+      //     label: "Catégories",
+      //     parent: "Evènements",
+      //     canDelete: true,
+      //   },
+      // },
+      // {
+      //   name: "Opportunités",
+      //   meta: {
+      //     label: "Opportunités",
+      //     icon: <CustomIconOpportunity />,
+      //   },
+      // },
+      // {
+      //   name: "opportunities",
+      //   list: "/opportunities",
+      //   show: "/opportunities/show/:id",
+      //   create: "/opportunities/create",
+      //   edit: "/opportunities/edit/:id",
+      //   meta: {
+      //     label: "Répertoire",
+      //     parent: "Opportunités",
+      //     canDelete: true,
+      //   },
+      // },
+      // {
+      //   name: "opportunity_types",
+      //   list: "/opportunity_types",
+      //   show: "/opportunity_types/show/:id",
+      //   create: "/opportunity_types/create",
+      //   edit: "/opportunity_types/edit/:id",
+      //   meta: {
+      //     label: "Catégories",
+      //     parent: "Opportunités",
+      //     canDelete: true,
+      //   },
+      // },
+      // {
+      //   name: "opportunity_targets",
+      //   list: "/opportunity_targets",
+      //   show: "/opportunity_targets/show/:id",
+      //   create: "/opportunity_targets/create",
+      //   edit: "/opportunity_targets/edit/:id",
+      //   meta: {
+      //     label: "Cibles",
+      //     parent: "Opportunités",
+      //     canDelete: true,
+      //   },
+      // },
+      // {
+      //   name: "Offres d'emplois",
+      //   meta: {
+      //     label: "Offres d'emplois",
+      //     icon: <CustomIconJob />,
+      //   },
+      // },
+      // {
+      //   name: "jobs",
+      //   list: "/jobs",
+      //   show: "/jobs/show/:id",
+      //   create: "/jobs/create",
+      //   edit: "/jobs/edit/:id",
+      //   meta: {
+      //     canDelete: true,
+      //     label: "Répertoire",
+      //     parent: "Offres d'emplois",
+      //   },
+      // },
+      // {
+      //   name: "Organisations",
+      //   meta: {
+      //     icon: <CustomIconOrganisation />,
+      //   },
+      // },
       {
         name: "organisations",
         list: "/organisations",
@@ -649,23 +668,35 @@ function App() {
         create: "/organisations/create",
         edit: "/organisations/edit/:id",
         meta: {
-          label: "Répertoire",
-          parent: "Organisations",
+          icon: <CustomIconOrganisation />,
           canDelete: true,
+          label: "Organisations",
         },
       },
-      {
-        name: "organisation_types",
-        list: "/organisation_types",
-        show: "/organisation_types/show/:id",
-        create: "/organisation_types/create",
-        edit: "/organisation_types/edit/:id",
-        meta: {
-          label: "Catégories",
-          parent: "Organisations",
-          canDelete: true,
-        },
-      },
+      // {
+      //   name: "organisations",
+      //   list: "/organisations",
+      //   show: "/organisations/show/:id",
+      //   create: "/organisations/create",
+      //   edit: "/organisations/edit/:id",
+      //   meta: {
+      //     label: "Répertoire",
+      //     parent: "Organisations",
+      //     canDelete: true,
+      //   },
+      // },
+      // {
+      //   name: "organisation_types",
+      //   list: "/organisation_types",
+      //   show: "/organisation_types/show/:id",
+      //   create: "/organisation_types/create",
+      //   edit: "/organisation_types/edit/:id",
+      //   meta: {
+      //     label: "Catégories",
+      //     parent: "Organisations",
+      //     canDelete: true,
+      //   },
+      // },
       {
         name: "Utilisateurs",
         meta: {
@@ -708,25 +739,25 @@ function App() {
           parent: "Utilisateurs",
         },
       },
-      {
-        name: "Champs & Propriétés",
-        meta: {
-          label: "Champs & Propriétés",
-          icon: <SettingOutlined />,
-        },
-      },
-      {
-        name: "activity_areas",
-        list: "/activity_areas",
-        show: "/activity_areas/show/:id",
-        create: "/activity_areas/create",
-        edit: "/activity_areas/edit/:id",
-        meta: {
-          label: "Secteurs d'activités",
-          parent: "Champs & Propriétés",
-          canDelete: true,
-        },
-      },
+      // {
+      //   name: "Champs & Propriétés",
+      //   meta: {
+      //     label: "Champs & Propriétés",
+      //     icon: <SettingOutlined />,
+      //   },
+      // },
+      // {
+      //   name: "activity_areas",
+      //   list: "/activity_areas",
+      //   show: "/activity_areas/show/:id",
+      //   create: "/activity_areas/create",
+      //   edit: "/activity_areas/edit/:id",
+      //   meta: {
+      //     label: "Secteurs d'activités",
+      //     parent: "Champs & Propriétés",
+      //     canDelete: true,
+      //   },
+      // },
       {
         name: "profil",
         list: "/profil",
@@ -748,95 +779,120 @@ function App() {
           icon: <DashboardOutlined />,
         },
       },
+
       {
-        name: "Publications",
-        meta: {
-          label: "Publications",
-          icon: <CustomIconArticle />,
-        },
-      },
-      {
+        // name: "Publications",
         name: "posts",
         list: "/posts",
         show: "/posts/show/:id",
         create: "/posts/create",
         meta: {
-          label: "Répertoire",
-          parent: "Publications",
-          canDelete: true,
+          label: "Publications",
+          icon: <CustomIconArticle />,
+          canDelete: false,
         },
       },
-      {
-        name: "Evènements",
-        meta: {
-          label: "Evènements",
-          icon: <CustomIconEvent />,
-        },
-      },
-      {
-        name: "events",
-        list: "/events",
-        show: "/events/show/:id",
-        create: "/events/create",
-        meta: {
-          label: "Répertoire",
-          parent: "Evènements",
-          canDelete: true,
-        },
-      },
-      {
-        name: "Opportunités",
-        meta: {
-          label: "Opportunités",
-          icon: <CustomIconOpportunity />,
-        },
-      },
-      {
-        name: "opportunities",
-        list: "/opportunities",
-        show: "/opportunities/show/:id",
-        create: "/opportunities/create",
-        meta: {
-          label: "Répertoire",
-          parent: "Opportunités",
-          canDelete: true,
-        },
-      },
-      {
-        name: "Offres d'emplois",
-        meta: {
-          label: "Offres d'emplois",
-          icon: <CustomIconJob />,
-        },
-      },
-      {
-        name: "jobs",
-        list: "/jobs",
-        show: "/jobs/show/:id",
-        create: "/jobs/create",
-        meta: {
-          canDelete: true,
-          label: "Répertoire",
-          parent: "Offres d'emplois",
-        },
-      },
-      {
-        name: "Organisations",
-        meta: {
-          icon: <CustomIconOrganisation />,
-        },
-      },
+      // {
+      //   name: "Publications",
+      //   meta: {
+      //     label: "Publications",
+      //     icon: <CustomIconArticle />,
+      //   },
+      // },
+      // {
+      //   name: "posts",
+      //   list: "/posts",
+      //   show: "/posts/show/:id",
+      //   create: "/posts/create",
+      //   meta: {
+      //     label: "Répertoire",
+      //     parent: "Publications",
+      //     canDelete: true,
+      //   },
+      // },
+      // {
+      //   name: "Evènements",
+      //   meta: {
+      //     label: "Evènements",
+      //     icon: <CustomIconEvent />,
+      //   },
+      // },
+      // {
+      //   name: "events",
+      //   list: "/events",
+      //   show: "/events/show/:id",
+      //   create: "/events/create",
+      //   meta: {
+      //     label: "Répertoire",
+      //     parent: "Evènements",
+      //     canDelete: true,
+      //   },
+      // },
+      // {
+      //   name: "Opportunités",
+      //   meta: {
+      //     label: "Opportunités",
+      //     icon: <CustomIconOpportunity />,
+      //   },
+      // },
+      // {
+      //   name: "opportunities",
+      //   list: "/opportunities",
+      //   show: "/opportunities/show/:id",
+      //   create: "/opportunities/create",
+      //   meta: {
+      //     label: "Répertoire",
+      //     parent: "Opportunités",
+      //     canDelete: true,
+      //   },
+      // },
+      // {
+      //   name: "Offres d'emplois",
+      //   meta: {
+      //     label: "Offres d'emplois",
+      //     icon: <CustomIconJob />,
+      //   },
+      // },
+      // {
+      //   name: "jobs",
+      //   list: "/jobs",
+      //   show: "/jobs/show/:id",
+      //   create: "/jobs/create",
+      //   meta: {
+      //     canDelete: true,
+      //     label: "Répertoire",
+      //     parent: "Offres d'emplois",
+      //   },
+      // },
       {
         name: "organisations",
         list: "/organisations",
         show: "/organisations/show/:id",
         create: "/organisations/create",
+        edit: "/organisations/edit/:id",
         meta: {
-          label: "Répertoire",
-          parent: "Organisations",
+          icon: <CustomIconOrganisation />,
           canDelete: true,
+          label: "Organisations",
         },
       },
+      // {
+      //   name: "Organisations",
+      //   meta: {
+      //     icon: <CustomIconOrganisation />,
+      //   },
+      // },
+      // {
+      //   name: "organisations",
+      //   list: "/organisations",
+      //   show: "/organisations/show/:id",
+      //   create: "/organisations/create",
+      //   meta: {
+      //     label: "Répertoire",
+      //     parent: "Organisations",
+      //     canDelete: true,
+      //   },
+      // },
       {
         name: "Utilisateurs",
         meta: {

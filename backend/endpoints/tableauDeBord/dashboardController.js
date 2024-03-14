@@ -20,6 +20,10 @@ const now = new Date();
 // @access Private
 exports.getAllTotaux = async (req, res) => {
   try {
+    const lastOrganisations = await Organisation.find()
+      .limit(10 * 1)
+      .skip(0)
+      .sort({ createdAt: -1 });
     let organisations = await Organisation.find().count();
     let lastYearOrganisations = await Organisation.find({
       createdAt: {
@@ -48,6 +52,10 @@ exports.getAllTotaux = async (req, res) => {
 
     // Pour les articles
     const posts = await Post.find().count();
+    const lastPosts = await Post.find()
+      .limit(10 * 1)
+      .skip(0)
+      .sort({ createdAt: -1 });
     let lastYearPosts = await Post.find({
       createdAt: {
         $gte: startOfYear,
@@ -86,6 +94,7 @@ exports.getAllTotaux = async (req, res) => {
       users,
       organisations: {
         all: organisations,
+        last: lastOrganisations,
         year: {
           evolution: Math.round((lastYearOrganisations / organisations) * 100),
           length: lastYearOrganisations,
@@ -105,6 +114,7 @@ exports.getAllTotaux = async (req, res) => {
       },
       posts: {
         all: Math.round(posts / 2),
+        last: lastPosts,
         year: {
           evolution: Math.round((lastYearPosts / posts) * 100),
           length: Math.round(lastYearPosts / 2),
