@@ -515,12 +515,12 @@ exports.getAllPosts = async (req, res) => {
     const postsFrFin = await Post.find({ ...queryObj, airTrans: "fr" })
       .limit(limit * 1)
       .skip(_start ? _start : 0)
-      .sort({ createdAt: -1, ...sort })
+      .sort({ airDateAdded: -1, ...sort })
       .select(fields);
     const postsEngFin = await Post.find({ ...queryObj, airTrans: "eng" })
       .limit(limit * 1)
       .skip(_start ? _start : 0)
-      .sort({ createdAt: -1, ...sort })
+      .sort({ airDateAdded: -1, ...sort })
       .select(fields);
 
     res.status(200).json([...postsFrFin, ...postsEngFin]);
