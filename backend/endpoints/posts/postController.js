@@ -6,7 +6,6 @@ const stream = require("stream");
 const { promisify } = require("util");
 const pipeline = promisify(stream.pipeline);
 const Path = require("path");
-const cron = require("node-cron");
 // const Airtable = require("airtable");
 require("dotenv").config();
 const axios = require("axios");
@@ -56,7 +55,7 @@ const PORT = process.env.PORT;
 
 var Airtable = require("airtable");
 
-const fetchAllRecords = async (apiKey, baseId, tableName, limit, eq) => {
+const fetchAllRecords = async (apiKey, baseId, tableName) => {
   var base = new Airtable({
     apiKey: apiKey,
   }).base(baseId);
@@ -175,15 +174,11 @@ exports.getFrenchPostFromAirtable = async (req, res) => {
 };
 
 exports.getAllPostFromAirtable = async (req, res) => {
-  const { limit, page, sort, fields, eq } = req.query;
-  const queryObj = CustomUtils.advancedQueryAirtable(req.query);
   try {
     const frResult = await fetchAllRecords(
       AIRTABLE_API_KEY,
       FRENCH_BASE_ID,
-      FRENCH_ARTICLE_TABLE_ID,
-      limit * 1,
-      queryObj
+      FRENCH_ARTICLE_TABLE_ID
     );
 
     const frArticles = await frResult.map(async (article) => {
@@ -251,9 +246,7 @@ exports.getAllPostFromAirtable = async (req, res) => {
     const engResult = await fetchAllRecords(
       AIRTABLE_API_KEY,
       ENGLISH_BASE_ID,
-      ENGLISH_ARTICLE_TABLE_ID,
-      limit * 1,
-      queryObj
+      ENGLISH_ARTICLE_TABLE_ID
     );
     const engArticles = await engResult.map(async (article) => {
       const existingArticle = await Post.find({
@@ -316,9 +309,159 @@ exports.getAllPostFromAirtable = async (req, res) => {
         }
       }
     });
+
+    console.log({ fr: frArticles, eng: engArticles });
     res.status(200).json({ success: true });
+    return { success: true };
   } catch (error) {
     res.status(404).json({ message: error.message });
+    // return { message: error.message }
+  }
+};
+
+exports.cronAllPostFromAirtable = async (req, res) => {
+  try {
+    const frResult = await fetchAllRecords(
+      AIRTABLE_API_KEY,
+      FRENCH_BASE_ID,
+      FRENCH_ARTICLE_TABLE_ID
+    );
+
+    const frArticles = await frResult.map(async (article) => {
+      const existingArticle = await Post.find({
+        title: article.title,
+      });
+      // console.log(existingArticle);
+      if (existingArticle.length === 0) {
+        try {
+          if (article.link) {
+            let domain_racine = extraireDomaine(article.link);
+            if (domain_racine) {
+              domain_racine = domain_racine.slice(8);
+              // console.log(domain_racine);
+              const img_name = domain_racine.split(".").join("") + ".jpg";
+              const path = `${Path.resolve(
+                __dirname,
+                "../../public/storage/logos"
+              )}/${img_name}`;
+              await downloadImage(article.logo, path);
+              let urla = `https://api.possible.africa/storage/logos/${img_name}`;
+
+              await Post.create({
+                title: article.title,
+                airTags: article.tags,
+                airMedia: article.media,
+                airLink: article.link,
+                airLanguage: article.language,
+                airLogo: urla,
+                airDateAdded: article.publication_date,
+                airTrans: "fr",
+              });
+            } else {
+              await Post.create({
+                title: article.title,
+                airTags: article.tags,
+                airMedia: article.media,
+                airLink: article.link,
+                airLanguage: article.language,
+                airLogo:
+                  "https://api.possible.africa/storage/logos/placeholder_org.jpeg",
+                airDateAdded: article.publication_date,
+                airTrans: "fr",
+              });
+            }
+          } else {
+            await Post.create({
+              title: article.title,
+              airTags: article.tags,
+              airMedia: article.media,
+              airLink: article.link,
+              airLanguage: article.language,
+              airLogo:
+                "https://api.possible.africa/storage/logos/placeholder_org.jpeg",
+              airDateAdded: article.publication_date,
+              airTrans: "fr",
+            });
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    });
+
+    const engResult = await fetchAllRecords(
+      AIRTABLE_API_KEY,
+      ENGLISH_BASE_ID,
+      ENGLISH_ARTICLE_TABLE_ID
+    );
+    const engArticles = await engResult.map(async (article) => {
+      const existingArticle = await Post.find({
+        title: article.title,
+      });
+      // console.log(existingArticle);
+      if (existingArticle.length === 0) {
+        try {
+          if (article.link) {
+            let domain_racine = extraireDomaine(article.link);
+            if (domain_racine) {
+              domain_racine = domain_racine.slice(8);
+              // console.log(domain_racine);
+              const img_name = domain_racine.split(".").join("") + ".jpg";
+              const path = `${Path.resolve(
+                __dirname,
+                "../../public/storage/logos"
+              )}/${img_name}`;
+              await downloadImage(article.logo, path);
+              let urla = `https://api.possible.africa/storage/logos/${img_name}`;
+
+              await Post.create({
+                title: article.title,
+                airTags: article.tags,
+                airMedia: article.media,
+                airLink: article.link,
+                airLanguage: article.language,
+                airLogo: urla,
+                airDateAdded: article.publication_date,
+                airTrans: "eng",
+              });
+            } else {
+              await Post.create({
+                title: article.title,
+                airTags: article.tags,
+                airMedia: article.media,
+                airLink: article.link,
+                airLanguage: article.language,
+                airLogo:
+                  "https://api.possible.africa/storage/logos/placeholder_org.jpeg",
+                airDateAdded: article.publication_date,
+                airTrans: "eng",
+              });
+            }
+          } else {
+            await Post.create({
+              title: article.title,
+              airTags: article.tags,
+              airMedia: article.media,
+              airLink: article.link,
+              airLanguage: article.language,
+              airLogo:
+                "https://api.possible.africa/storage/logos/placeholder_org.jpeg",
+              airDateAdded: article.publication_date,
+              airTrans: "eng",
+            });
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    });
+
+    // console.log({ fr: frArticles, eng: engArticles });
+    // res.status(200).json({ success: true });
+    return { success: true };
+  } catch (error) {
+    // res.status(404).json({ message: error.message });
+    return { message: error.message }
   }
 };
 
@@ -467,6 +610,4 @@ exports.deletePost = async (req, res) => {
   }
 };
 
-cron.schedule("*/40 * * * *", () => {
-  getAllPostFromAirtable();
-});
+

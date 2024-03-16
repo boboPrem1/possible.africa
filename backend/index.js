@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const connection = require("./db");
 const http = require("http");
 const multer = require("multer");
+const cron = require("node-cron");
 // const cron = require("node-cron");
 // import dotenv
 require("dotenv").config();
@@ -73,6 +74,8 @@ var corsOptions = {
 // Middleware
 //
 const { protect } = require("./endpoints/auth/authController.js");
+const { getAllPostFromAirtable, cronAllPostFromAirtable } = require("./endpoints/posts/postController.js");
+const { getOrganisationsFromAirtable, cronOrganisationsFromAirtable } = require("./endpoints/organisations/organisationController.js");
 app.use(cors());
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
@@ -118,10 +121,14 @@ app.get(API_URL_BASE, (req, res) => {
   });
 });
 
-// cron.schedule("* * * * *", () => {
-//   console.log("Exécution de la tâche toutes les minutes");
-//   // Placez ici le code de la tâche que vous souhaitez exécuter
-// });
+cron.schedule("*/40 * * * *", () => {
+  cronAllPostFromAirtable();
+});
+
+cron.schedule("*/30 * * * *", () => {
+  cronOrganisationsFromAirtable();
+});
+
 
 // const io = new Server(server, {
 //   cors: {

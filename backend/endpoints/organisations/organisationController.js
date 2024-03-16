@@ -11,7 +11,6 @@ const stream = require("stream");
 const { promisify } = require("util");
 const pipeline = promisify(stream.pipeline);
 require("dotenv").config();
-const cron = require("node-cron");
 
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
 const ORGANISATIONS_BASE_ID = process.env.ORGANISATIONS_BASE_ID;
@@ -71,7 +70,7 @@ async function downloadMedia(mediaUrl) {
     return null;
   }
 }
-const fetchAllRecords = async (apiKey, baseId, tableName, limit, eq) => {
+const fetchAllRecords = async (apiKey, baseId, tableName) => {
   var base = new Airtable({
     apiKey: apiKey,
   }).base(baseId);
@@ -111,21 +110,18 @@ const fetchAllRecords = async (apiKey, baseId, tableName, limit, eq) => {
 };
 
 exports.getOrganisationsFromAirtable = async (req, res) => {
-  const { limit, page, sort, fields } = req.query;
-  const queryObj = CustomUtils.advancedQueryAirtable(req.query);
   try {
     const result = await fetchAllRecords(
       AIRTABLE_API_KEY,
       ORGANISATIONS_BASE_ID,
-      ORGANISATION_TABLE_ID,
-      limit * 1,
-      queryObj
+      ORGANISATION_TABLE_ID
     );
+    let existing = 0;
     const organisations = await result.map(async (organisation) => {
       const ExistingOrg = await Organisation.find({
         name: organisation.name,
       });
-      // console.log(ExistingOrg.length);
+      console.log(ExistingOrg);
       if (ExistingOrg.length === 0) {
         try {
           let domain_racine = extraireDomaine(organisation.website);
@@ -173,14 +169,98 @@ exports.getOrganisationsFromAirtable = async (req, res) => {
         } catch (e) {
           console.log(e);
         }
+      } else {
+        existing = existing + 1;
       }
       // console.log(ExistingOrg);
     });
+    // console.log({ organisations });
+    // console.log({ existing });
 
     res.status(200).json({ success: true });
+    // return { success: true };
     // console.log(organisations);
   } catch (error) {
     res.status(404).json({ message: error.message });
+    // return { message: error.message };
+  }
+};
+
+
+exports.cronOrganisationsFromAirtable = async () => {
+  try {
+    const result = await fetchAllRecords(
+      AIRTABLE_API_KEY,
+      ORGANISATIONS_BASE_ID,
+      ORGANISATION_TABLE_ID
+    );
+    let existing = 0;
+    const organisations = await result.map(async (organisation) => {
+      const ExistingOrg = await Organisation.find({
+        name: organisation.name,
+      });
+      console.log(ExistingOrg);
+      if (ExistingOrg.length === 0) {
+        try {
+          let domain_racine = extraireDomaine(organisation.website);
+          // console.log(domain_racine);
+          if (domain_racine) {
+            domain_racine = domain_racine.slice(8);
+            const url = `https://logo.clearbit.com/${domain_racine}`;
+            const path = `${Path.resolve(
+              __dirname,
+              "../../public/storage/logos"
+            )}/${domain_racine.split(".").join("")}.jpg`;
+            await downloadImage(url, path);
+            let urla = `https://api.possible.africa/storage/logos/${domain_racine
+              .split(".")
+              .join("")}.jpg`;
+            const org = await Organisation.create({
+              name: organisation.name,
+              airLogo: urla,
+              airDescription: organisation.description,
+              airRegion: organisation.region,
+              airHeadquarter: organisation.headquarter,
+              airOperatingCountries: organisation.operationnal_countries,
+              airSector: organisation.sector,
+              airWebsite: organisation.website,
+              airRelatedArticles: organisation.related_articles,
+              airSource: organisation.source,
+            });
+          } else {
+            const org = await Organisation.create({
+              name: organisation.name,
+              airLogo:
+                "https://api.possible.africa/storage/logos/placeholder_org.jpeg",
+              airDescription: organisation.description,
+              airRegion: organisation.region,
+              airHeadquarter: organisation.headquarter,
+              airOperatingCountries: organisation.operationnal_countries,
+              airSector: organisation.sector,
+              airWebsite: organisation.website,
+              airRelatedArticles: organisation.related_articles,
+              airSource: organisation.source,
+            });
+          }
+
+          // console.log(org);
+        } catch (e) {
+          console.log(e);
+        }
+      } else {
+        existing = existing + 1;
+      }
+      // console.log(ExistingOrg);
+    });
+    // console.log({ organisations });
+    console.log({ existing });
+
+    // res.status(200).json({ success: true });
+    return { success: true };
+    // console.log(organisations);
+  } catch (error) {
+    // res.status(404).json({ message: error.message });
+    return { message: error.message };
   }
 };
 
@@ -311,7 +391,3 @@ exports.deleteOrganisation = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-cron.schedule("*/30 * * * *", () => {
-  getOrganisationsFromAirtable();
-});
