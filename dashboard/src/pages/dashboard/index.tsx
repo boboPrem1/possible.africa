@@ -193,7 +193,7 @@ export default function CustomDashboard() {
         .then((res) => {
           setDashboardData(res.data);
           setLoading(false);
-          console.log(res);
+          // console.log(res);
           // console.log(dashboardData);
         })
         .catch((err) => {
@@ -679,7 +679,7 @@ export default function CustomDashboard() {
                 <tbody>
                   {dashboardData?.organisations?.last?.map((organisation) => {
                     return (
-                      <tr>
+                      <tr key={organisation?._id}>
                         <td className="px-3.5 py-2.5 first:pl-5 last:pr-5 border-y border-primary/20 dark:border-zink-500">
                           <ImageField
                             style={{ maxWidth: "50px" }}
@@ -820,7 +820,7 @@ export default function CustomDashboard() {
                 <tbody>
                   {dashboardData?.posts?.last?.map((post) => {
                     return (
-                      <tr>
+                      <tr key={post?._id}>
                         <td className="px-3.5 py-2.5 first:pl-5 last:pr-5 border-y border-primary/20 dark:border-zink-500">
                           <div className="flex gap-2">
                             <div className="grow">

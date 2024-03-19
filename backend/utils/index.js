@@ -63,6 +63,7 @@ class CustomUtils {
       "fields",
       "_end",
       "_start",
+      "possible"
     ];
     excludedFields.forEach((element) => {
       delete queryObj[element];

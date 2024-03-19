@@ -70,7 +70,7 @@ exports.signin = async (req, res, next) => {
 
     // Test if user exists && password is correct
     const user = await User.findOne({ email }).select("+password");
-    console.log(user);
+    // console.log(user);
 
     if (!user || !(await user.comparePassword(password))) {
       return res.status(401).json({ message: CustomUtils.consts.UNAUTHORIZED });

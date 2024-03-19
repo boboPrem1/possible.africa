@@ -61,7 +61,7 @@ const postSchema = mongoose.Schema(
       type: String,
     },
     airDateAdded: {
-      type: String,
+      type: Date,
     },
     airTrans: {
       type: String
@@ -75,34 +75,6 @@ const postSchema = mongoose.Schema(
 
 // populate response with user
 postSchema.pre(/^find/, function (next) {
-  this.populate({
-    path: "user",
-    select: "username firstname lastname email phone role avatar complete_name",
-  });
-  this.populate({
-    path: "authors",
-    select: "username firstname lastname email phone role avatar complete_name",
-  });
-  this.populate({
-    path: "categorie",
-    select: "name slug",
-  });
-  this.populate({
-    path: "labels",
-    select: "name slug",
-  });
-  this.populate({
-    path: "organisations",
-    select: "name contributeur logo",
-  });
-  this.populate({
-    path: "editors",
-    select: "name contributeur logo",
-  });
-  this.populate({
-    path: "countries",
-    select: "name idd flag translations",
-  });
   next();
 });
 

@@ -88,6 +88,15 @@ export const PostList: React.FC<IResourceComponentsProps> = () => {
     tableQueryResult: { refetch },
   } = useTable({
     syncWithLocation: true,
+    filters: {
+      initial: [
+        {
+          field: 'possible',
+          operator: 'eq',
+          value: true
+        },
+      ]
+    }
   });
 
   const { data: organisationsData, isLoading: organisationsIsLoading } =

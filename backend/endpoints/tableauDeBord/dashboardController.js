@@ -55,27 +55,27 @@ exports.getAllTotaux = async (req, res) => {
     const lastPosts = await Post.find()
       .limit(10 * 1)
       .skip(0)
-      .sort({ createdAt: -1 });
+      .sort({ airDateAdded: -1 });
     let lastYearPosts = await Post.find({
-      createdAt: {
+      airDateAdded: {
         $gte: startOfYear,
         $lte: now,
       },
     }).count();
     let lastMonthPosts = await Post.find({
-      createdAt: {
+      airDateAdded: {
         $gte: startOfMonth,
         $lte: now,
       },
     }).count();
     let lastWeekPosts = await Post.find({
-      createdAt: {
+      airDateAdded: {
         $gte: startOfWeek,
         $lte: now,
       },
     }).count();
     let todayPosts = await Post.find({
-      createdAt: {
+      airDateAdded: {
         $gte: startOfDay,
         $lte: now,
       },
@@ -96,40 +96,40 @@ exports.getAllTotaux = async (req, res) => {
         all: organisations,
         last: lastOrganisations,
         year: {
-          evolution: Math.round((lastYearOrganisations / organisations) * 100),
+          evolution: Math.ceil((lastYearOrganisations / organisations) * 100),
           length: lastYearOrganisations,
         },
         month: {
-          evolution: Math.round((lastMonthOrganisations / organisations) * 100),
+          evolution: Math.ceil((lastMonthOrganisations / organisations) * 100),
           length: lastMonthOrganisations,
         },
         week: {
-          evolution: Math.round((lastWeekOrganisations / organisations) * 100),
+          evolution: Math.ceil((lastWeekOrganisations / organisations) * 100),
           length: lastWeekOrganisations,
         },
         day: {
-          evolution: Math.round((todayOrganisations / organisations) * 100),
+          evolution: Math.ceil((todayOrganisations / organisations) * 100),
           length: todayOrganisations,
         },
       },
       posts: {
-        all: Math.round(posts / 2),
+        all: Math.ceil(posts / 2),
         last: lastPosts,
         year: {
-          evolution: Math.round((lastYearPosts / posts) * 100),
-          length: Math.round(lastYearPosts / 2),
+          evolution: Math.ceil((lastYearPosts / posts) * 100),
+          length: Math.ceil(lastYearPosts / 2),
         },
         month: {
-          evolution: Math.round((lastMonthPosts / posts) * 100),
-          length: Math.round(lastMonthPosts / 2),
+          evolution: Math.ceil((lastMonthPosts / posts) * 100),
+          length: Math.ceil(lastMonthPosts / 2),
         },
         week: {
-          evolution: Math.round((lastWeekPosts / posts) * 100),
-          length: Math.round(lastWeekPosts / 2),
+          evolution: Math.ceil((lastWeekPosts / posts) * 100),
+          length: Math.ceil(lastWeekPosts / 2),
         },
         day: {
-          evolution: Math.round((todayPosts / posts) * 100),
-          length: Math.round(todayPosts / 2),
+          evolution: Math.ceil((todayPosts / posts) * 100),
+          length: Math.ceil(todayPosts / 2),
         },
       },
     });

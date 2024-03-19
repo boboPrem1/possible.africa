@@ -73,7 +73,7 @@ export const Header = () => {
               justifyContent="center"
               alignContent="center"
             >
-              <div className="font-black text-2xl text-neutral-500 uppercase">
+              <div className="font-black text-2xl text-center text-neutral-500 uppercase">
                 L'univers des possibles de l'#AfricaTech
               </div>
               {/* <Searchbar zIndex={100} /> */}

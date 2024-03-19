@@ -58,7 +58,7 @@ function App() {
                   <Route
                     index
                     path="/actualites2"
-                    element={<ActualitesCopy />}
+                    element={<Actualites />}
                   />
                 </Route>
                 <Route path="/interviews">

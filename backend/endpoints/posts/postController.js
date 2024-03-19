@@ -208,7 +208,7 @@ exports.getAllPostFromAirtable = async (req, res) => {
                 airLink: article.link,
                 airLanguage: article.language,
                 airLogo: urla,
-                airDateAdded: article.publication_date,
+                airDateAdded: new Date(article.publication_date),
                 airTrans: "fr",
               });
             } else {
@@ -220,7 +220,7 @@ exports.getAllPostFromAirtable = async (req, res) => {
                 airLanguage: article.language,
                 airLogo:
                   "https://api.possible.africa/storage/logos/placeholder_org.jpeg",
-                airDateAdded: article.publication_date,
+                airDateAdded: new Date(article.publication_date),
                 airTrans: "fr",
               });
             }
@@ -233,7 +233,7 @@ exports.getAllPostFromAirtable = async (req, res) => {
               airLanguage: article.language,
               airLogo:
                 "https://api.possible.africa/storage/logos/placeholder_org.jpeg",
-              airDateAdded: article.publication_date,
+              airDateAdded: new Date(article.publication_date),
               airTrans: "fr",
             });
           }
@@ -275,7 +275,7 @@ exports.getAllPostFromAirtable = async (req, res) => {
                 airLink: article.link,
                 airLanguage: article.language,
                 airLogo: urla,
-                airDateAdded: article.publication_date,
+                airDateAdded: new Date(article.publication_date),
                 airTrans: "eng",
               });
             } else {
@@ -287,7 +287,7 @@ exports.getAllPostFromAirtable = async (req, res) => {
                 airLanguage: article.language,
                 airLogo:
                   "https://api.possible.africa/storage/logos/placeholder_org.jpeg",
-                airDateAdded: article.publication_date,
+                airDateAdded: new Date(article.publication_date),
                 airTrans: "eng",
               });
             }
@@ -300,7 +300,7 @@ exports.getAllPostFromAirtable = async (req, res) => {
               airLanguage: article.language,
               airLogo:
                 "https://api.possible.africa/storage/logos/placeholder_org.jpeg",
-              airDateAdded: article.publication_date,
+              airDateAdded: new Date(article.publication_date),
               airTrans: "eng",
             });
           }
@@ -354,7 +354,7 @@ exports.cronAllPostFromAirtable = async (req, res) => {
                 airLink: article.link,
                 airLanguage: article.language,
                 airLogo: urla,
-                airDateAdded: article.publication_date,
+                airDateAdded: new Date(article.publication_date),
                 airTrans: "fr",
               });
             } else {
@@ -366,7 +366,7 @@ exports.cronAllPostFromAirtable = async (req, res) => {
                 airLanguage: article.language,
                 airLogo:
                   "https://api.possible.africa/storage/logos/placeholder_org.jpeg",
-                airDateAdded: article.publication_date,
+                airDateAdded: new Date(article.publication_date),
                 airTrans: "fr",
               });
             }
@@ -379,7 +379,7 @@ exports.cronAllPostFromAirtable = async (req, res) => {
               airLanguage: article.language,
               airLogo:
                 "https://api.possible.africa/storage/logos/placeholder_org.jpeg",
-              airDateAdded: article.publication_date,
+              airDateAdded: new Date(article.publication_date),
               airTrans: "fr",
             });
           }
@@ -421,7 +421,7 @@ exports.cronAllPostFromAirtable = async (req, res) => {
                 airLink: article.link,
                 airLanguage: article.language,
                 airLogo: urla,
-                airDateAdded: article.publication_date,
+                airDateAdded: new Date(article.publication_date),
                 airTrans: "eng",
               });
             } else {
@@ -433,7 +433,7 @@ exports.cronAllPostFromAirtable = async (req, res) => {
                 airLanguage: article.language,
                 airLogo:
                   "https://api.possible.africa/storage/logos/placeholder_org.jpeg",
-                airDateAdded: article.publication_date,
+                airDateAdded: new Date(article.publication_date),
                 airTrans: "eng",
               });
             }
@@ -446,7 +446,7 @@ exports.cronAllPostFromAirtable = async (req, res) => {
               airLanguage: article.language,
               airLogo:
                 "https://api.possible.africa/storage/logos/placeholder_org.jpeg",
-              airDateAdded: article.publication_date,
+              airDateAdded: new Date(article.publication_date),
               airTrans: "eng",
             });
           }
@@ -461,7 +461,7 @@ exports.cronAllPostFromAirtable = async (req, res) => {
     return { success: true };
   } catch (error) {
     // res.status(404).json({ message: error.message });
-    return { message: error.message }
+    return { message: error.message };
   }
 };
 
@@ -504,26 +504,46 @@ exports.getEnglishPostFromAirtable = async (req, res) => {
 };
 
 exports.getAllPosts = async (req, res) => {
-  let { limit, page, sort, fields, _start, _end } = req.query;
+  let { limit, page, sort, fields, _start, _end, possible } = req.query;
   const queryObj = CustomUtils.advancedQuery(req.query);
-  // console.log(queryObj);
+  // console.log(possible);
   try {
     if (_end && (_start || _start == 0)) {
       limit = _end - _start;
     }
+    if (possible) {
+      const postsFrFin = await Post.find({ ...queryObj, airTrans: "fr" })
+        .limit(limit * 1)
+        .skip(_start ? _start : 0)
+        .sort({ airDateAdded: -1, ...sort })
+        .select(fields);
+      const postsEngFin = await Post.find({ ...queryObj, airTrans: "eng" })
+        .limit(limit * 1)
+        .skip(_start ? _start : 0)
+        .sort({ airDateAdded: -1, ...sort })
+        .select(fields);
 
-    const postsFrFin = await Post.find({ ...queryObj, airTrans: "fr" })
+      return res.status(200).json([...postsFrFin, ...postsEngFin]);
+    }
+    const posts = await Post.find({ ...queryObj })
       .limit(limit * 1)
       .skip(_start ? _start : 0)
       .sort({ airDateAdded: -1, ...sort })
       .select(fields);
-    const postsEngFin = await Post.find({ ...queryObj, airTrans: "eng" })
-      .limit(limit * 1)
-      .skip(_start ? _start : 0)
-      .sort({ airDateAdded: -1, ...sort })
-      .select(fields);
+    res.status(200).json(posts);
 
-    res.status(200).json([...postsFrFin, ...postsEngFin]);
+    // const posts = await Post.find();
+    // const allPosts = await posts.map(async (e) => {
+    //   console.log(e);
+    //   await Post.findByIdAndUpdate(
+    //     e._id,
+    //     { dateAdded: new Date(e.dateAdded) },
+    //     {
+    //       new: true,
+    //     }
+    //   );
+    // });
+    // res.status(200).json(allPosts);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
@@ -609,5 +629,3 @@ exports.deletePost = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-
