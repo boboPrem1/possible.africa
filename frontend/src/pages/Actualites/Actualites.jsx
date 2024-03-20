@@ -18,241 +18,291 @@ function Actualites() {
 
   return (
     // <div className="mx-auto max-w-[1280px] bg-green-600 w-full min-h-[400px] grid grid-cols-[1fr_2fr_1fr] gap-x-5">
-    <div className="mx-auto bg-transparent w-11/12 mt-10">
-      <div className="h-[400px] bg-red-600 hidden"></div>
-      <div className="min-h-[400px] rounded-[12px] flex flex-col gap-y-[30px]">
-        <div className="w-full min-h-40 bg-white rounded-[12px] border-2 border-primary relative flex flex-col justify-start items-center pb-[20px]">
-          <span className="text-[16px] border-2 border-primary bg-lightPrimary text-primary h-[30px] w-[126px] font-medium rounded-full flex justify-center items-start absolute -top-[14px] left-5">
-            <span>Aujourd'hui</span>
+    <div className="mx-auto bg-transparent w-11/12 mt-10 text-darkGray lg:grid lg:grid-cols-[1fr_2fr_1fr] lg:gap-x-5">
+      <div className="h-[400px] bg-red-600 hidden lg:flex lg:justify-start lg:flex-col lg:items-center"></div>
+      <div className="min-h-[400px] rounded-[12px] flex flex-col gap-y-[30px] md:max-w-[600px] mx-auto">
+        <div className="w-full min-h-40 bg-white border-t-[.5px] border-primary relative flex flex-col justify-start items-center pb-[20px]">
+          <span className="text-[16px] border-[.5px] border-primary bg-lightPrimary text-primary h-[30px] w-[130px] font-medium rounded-full flex justify-center items-start absolute -top-[14px] left-5">
+            <span className="font-semibold">les plus récents</span>
           </span>
-          <div className="w-11/12 h-[200px] bg-white shadow-lg mt-[20px] rounded-[12px] p-[12px] overflow-hidden">
+          <div className="w-full h-[200px] bg-white shadow-lg mt-[20px] rounded-[12px] p-[12px] overflow-hidden">
             <div className="h-[46px] w-full flex justify-start items-center gap-x-[8px]">
               <div className="h-[40px] w-[40px] rounded-full overflow-hidden bg-slate-200"></div>
               <div className="flex flex-col justify-start min-h-[46px]">
                 <div>
-                  <span>Techmoran</span>
+                  <span className="font-semibold md:text-lg">Techmoran</span>
                 </div>
-                <div className="text-xs italic">
+                <div className="text-xs italic md:text-sm">
                   Publié le 16/3/2024, language d' origine :{" "}
                   <span className="text-primary">English</span>
                 </div>
               </div>
             </div>
-            <div className="h-[90px] w-full text-primary font-bold flex items-center">
+            <div className="h-[90px] w-full text-primary font-bold flex items-center md:text-xl">
               Flutterwave nomme l'ancien directeur de la CBN Diop Fatou comme
               président du conseil ...
             </div>
             <div className="h-[40px] w-full flex justify-start items-center gap-x-[12px] overflow-x-scroll">
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">nigéria</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  nigéria
+                </span>
               </div>
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">éducation</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  éducation
+                </span>
               </div>
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">nigéria</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  nigéria
+                </span>
               </div>
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">éducation</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  éducation
+                </span>
               </div>
             </div>
           </div>
-          <div className="w-11/12 h-[200px] bg-white shadow-lg mt-[20px] rounded-[12px] p-[12px] overflow-hidden">
+          <div className="w-full h-[200px] bg-white shadow-lg mt-[20px] rounded-[12px] p-[12px] overflow-hidden">
             <div className="h-[46px] w-full flex justify-start items-center gap-x-[8px]">
               <div className="h-[40px] w-[40px] rounded-full overflow-hidden bg-slate-200"></div>
               <div className="flex flex-col justify-start min-h-[46px]">
                 <div>
-                  <span>Techmoran</span>
+                  <span className="font-semibold md:text-lg">Techmoran</span>
                 </div>
-                <div className="text-xs italic">
+                <div className="text-xs italic md:text-sm">
                   Publié le 16/3/2024, language d' origine :{" "}
                   <span className="text-primary">English</span>
                 </div>
               </div>
             </div>
-            <div className="h-[90px] w-full text-primary font-bold flex items-center">
+            <div className="h-[90px] w-full text-primary font-bold flex items-center md:text-xl">
               Flutterwave nomme l'ancien directeur de la CBN Diop Fatou comme
               président du conseil ...
             </div>
             <div className="h-[40px] w-full flex justify-start items-center gap-x-[12px] overflow-x-scroll">
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">nigéria</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  nigéria
+                </span>
               </div>
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">éducation</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  éducation
+                </span>
               </div>
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">nigéria</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  nigéria
+                </span>
               </div>
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">éducation</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  éducation
+                </span>
               </div>
             </div>
           </div>
-          <div className="w-11/12 h-[200px] bg-white shadow-lg mt-[20px] rounded-[12px] p-[12px] overflow-hidden">
+          <div className="w-full h-[200px] bg-white shadow-lg mt-[20px] rounded-[12px] p-[12px] overflow-hidden">
             <div className="h-[46px] w-full flex justify-start items-center gap-x-[8px]">
               <div className="h-[40px] w-[40px] rounded-full overflow-hidden bg-slate-200"></div>
               <div className="flex flex-col justify-start min-h-[46px]">
                 <div>
-                  <span>Techmoran</span>
+                  <span className="font-semibold md:text-lg">Techmoran</span>
                 </div>
-                <div className="text-xs italic">
+                <div className="text-xs italic md:text-sm">
                   Publié le 16/3/2024, language d' origine :{" "}
                   <span className="text-primary">English</span>
                 </div>
               </div>
             </div>
-            <div className="h-[90px] w-full text-primary font-bold flex items-center">
+            <div className="h-[90px] w-full text-primary font-bold flex items-center md:text-xl">
               Flutterwave nomme l'ancien directeur de la CBN Diop Fatou comme
               président du conseil ...
             </div>
             <div className="h-[40px] w-full flex justify-start items-center gap-x-[12px] overflow-x-scroll">
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">nigéria</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  nigéria
+                </span>
               </div>
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">éducation</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  éducation
+                </span>
               </div>
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">nigéria</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  nigéria
+                </span>
               </div>
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">éducation</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  éducation
+                </span>
               </div>
             </div>
           </div>
         </div>
-        <div className="w-full min-h-40 bg-white rounded-[12px] border-2 border-primary relative flex flex-col justify-start items-center pb-[20px]">
-          <span className="text-[16px] border-2 border-primary bg-lightPrimary text-primary h-[30px] w-[126px] font-medium rounded-full flex justify-center items-start absolute -top-[14px] left-5">
-            <span>Hier</span>
+        <div className="w-full min-h-40 bg-white border-t-[.5px] border-primary relative flex flex-col justify-start items-center pb-[20px]">
+          <span className="text-[16px] border-[.5px] border-primary bg-lightPrimary text-primary h-[30px] w-[150px] font-medium rounded-full flex justify-center items-start absolute -top-[14px] left-5">
+            <span className="font-semibold">Les moins récents</span>
           </span>
-          <div className="w-11/12 h-[200px] bg-white shadow-lg mt-[20px] rounded-[12px] p-[12px] overflow-hidden">
+          <div className="w-full h-[200px] bg-white shadow-lg mt-[20px] rounded-[12px] p-[12px] overflow-hidden">
             <div className="h-[46px] w-full flex justify-start items-center gap-x-[8px]">
               <div className="h-[40px] w-[40px] rounded-full overflow-hidden bg-slate-200"></div>
               <div className="flex flex-col justify-start min-h-[46px]">
                 <div>
-                  <span>Techmoran</span>
+                  <span className="font-semibold md:text-lg">Techmoran</span>
                 </div>
-                <div className="text-xs italic">
+                <div className="text-xs italic md:text-sm">
                   Publié le 16/3/2024, language d' origine :{" "}
                   <span className="text-primary">English</span>
                 </div>
               </div>
             </div>
-            <div className="h-[90px] w-full text-primary font-bold flex items-center">
+            <div className="h-[90px] w-full text-primary font-bold flex items-center md:text-xl">
               Flutterwave nomme l'ancien directeur de la CBN Diop Fatou comme
               président du conseil ...
             </div>
             <div className="h-[40px] w-full flex justify-start items-center gap-x-[12px] overflow-x-scroll">
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">nigéria</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  nigéria
+                </span>
               </div>
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">éducation</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  éducation
+                </span>
               </div>
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">nigéria</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  nigéria
+                </span>
               </div>
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">éducation</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  éducation
+                </span>
               </div>
             </div>
           </div>
-          <div className="w-11/12 h-[200px] bg-white shadow-lg mt-[20px] rounded-[12px] p-[12px] overflow-hidden">
+          <div className="w-full h-[200px] bg-white shadow-lg mt-[20px] rounded-[12px] p-[12px] overflow-hidden">
             <div className="h-[46px] w-full flex justify-start items-center gap-x-[8px]">
               <div className="h-[40px] w-[40px] rounded-full overflow-hidden bg-slate-200"></div>
               <div className="flex flex-col justify-start min-h-[46px]">
                 <div>
-                  <span>Techmoran</span>
+                  <span className="font-semibold md:text-lg">Techmoran</span>
                 </div>
-                <div className="text-xs italic">
+                <div className="text-xs italic md:text-sm">
                   Publié le 16/3/2024, language d' origine :{" "}
                   <span className="text-primary">English</span>
                 </div>
               </div>
             </div>
-            <div className="h-[90px] w-full text-primary font-bold flex items-center">
+            <div className="h-[90px] w-full text-primary font-bold flex items-center md:text-xl">
               Flutterwave nomme l'ancien directeur de la CBN Diop Fatou comme
               président du conseil ...
             </div>
             <div className="h-[40px] w-full flex justify-start items-center gap-x-[12px] overflow-x-scroll">
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">nigéria</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  nigéria
+                </span>
               </div>
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">éducation</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  éducation
+                </span>
               </div>
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">nigéria</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  nigéria
+                </span>
               </div>
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">éducation</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  éducation
+                </span>
               </div>
             </div>
           </div>
-          <div className="w-11/12 h-[200px] bg-white shadow-lg mt-[20px] rounded-[12px] p-[12px] overflow-hidden">
+          <div className="w-full h-[200px] bg-white shadow-lg mt-[20px] rounded-[12px] p-[12px] overflow-hidden">
             <div className="h-[46px] w-full flex justify-start items-center gap-x-[8px]">
               <div className="h-[40px] w-[40px] rounded-full overflow-hidden bg-slate-200"></div>
               <div className="flex flex-col justify-start min-h-[46px]">
                 <div>
-                  <span>Techmoran</span>
+                  <span className="font-semibold md:text-lg">Techmoran</span>
                 </div>
-                <div className="text-xs italic">
+                <div className="text-xs italic md:text-sm">
                   Publié le 16/3/2024, language d' origine :{" "}
                   <span className="text-primary">English</span>
                 </div>
               </div>
             </div>
-            <div className="h-[90px] w-full text-primary font-bold flex items-center">
+            <div className="h-[90px] w-full text-primary font-bold flex items-center md:text-xl">
               Flutterwave nomme l'ancien directeur de la CBN Diop Fatou comme
               président du conseil ...
             </div>
             <div className="h-[40px] w-full flex justify-start items-center gap-x-[12px] overflow-x-scroll">
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">nigéria</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  nigéria
+                </span>
               </div>
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">éducation</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  éducation
+                </span>
               </div>
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">nigéria</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  nigéria
+                </span>
               </div>
               <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
                 <div className="h-[35px] w-[35px] rounded-full bg-mediumGray"></div>
-                <span className="capitalize">éducation</span>
+                <span className="capitalize md:text-lg md:font-semibold">
+                  éducation
+                </span>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="w-full">
-          <button className="w-full h-[45px] border-2 border-primary rounded-full text-primary text-lg font-bold hover:text-white hover:bg-gradient-to-r hover:from-primary hover:to-darkPrimary hover:border-none active:scale-95 transition-all duration-300">Charger plus de résultats</button>
+        <div className="w-full md:flex md:justify-end">
+          <button className="w-full h-[45px] bg-primary rounded-full text-lg font-bold text-white hover:bg-gradient-to-r hover:from-primary hover:to-darkPrimary hover:border-none active:scale-95 md:w-6/12 lg:w-5/12 transition-all duration-300">
+            Charger plus de résultats
+          </button>
         </div>
       </div>
-      <div className="h-[400px] bg-purple-600 hidden"></div>
+      <div className="h-[400px] bg-purple-600 hidden lg:inline-grid"></div>
     </div>
   );
 }
