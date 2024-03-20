@@ -523,7 +523,7 @@ exports.getAllPosts = async (req, res) => {
         .sort({ airDateAdded: -1, ...sort })
         .select(fields);
 
-      return res.status(200).json([...postsFrFin, ...postsEngFin]);
+      res.status(200).json([...postsFrFin, ...postsEngFin]);
     }
     const posts = await Post.find({ ...queryObj })
       .limit(limit * 1)

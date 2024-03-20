@@ -34,7 +34,7 @@ function ActualitesCopy() {
   const [languageChanging, setLanguageChanging] = useState(false);
   const [language, setLanguage] = useState("fr");
   const [infiniteScrollIsFetching] = useState(false);
-  const [pageEq, setPageEq] = useState([{ field: "possible", value: false, },{ field: "title", value: "" }]);
+  const [pageEq, setPageEq] = useState([{ field: "possible", value: true, },{ field: "title", value: "" }]);
   // Chargement de tous les données qui viennent de la ase de données MongoDb
   const socialMedias = [
     "https://api.possible.africa/storage/logos/wwwlinkedincom.jpg",
