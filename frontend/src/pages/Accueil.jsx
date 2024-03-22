@@ -16,7 +16,7 @@ function Home() {
   return (
     <>
       <Container maxW="100vw" p={0}>
-        <ActualitesCopy />
+        <Actualites />
       </Container>
     </>
   );
