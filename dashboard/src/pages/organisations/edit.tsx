@@ -303,7 +303,7 @@ export const OrganisationEdit: React.FC<IResourceComponentsProps> = () => {
             optionFilterProp="label"
           />
         </Form.Item> */}
-        <Form.Item label="Logo" name="airLogo">
+        <Form.Item label="Logo" name="logo">
           <Upload
             name="file"
             listType="picture-card"
@@ -518,25 +518,25 @@ export const OrganisationEdit: React.FC<IResourceComponentsProps> = () => {
         <Form.Item label="Url Twitter" name={["twitter_url"]}>
           <Input />
         </Form.Item> */}
-        <Form.Item label="Description" name={["airDescription"]}>
+        <Form.Item label="Description" name={["description"]}>
           <Input />
         </Form.Item>
-        <Form.Item label="Secteur" name={["airSector"]}>
+        <Form.Item label="Secteur" name={["sector"]}>
           <Input />
         </Form.Item>
-        <Form.Item label="Source" name={["airSource"]}>
+        <Form.Item label="Source" name={["source"]}>
           <Input />
         </Form.Item>
-        <Form.Item label="Pays" name={["airRegion"]}>
+        <Form.Item label="Pays" name={["region"]}>
           <Input />
         </Form.Item>
-        <Form.Item label="Siège" name={["airHeadquarter"]}>
+        <Form.Item label="Siège" name={["headquarter"]}>
           <Input />
         </Form.Item>
-        <Form.Item label="Pays Couverts" name={["airOperatingCountries"]}>
+        <Form.Item label="Pays Couverts" name={["operatingCountries"]}>
           <Input />
         </Form.Item>
-        <Form.Item label="Site Web" name={["airWebsite"]}>
+        <Form.Item label="Site Web" name={["website"]}>
           <Input />
         </Form.Item>
       </Form>

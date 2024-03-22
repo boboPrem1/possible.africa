@@ -739,7 +739,7 @@ export const OrganisationList: React.FC<IResourceComponentsProps> = () => {
               <Table.Column
                 fixed="left"
                 width="3%"
-                dataIndex="airLogo"
+                dataIndex="logo"
                 title="Logo"
                 render={(value: any) => {
                   if (value && !(value.split(".").pop() === "html")) {
@@ -766,37 +766,37 @@ export const OrganisationList: React.FC<IResourceComponentsProps> = () => {
               <Table.Column
                 ellipsis={true}
                 width="8%"
-                dataIndex="airDescription"
+                dataIndex="description"
                 title="Description"
               />
               <Table.Column
                 ellipsis={true}
                 width="8%"
-                dataIndex="airSector"
+                dataIndex="sector"
                 title="Secteur"
               />
               <Table.Column
                 ellipsis={true}
                 width="8%"
-                dataIndex="airSource"
+                dataIndex="source"
                 title="Source"
               />
               <Table.Column
                 ellipsis={true}
                 width="8%"
-                dataIndex="airRegion"
+                dataIndex="region"
                 title="Pays"
               />
               <Table.Column
                 ellipsis={true}
                 width="8%"
-                dataIndex="airHeadquarter"
+                dataIndex="headquarter"
                 title="Siège"
               />
               <Table.Column
                 ellipsis={true}
                 width="8%"
-                dataIndex="airOperatingCountries"
+                dataIndex="operatingCountries"
                 title="Pays Couverts"
               />
               <Table.Column
@@ -813,7 +813,7 @@ export const OrganisationList: React.FC<IResourceComponentsProps> = () => {
                     return "-";
                   }
                 }}
-                dataIndex="airWebsite"
+                dataIndex="website"
                 title="Site Web"
               />
               {/* <Table.Column

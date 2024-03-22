@@ -1,6 +1,4 @@
 const Organisation = require("./organisationModel");
-const Country = require("../countries/countryModel");
-const OrganisationType = require("../organisationTypes/organisationTypeModel");
 const download = require("image-downloader");
 const CustomUtils = require("../../utils/index.js");
 const axios = require("axios");
@@ -87,22 +85,48 @@ const fetchAllRecords = async (apiKey, baseId, tableName) => {
         ],
       })
       .all();
+
     records.forEach((record) => {
       allRecords.push({
         _id: record.get("Name"),
         name: record.get("Name"),
+        logo: record.get("Logo"),
         description: record.get("Description"),
         region: record.get("Region"),
-        headquarter: record.get("Headquarter"),
-        operationnal_countries: record.get("Operating Countries"),
+        operatingCountries: record.get("Operating Countries"),
         sector: record.get("Sector"),
-        related_articles: record.get("Articles Related"),
+        subSector: record.get("Sub-Sector"),
+        active: record.get("Active"),
         website: record.get("Website"),
-        publication_date: record.get("Date Added"),
         source: record.get("Source"),
+        tier: record.get("Tier"),
+        dateAdded: record.get("Date Added"),
+        logoUrl: record.get("Logo URL"),
       });
     });
 
+    allRecords.map((el) => {
+      return {
+        _id: el._id,
+        logo: el.logo ? el.logo.join(" ")[0].url : null,
+        name: el.name ? el.name : null,
+        description: el.description ? el.description : null,
+        region: el.region ? el.region : null,
+        operatingCountries: el.operatingCountries
+          ? el.operatingCountries.join(" ")
+          : null,
+        sector: el.sector ? el.sector : null,
+        subSector: el.subSector ? el.subSector : null,
+        active: el.active ? el.active : null,
+        website: el.website ? el.website : null,
+        source: el.source ? el.source : null,
+        tier: el.tier ? el.tier : null,
+        dateAdded: el.dateAdded ? el.dateAdded : null,
+        logoUrl: el.logoUrl ? el.logoUrl : null,
+      };
+    });
+
+    // console.log(allRecords);
     return allRecords;
   } catch (err) {
     console.error(err);
@@ -119,9 +143,10 @@ exports.getOrganisationsFromAirtable = async (req, res) => {
     let existing = 0;
     const organisations = await result.map(async (organisation) => {
       const ExistingOrg = await Organisation.find({
-        name: organisation.name,
+        name: { $eq: organisation.name },
       });
       console.log(ExistingOrg);
+
       if (ExistingOrg.length === 0) {
         try {
           let domain_racine = extraireDomaine(organisation.website);
@@ -138,54 +163,70 @@ exports.getOrganisationsFromAirtable = async (req, res) => {
               .split(".")
               .join("")}.jpg`;
             const org = await Organisation.create({
-              name: organisation.name,
-              airLogo: urla,
-              airDescription: organisation.description,
-              airRegion: organisation.region,
-              airHeadquarter: organisation.headquarter,
-              airOperatingCountries: organisation.operationnal_countries,
-              airSector: organisation.sector,
-              airWebsite: organisation.website,
-              airRelatedArticles: organisation.related_articles,
-              airSource: organisation.source,
+              logo: urla,
+              name: organisation.name ? organisation.name : null,
+              description: organisation.description
+                ? organisation.description
+                : null,
+              region: organisation.region
+                ? organisation.region.join(",")
+                : null,
+              operatingCountries: organisation.operatingCountries
+                ? organisation.operatingCountries.join(",")
+                : null,
+              sector: organisation.sector
+                ? organisation.sector.join(",")
+                : null,
+              subSector: organisation.subSector
+                ? organisation.subSector.join(",")
+                : null,
+              active: organisation.active ? organisation.active : null,
+              website: organisation.website ? organisation.website : null,
+              source: organisation.source ? organisation.source : null,
+              tier: organisation.tier ? organisation.tier : null,
+              dateAdded: organisation.dateAdded ? organisation.dateAdded : null,
             });
           } else {
+            const urla =
+              "https://api.possible.africa/storage/logos/placeholder_org.jpeg";
             const org = await Organisation.create({
-              name: organisation.name,
-              airLogo:
-                "https://api.possible.africa/storage/logos/placeholder_org.jpeg",
-              airDescription: organisation.description,
-              airRegion: organisation.region,
-              airHeadquarter: organisation.headquarter,
-              airOperatingCountries: organisation.operationnal_countries,
-              airSector: organisation.sector,
-              airWebsite: organisation.website,
-              airRelatedArticles: organisation.related_articles,
-              airSource: organisation.source,
+              logo: urla,
+              name: organisation.name ? organisation.name : null,
+              description: organisation.description
+                ? organisation.description
+                : null,
+              region: organisation.region
+                ? organisation.region.join(",")
+                : null,
+              operatingCountries: organisation.operatingCountries
+                ? organisation.operatingCountries.join(",")
+                : null,
+              sector: organisation.sector
+                ? organisation.sector.join(",")
+                : null,
+              subSector: organisation.subSector
+                ? organisation.subSector.join(",")
+                : null,
+              active: organisation.active ? organisation.active : null,
+              website: organisation.website ? organisation.website : null,
+              source: organisation.source ? organisation.source : null,
+              tier: organisation.tier ? organisation.tier : null,
+              dateAdded: organisation.dateAdded ? organisation.dateAdded : null,
             });
           }
-
-          // console.log(org);
         } catch (e) {
           console.log(e);
         }
       } else {
         existing = existing + 1;
       }
-      // console.log(ExistingOrg);
     });
-    // console.log({ organisations });
-    // console.log({ existing });
 
-    res.status(200).json({ success: true });
-    // return { success: true };
-    // console.log(organisations);
+    res.status(200).json({success: true, existing: existing});
   } catch (error) {
     res.status(404).json({ message: error.message });
-    // return { message: error.message };
   }
 };
-
 
 exports.cronOrganisationsFromAirtable = async () => {
   try {
@@ -197,9 +238,10 @@ exports.cronOrganisationsFromAirtable = async () => {
     let existing = 0;
     const organisations = await result.map(async (organisation) => {
       const ExistingOrg = await Organisation.find({
-        name: organisation.name,
+        name: { $eq: organisation.name },
       });
       console.log(ExistingOrg);
+
       if (ExistingOrg.length === 0) {
         try {
           let domain_racine = extraireDomaine(organisation.website);
@@ -216,51 +258,68 @@ exports.cronOrganisationsFromAirtable = async () => {
               .split(".")
               .join("")}.jpg`;
             const org = await Organisation.create({
-              name: organisation.name,
-              airLogo: urla,
-              airDescription: organisation.description,
-              airRegion: organisation.region,
-              airHeadquarter: organisation.headquarter,
-              airOperatingCountries: organisation.operationnal_countries,
-              airSector: organisation.sector,
-              airWebsite: organisation.website,
-              airRelatedArticles: organisation.related_articles,
-              airSource: organisation.source,
+              logo: urla,
+              name: organisation.name ? organisation.name : null,
+              description: organisation.description
+                ? organisation.description
+                : null,
+              region: organisation.region
+                ? organisation.region.join(",")
+                : null,
+              operatingCountries: organisation.operatingCountries
+                ? organisation.operatingCountries.join(",")
+                : null,
+              sector: organisation.sector
+                ? organisation.sector.join(",")
+                : null,
+              subSector: organisation.subSector
+                ? organisation.subSector.join(",")
+                : null,
+              active: organisation.active ? organisation.active : null,
+              website: organisation.website ? organisation.website : null,
+              source: organisation.source ? organisation.source : null,
+              tier: organisation.tier ? organisation.tier : null,
+              dateAdded: organisation.dateAdded ? organisation.dateAdded : null,
             });
           } else {
+            const urla =
+              "https://api.possible.africa/storage/logos/placeholder_org.jpeg";
             const org = await Organisation.create({
-              name: organisation.name,
-              airLogo:
-                "https://api.possible.africa/storage/logos/placeholder_org.jpeg",
-              airDescription: organisation.description,
-              airRegion: organisation.region,
-              airHeadquarter: organisation.headquarter,
-              airOperatingCountries: organisation.operationnal_countries,
-              airSector: organisation.sector,
-              airWebsite: organisation.website,
-              airRelatedArticles: organisation.related_articles,
-              airSource: organisation.source,
+              logo: urla,
+              name: organisation.name ? organisation.name : null,
+              description: organisation.description
+                ? organisation.description
+                : null,
+              region: organisation.region
+                ? organisation.region.join(",")
+                : null,
+              operatingCountries: organisation.operatingCountries
+                ? organisation.operatingCountries.join(",")
+                : null,
+              sector: organisation.sector
+                ? organisation.sector.join(",")
+                : null,
+              subSector: organisation.subSector
+                ? organisation.subSector.join(",")
+                : null,
+              active: organisation.active ? organisation.active : null,
+              website: organisation.website ? organisation.website : null,
+              source: organisation.source ? organisation.source : null,
+              tier: organisation.tier ? organisation.tier : null,
+              dateAdded: organisation.dateAdded ? organisation.dateAdded : null,
             });
           }
-
-          // console.log(org);
         } catch (e) {
           console.log(e);
         }
       } else {
         existing = existing + 1;
       }
-      // console.log(ExistingOrg);
     });
-    // console.log({ organisations });
-    console.log({ existing });
 
-    // res.status(200).json({ success: true });
-    return { success: true };
-    // console.log(organisations);
+    res.status(200).json({ success: true, existing: existing });
   } catch (error) {
-    // res.status(404).json({ message: error.message });
-    return { message: error.message };
+    res.status(404).json({ message: error.message });
   }
 };
 

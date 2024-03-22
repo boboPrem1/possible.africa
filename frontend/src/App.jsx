@@ -50,7 +50,7 @@ function App() {
                   <Route
                     index
                     path="/actualites"
-                    element={<ActualitesCopy />}
+                    element={<Actualites />}
                   />
                   <Route path="/actualites/:slug" element={<OneActualite />} />
                 </Route>

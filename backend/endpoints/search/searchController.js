@@ -1,8 +1,5 @@
 const Organisation = require("../organisations/organisationModel.js");
 const Post = require("../posts/postModel.js");
-const Job = require("../jobs/jobModel.js");
-const Event = require("../events/eventModel.js");
-const Opportunity = require("../opportunities/opportunityModel.js");
 const bcrypt = require("bcryptjs");
 
 function calculateSecondsDiff(date1, date2) {
@@ -94,57 +91,6 @@ exports.getAllFound = async (req, res) => {
           const allFoundsCopy = [...allFounds];
           const finalFounds = allFoundsCopy.map((el) => {
             const newEl = { searchType: "job", ...el._doc };
-            return newEl;
-          });
-          return finalFounds;
-        } else {
-          return allFounds;
-        }
-      })(),
-      (async () => {
-        const allFounds = await Event.find({
-          $or: [
-            { title: regex },
-            { format: regex },
-            // { target_country: regex },
-            { activity_area: regex },
-            { description: regex },
-            { slug: regex },
-            { location: regex },
-            { frequence: regex },
-          ],
-        });
-        if (allFounds.length) {
-          const allFoundsCopy = [...allFounds];
-          const finalFounds = allFoundsCopy.map((el) => {
-            const newEl = { searchType: "event", ...el._doc };
-            return newEl;
-          });
-          return finalFounds;
-        } else {
-          return allFounds;
-        }
-      })(),
-      (async () => {
-        const allFounds = await Opportunity.find({
-          $or: [
-            { title: regex },
-            { target_people: regex },
-            // { target_country: regex },
-            { activity_area: regex },
-            { description: regex },
-            { eligibility: regex },
-            { processus: regex },
-            { slug: regex },
-            { beneficies: regex },
-            { registration_link: regex },
-            { frequency: regex },
-          ],
-        });
-        if (allFounds.length) {
-          const allFoundsCopy = [...allFounds];
-          const finalFounds = allFoundsCopy.map((el) => {
-            const newEl = { searchType: "ooportunity", ...el._doc };
             return newEl;
           });
           return finalFounds;

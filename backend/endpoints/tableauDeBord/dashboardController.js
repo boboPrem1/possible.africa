@@ -1,9 +1,6 @@
 const CustomUtils = require("../../utils/index.js");
 const Organisation = require("../organisations/organisationModel.js");
 const Post = require("../posts/postModel.js");
-const Job = require("../jobs/jobModel.js");
-const Event = require("../events/eventModel.js");
-const Opportunity = require("../opportunities/opportunityModel.js");
 const User = require("../users/userModel.js");
 const moment = require("moment");
 
@@ -23,28 +20,28 @@ exports.getAllTotaux = async (req, res) => {
     const lastOrganisations = await Organisation.find()
       .limit(10 * 1)
       .skip(0)
-      .sort({ createdAt: -1 });
+      .sort({ dateAdded: -1 });
     let organisations = await Organisation.find().count();
     let lastYearOrganisations = await Organisation.find({
-      createdAt: {
+      dateAdded: {
         $gte: startOfYear,
         $lte: now,
       },
     }).count();
     let lastMonthOrganisations = await Organisation.find({
-      createdAt: {
+      dateAdded: {
         $gte: startOfMonth,
         $lte: now,
       },
     }).count();
     let lastWeekOrganisations = await Organisation.find({
-      createdAt: {
+      dateAdded: {
         $gte: startOfWeek,
         $lte: now,
       },
     }).count();
     let todayOrganisations = await Organisation.find({
-      createdAt: {
+      dateAdded: {
         $gte: startOfDay,
         $lte: now,
       },
@@ -80,9 +77,6 @@ exports.getAllTotaux = async (req, res) => {
         $lte: now,
       },
     }).count();
-    const jobs = await Job.find().count();
-    const opportunities = await Opportunity.find().count();
-    const events = await Event.find().count();
     const users = await User.find().count();
 
     // if (!user)

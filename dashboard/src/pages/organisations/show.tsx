@@ -121,7 +121,7 @@ export const OrganisationShow: React.FC<IResourceComponentsProps> = () => {
       <Title level={5}>Description</Title>
       <span>
         {
-          record?.airDescription
+          record?.description
           // &&
           // parse(
           //   record?.description.replace(/\\n/g, "<br />"),
@@ -130,15 +130,15 @@ export const OrganisationShow: React.FC<IResourceComponentsProps> = () => {
         }
       </span>
       <Title level={5}>Secteur</Title>
-      <TextField value={record?.airSector} />
+      <TextField value={record?.sector} />
       <Title level={5}>Source</Title>
-      <TextField value={record?.airSource} />
+      <TextField value={record?.source} />
       <Title level={5}>Pays</Title>
-      <TextField value={record?.airRegion} />
+      <TextField value={record?.region} />
       <Title level={5}>Siège</Title>
-      <TextField value={record?.airHeadquarter} />
+      <TextField value={record?.headquarter} />
       <Title level={5}>Pays Couverts</Title>
-      <TextField value={record?.airOperatingCountries} />
+      <TextField value={record?.operatingCountries} />
       {/* <Title level={5}>Telephone</Title>
       {record?.telephone ? (
         <Link
@@ -156,13 +156,13 @@ export const OrganisationShow: React.FC<IResourceComponentsProps> = () => {
         "-"
       )} */}
       <Title level={5}>Site Web</Title>
-      {record?.airWebsite ? (
+      {record?.website ? (
         <Link
           // href={"https://www.google.com/search?q=" + value}
-          href={record?.airWebsite}
+          href={record?.website}
           target="_blank"
         >
-          {record?.airWebsite}
+          {record?.website}
         </Link>
       ) : (
         "-"

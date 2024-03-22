@@ -700,30 +700,30 @@ export default function CustomDashboard() {
                                   : organisation?.name}
                               </h6>
                               <p className="text-primary dark:text-zink-200">
-                                {organisation?.airSource?.length > 30
-                                  ? organisation?.airSource?.slice(0, 30) +
+                                {organisation?.source?.length > 30
+                                  ? organisation?.source?.slice(0, 30) +
                                     "..."
-                                  : organisation?.airSource}
+                                  : organisation?.source}
                               </p>
                             </div>
                           </div>
                         </td>
                         <td className="px-3.5 py-2.5 first:pl-5 last:pr-5 border-y border-primary/20 dark:border-zink-500">
-                          {organisation?.airDescription?.length > 30
-                            ? organisation?.airDescription?.slice(0, 30) + "..."
-                            : organisation?.airDescription}
+                          {organisation?.description?.length > 30
+                            ? organisation?.description?.slice(0, 30) + "..."
+                            : organisation?.description}
                         </td>
                         <td className="px-3.5 py-2.5 first:pl-5 last:pr-5 border-y border-primary/20 dark:border-zink-500 text-green-500">
-                          {organisation?.airSector?.length > 30
-                            ? organisation?.airSector?.slice(0, 30) + "..."
-                            : organisation?.airSector}
+                          {organisation?.sector?.length > 30
+                            ? organisation?.sector?.slice(0, 30) + "..."
+                            : organisation?.sector}
                         </td>
                         <td className="px-3.5 py-2.5 first:pl-5 last:pr-5 border-y border-primary/20 dark:border-zink-500">
                           <span className="px-2.5 py-0.5 text-xs inline-block font-medium rounded border bg-green-100 border-green-200 text-green-500 dark:bg-green-500/20 dark:border-green-500/20">
-                            {organisation?.airHeadquarter?.length > 30
-                              ? organisation?.airHeadquarter?.slice(0, 30) +
+                            {organisation?.headquarter?.length > 30
+                              ? organisation?.headquarter?.slice(0, 30) +
                                 "..."
-                              : organisation?.airHeadquarter}
+                              : organisation?.headquarter}
                           </span>
                         </td>
                         {/* <td className="px-3.5 py-2.5 first:pl-5 last:pr-5 border-y border-primary/20 dark:border-zink-500">

@@ -2,7 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
+@keyframes loading {
+  0% {
+    opacity: .5;
+    rotate: 25deg;
+  }
+  50% {
+    scale: 1.2;
+    opacity: 1;
+  }
+  100% {
+    rotate: -25deg;
+    translate: 100px 0;
+    opacity: .5;
+    /* transform: translateX(200px); */
+  }
+}
+@keyframes loadingMini {
+  0% {
+    opacity: .5;
+    rotate: 25deg;
+  }
+  50% {
+    scale: 1.2;
+    opacity: 1;
+  }
+  100% {
+    rotate: -25deg;
+    translate: 35px 0;
+    opacity: .5;
+    /* transform: translateX(200px); */
+  }
+}
+
+body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;

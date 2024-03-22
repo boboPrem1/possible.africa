@@ -32,6 +32,7 @@ export const apiSlice = createApi({
     },
   }),
   tagTypes: ["Organisations"],
+  refetchOnMountOrArgChange: true,
   endpoints: (builder) => ({
     getPostCategories: builder.query({
       query: (queryArgs = baseQueryArgs) =>

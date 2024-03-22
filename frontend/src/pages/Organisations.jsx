@@ -112,7 +112,7 @@ function Organisations() {
         endMessage={<Text>Yay! You have seen it all</Text>}
       >
         {organisations.map((organisation, index) => {
-          const createdAt = new Date(organisation?.createdAt);
+          const createdAt = new Date(organisation?.dateAdded);
           // transform date to french format
           const date =
             createdAt.getDate() +
@@ -126,15 +126,15 @@ function Organisations() {
               postType="Organisation"
               key={date}
               title={organisation?.name}
-              description={organisation?.airDescription}
+              description={organisation?.description}
               imgUrl={
-                socialMedias.includes(organisation?.airLogo)
+                socialMedias.includes(organisation?.logo)
                   ? logoPlaceholder
-                  : organisation?.airLogo
+                  : organisation?.logo
               }
               // isLoaded={isLoaded}
               // link={"/organisations/" + organisation?.id}
-              link={organisation?.airWebsite}
+              link={organisation?.website}
               // type={organisation?.type?.name}
               // organisation_types={
               //   organisation?.types?.length > 0 ? organisation?.types : []
@@ -150,14 +150,12 @@ function Organisations() {
               //     : []
               // }
               createdAt={date}
-              country={organisation?.airRegion}
-              sitWebLink={organisation?.airWebsite || ""}
-              airtableRegion={organisation?.airRegion}
-              airtableHeadquarter={organisation?.airHeadquarter}
-              airtableOperationnalCountries={
-                organisation?.airOperatingCountries
-              }
-              airtableSector={organisation?.airSector}
+              country={organisation?.region}
+              sitWebLink={organisation?.website || ""}
+              airtableRegion={organisation?.region}
+              airtableHeadquarter={organisation?.headquarter}
+              airtableOperationnalCountries={organisation?.operatingCountries}
+              airtableSector={organisation?.sector}
               airtableRelaredArticles={organisation?.airRelatedArticles}
             />
           );
