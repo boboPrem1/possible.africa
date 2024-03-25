@@ -7,7 +7,7 @@ import {
 } from "../../features/api/apiSlice.js";
 import CustomContainer from "../../utils/CustomContainer.jsx";
 import { ParseSlice } from "../../utils/htmlParser.jsx";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import NoData from "../../utils/NoData.jsx";
 import CenteredContainer from "../../utils/CenteredContainer.jsx";
@@ -32,7 +32,55 @@ const socialMedias = [
 const logoPlaceholder =
   "https://api.possible.africa/storage/logos/placeholder_org.jpeg";
 
+function pageEqReducer(state, action) {
+  let modifieState = [
+    { field: "possible", value: true },
+    { field: "title", value: "" },
+    { field: "airTags", value: "" },
+    { field: "airLanguage", value: "" },
+  ];
+  let titleValue = "";
+  let airLanguageValue = "";
+  let airTagsValue = "";
+  switch (action.field) {
+    case "title":
+      state[1] = { ...state[1], value: action.value };
+      break;
+    case "airTags":
+      state[2] = { ...state[2], value: action.value };
+      break;
+    case "airLanguage":
+      state[3] = { ...state[3], value: action.value };
+      break;
+    case "reset":
+      state = [
+        { field: "possible", value: true },
+        { field: "title", value: "" },
+        { field: "airTags", value: "" },
+        { field: "airLanguage", value: "" },
+      ];
+      break;
+    default:
+      console.log("undefined action");
+      break;
+  }
+  // console.log(state);
+  // return [
+  //   { field: "possible", value: true },
+  //   { field: "title", value: titleValue },
+  //   { field: "airTags", value: airTagsValue },
+  //   { field: "airLanguage", value: airLanguageValue },
+  // ];
+  return [...state];
+}
+
 function Actualites() {
+  const initialPageEq = [
+    { field: "possible", value: true },
+    { field: "title", value: "" },
+    { field: "airTags", value: "" },
+    { field: "airLanguage", value: "" },
+  ];
   const [page, setPage] = useState(1);
   const [firstLoad, setFirstLoad] = useState(true);
   const [pageS, setPageS] = useState(page + 1);
@@ -41,7 +89,7 @@ function Actualites() {
   const [languageChanging, setLanguageChanging] = useState(false);
   const [language, setLanguage] = useState("fr");
   const [infiniteScrollIsFetching] = useState(false);
-  const [pageEq, setPageEq] = useState([
+  const [pageEq, dispatch] = useReducer(pageEqReducer, [
     { field: "possible", value: true },
     { field: "title", value: "" },
     { field: "airTags", value: "" },
@@ -53,8 +101,6 @@ function Actualites() {
     { field: "airTags", value: "" },
     { field: "airLanguage", value: "" },
   ]);
-  const [engData, setEngData] = useState([]);
-  const [frData, setFrData] = useState([]);
   const [allTags, setAllTags] = useState([]);
 
   const {
@@ -69,7 +115,7 @@ function Actualites() {
     limit: firstLoad ? 10 * page : 10 * (page + 1),
     page: firstLoad ? page : page + 1,
     fields: [],
-    eq: pageEq,
+    eq: pageEqS,
   });
 
   const {
@@ -79,38 +125,19 @@ function Actualites() {
     refetch: refechAllNewsLength,
   } = useGetPostsQuery({
     fields: [],
-    eq: pageEq[0].value ? pageEq : [],
+    eq: pageEqS[0].value ? pageEqS : [],
   });
 
   useEffect(() => {
-    // console.log(allNews.slice(0, 10));
-    if (allNews.length) {
-      const eng = allNews.filter((el) => el.airTrans === "eng");
-      const fr = allNews.filter((el) => el.airTrans === "fr");
-      setFrData([...fr]);
-      setEngData([...eng]);
-      setFirstLoad(false);
-    }
-    if (frData) {
-      console.log({ frData });
-    }
-    if (engData) {
-      console.log({ engData });
-    }
     if (page != pageS || pageEq.length) {
       refetch();
       // console.log(page, pageS);
     } else {
       // console.log(page, pageS);
     }
-  }, [isLoading, page, pageS, pageEq]);
+  }, [isLoading, page, pageS]);
 
-  if (
-    isLoading ||
-    allNewsLengthIsLoading ||
-    frData.length === 0 ||
-    engData.length === 0
-  ) {
+  if (isLoading || allNewsLengthIsLoading) {
     return (
       <div className="h-[400px] w-full m-auto flex justify-center items-center">
         <img
@@ -172,33 +199,18 @@ function Actualites() {
           label="Rechercher par titre"
           placeholder="Entrez le titre de l'article ."
           type="text"
+          value={pageEq[1].value}
           onChange={(e) => {
-            setPageEq(
-              pageEq.map((a) => {
-                if (a.field === "title") {
-                  return { field: a.field, value: e.target.value };
-                } else {
-                  return a;
-                }
-              })
-            );
-            // refetch();
+            dispatch({ field: "title", value: e.target.value });
           }}
         />
         <Input
           label="Rechercher par tag"
           placeholder="Entrez un tag de l'article ."
           type="text"
+          value={pageEq[2].value}
           onChange={(e) => {
-            setPageEq(
-              pageEq.map((a) => {
-                if (a.field === "airTags") {
-                  return { field: a.field, value: e.target.value };
-                } else {
-                  return a;
-                }
-              })
-            );
+            dispatch({ field: "airTags", value: e.target.value });
           }}
         />
         {/* <CustumSelect
@@ -215,17 +227,10 @@ function Actualites() {
         <CustumSelect
           label="Langue d'écriture de l'article"
           placeholder="Choisissez une langue."
+          // value={pageEq[3].value}
           value={pageEq[3].value}
           onChange={(e) => {
-            setPageEq(
-              pageEq.map((a) => {
-                if (a.field === "airLanguage") {
-                  return { field: a.field, value: e.target.value };
-                } else {
-                  return a;
-                }
-              })
-            );
+            dispatch({ field: "airLanguage", value: e.target.value });
           }}
         >
           <option value="">Choisissez une langue</option>
@@ -233,6 +238,27 @@ function Actualites() {
           <option value="FR">Français</option>
         </CustumSelect>
 
+        <button
+          className="w-full h-[45px] bg-primary rounded-full text-lg font-bold text-white hover:bg-gradient-to-r hover:from-primary hover:to-darkPrimary hover:border-none active:scale-95 transition-all duration-300"
+          onClick={() => setPageEqS([...pageEq])}
+        >
+          Filtrer
+        </button>
+        <button
+          className="w-full h-[45px] bg-transparent rounded-full text-lg text-primary border-2 border-primary hover:text-white font-bold hover:bg-gradient-to-r hover:from-primary hover:to-darkPrimary hover:border-none active:scale-95 transition-all duration-300"
+          onClick={() => {
+            setPageEqS([
+              { field: "possible", value: true },
+              { field: "title", value: "" },
+              { field: "airTags", value: "" },
+              { field: "airLanguage", value: "" },
+            ]);
+            dispatch({ field: "reset", value: "" });
+            console.log(titleInputRef);
+          }}
+        >
+          Réinitialiser les filtres
+        </button>
         {/* <div>
           <div className="font-semibold">Langue de publication</div>
           <Input label="Anglais" type="checkbox" />
@@ -300,168 +326,174 @@ function Actualites() {
           </span>
           {/* One card in recents part */}
           {language === "fr"
-            ? frData.slice(0, 10).map((post, index) => {
-                const createdAt = new Date(post?.airDateAdded);
-                // transform date to french format
-                const date =
-                  createdAt.getDate() +
-                  "/" +
-                  (createdAt.getMonth() + 1) +
-                  "/" +
-                  createdAt.getFullYear();
-                return (
-                  <div
-                    key={index}
-                    className="w-full h-[200px] bg-white shadow-lg mt-[20px] rounded-[12px] p-[12px] overflow-hidden"
-                  >
-                    <div className="h-[46px] w-full flex justify-start items-center gap-x-[8px]">
-                      <div className="h-[40px] w-[40px] rounded-full overflow-hidden bg-transparent">
-                        <img
-                          src={
-                            socialMedias.includes(post?.airLogo)
-                              ? logoPlaceholder
-                              : post?.airLogo
-                          }
-                          height={40}
-                          width={40}
-                          alt="logo"
-                        />
-                      </div>
-                      <div className="flex flex-col justify-start min-h-[46px]">
-                        <div>
-                          <span className="font-semibold md:text-lg">
-                            {post.airMedia}
-                          </span>
+            ? allNews
+                .filter((el) => el.airTrans === "fr")
+                .slice(0, 10)
+                .map((post, index) => {
+                  const createdAt = new Date(post?.airDateAdded);
+                  // transform date to french format
+                  const date =
+                    createdAt.getDate() +
+                    "/" +
+                    (createdAt.getMonth() + 1) +
+                    "/" +
+                    createdAt.getFullYear();
+                  return (
+                    <div
+                      key={index}
+                      className="w-full h-[200px] bg-white shadow-lg mt-[20px] rounded-[12px] p-[12px] overflow-hidden"
+                    >
+                      <div className="h-[46px] w-full flex justify-start items-center gap-x-[8px]">
+                        <div className="h-[40px] w-[40px] rounded-full overflow-hidden bg-transparent">
+                          <img
+                            src={
+                              socialMedias.includes(post?.airLogo)
+                                ? logoPlaceholder
+                                : post?.airLogo
+                            }
+                            height={40}
+                            width={40}
+                            alt="logo"
+                          />
                         </div>
-                        <div className="text-xs italic md:text-sm">
-                          Publié le {date}, language d' origine :{" "}
-                          <span className="text-primary">
-                            {post.airLanguage === "ENG"
-                              ? "Anglais"
-                              : "Français"}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="h-[90px] w-full text-primary hover:text-darkPrimary active:text-darkPrimary visited:text-darkPrimary font-bold flex items-center md:text-xl">
-                      <a
-                        href={post.airLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {post.title.length > 110
-                          ? post.title.slice(0, 110) + " . . ."
-                          : post.title}
-                      </a>
-                    </div>
-                    <div className="h-[40px] w-full flex justify-start items-center gap-x-[12px] overflow-x-scroll">
-                      {post.airTags.split(", ").map((tag) => {
-                        return (
-                          <div
-                            key={tag}
-                            className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray"
-                          >
-                            <div className="h-[35px] w-[35px] rounded-full border-2 scale-105 bg-transparent flex justify-center">
-                              <img
-                                src={tagSolid}
-                                height={20}
-                                width={18}
-                                alt="Tag"
-                              />
-                            </div>
-                            <span className="capitalize md:text-lg md:font-semibold">
-                              {tag}
+                        <div className="flex flex-col justify-start min-h-[46px]">
+                          <div>
+                            <span className="font-semibold md:text-lg">
+                              {post.airMedia}
                             </span>
                           </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              })
-            : engData.slice(0, 10).map((post, index) => {
-                const createdAt = new Date(post?.airDateAdded);
-                // transform date to french format
-                const date =
-                  createdAt.getDate() +
-                  "/" +
-                  (createdAt.getMonth() + 1) +
-                  "/" +
-                  createdAt.getFullYear();
-                return (
-                  <div
-                    key={index}
-                    className="w-full h-[200px] bg-white shadow-lg mt-[20px] rounded-[12px] p-[12px] overflow-hidden"
-                  >
-                    <div className="h-[46px] w-full flex justify-start items-center gap-x-[8px]">
-                      <div className="h-[40px] w-[40px] rounded-full overflow-hidden bg-slate-200">
-                        <img
-                          src={
-                            socialMedias.includes(post?.airLogo)
-                              ? logoPlaceholder
-                              : post?.airLogo
-                          }
-                          height={40}
-                          width={40}
-                          alt="logo"
-                        />
-                      </div>
-                      <div className="flex flex-col justify-start min-h-[46px]">
-                        <div>
-                          <span className="font-semibold md:text-lg">
-                            {post.airMedia}{" "}
-                          </span>
-                        </div>
-                        <div className="text-xs italic md:text-sm">
-                          Publié le {date}, language d' origine :{" "}
-                          <span className="text-primary">
-                            {post.airLanguage === "ENG"
-                              ? "Anglais"
-                              : "Français"}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="h-[90px] w-full text-primary hover:text-darkPrimary active:text-darkPrimary visited:text-darkPrimary font-bold flex items-center md:text-xl">
-                      <a
-                        href={post.airLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {post.title.length > 110
-                          ? post.title.slice(0, 110) + " . . ."
-                          : post.title}
-                      </a>
-                    </div>
-                    <div className="h-[40px] w-full flex justify-start items-center gap-x-[12px] overflow-x-scroll">
-                      {post.airTags.split(", ").map((tag) => {
-                        return (
-                          <div
-                            key={tag}
-                            className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray"
-                          >
-                            <div className="h-[35px] w-[35px] rounded-full border-2 scale-105 bg-transparent flex justify-center">
-                              <img
-                                src={tagSolid}
-                                height={20}
-                                width={18}
-                                alt="Tag"
-                              />
-                            </div>
-                            <span className="capitalize md:text-lg md:font-semibold">
-                              {tag}
+                          <div className="text-xs italic md:text-sm">
+                            Publié le {date}, language d' origine :{" "}
+                            <span className="text-primary">
+                              {post.airLanguage === "ENG"
+                                ? "Anglais"
+                                : "Français"}
                             </span>
                           </div>
-                        );
-                      })}
+                        </div>
+                      </div>
+                      <div className="h-[90px] w-full text-primary hover:text-darkPrimary active:text-darkPrimary visited:text-darkPrimary font-bold flex items-center md:text-xl">
+                        <a
+                          href={post.airLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {post.title.length > 110
+                            ? post.title.slice(0, 110) + " . . ."
+                            : post.title}
+                        </a>
+                      </div>
+                      <div className="h-[40px] w-full flex justify-start items-center gap-x-[12px] overflow-x-scroll">
+                        {post.airTags.split(", ").map((tag) => {
+                          return (
+                            <div
+                              key={tag}
+                              className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray"
+                            >
+                              <div className="h-[35px] w-[35px] rounded-full border-2 scale-105 bg-transparent flex justify-center">
+                                <img
+                                  src={tagSolid}
+                                  height={20}
+                                  width={18}
+                                  alt="Tag"
+                                />
+                              </div>
+                              <span className="capitalize md:text-lg md:font-semibold">
+                                {tag}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+            : allNews
+                .filter((el) => el.airTrans === "eng")
+                .slice(0, 10)
+                .map((post, index) => {
+                  const createdAt = new Date(post?.airDateAdded);
+                  // transform date to french format
+                  const date =
+                    createdAt.getDate() +
+                    "/" +
+                    (createdAt.getMonth() + 1) +
+                    "/" +
+                    createdAt.getFullYear();
+                  return (
+                    <div
+                      key={index}
+                      className="w-full h-[200px] bg-white shadow-lg mt-[20px] rounded-[12px] p-[12px] overflow-hidden"
+                    >
+                      <div className="h-[46px] w-full flex justify-start items-center gap-x-[8px]">
+                        <div className="h-[40px] w-[40px] rounded-full overflow-hidden bg-slate-200">
+                          <img
+                            src={
+                              socialMedias.includes(post?.airLogo)
+                                ? logoPlaceholder
+                                : post?.airLogo
+                            }
+                            height={40}
+                            width={40}
+                            alt="logo"
+                          />
+                        </div>
+                        <div className="flex flex-col justify-start min-h-[46px]">
+                          <div>
+                            <span className="font-semibold md:text-lg">
+                              {post.airMedia}{" "}
+                            </span>
+                          </div>
+                          <div className="text-xs italic md:text-sm">
+                            Publié le {date}, language d' origine :{" "}
+                            <span className="text-primary">
+                              {post.airLanguage === "ENG"
+                                ? "Anglais"
+                                : "Français"}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="h-[90px] w-full text-primary hover:text-darkPrimary active:text-darkPrimary visited:text-darkPrimary font-bold flex items-center md:text-xl">
+                        <a
+                          href={post.airLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {post.title.length > 110
+                            ? post.title.slice(0, 110) + " . . ."
+                            : post.title}
+                        </a>
+                      </div>
+                      <div className="h-[40px] w-full flex justify-start items-center gap-x-[12px] overflow-x-scroll">
+                        {post.airTags.split(", ").map((tag) => {
+                          return (
+                            <div
+                              key={tag}
+                              className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray"
+                            >
+                              <div className="h-[35px] w-[35px] rounded-full border-2 scale-105 bg-transparent flex justify-center">
+                                <img
+                                  src={tagSolid}
+                                  height={20}
+                                  width={18}
+                                  alt="Tag"
+                                />
+                              </div>
+                              <span className="capitalize md:text-lg md:font-semibold">
+                                {tag}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
         </div>
         <div
           className={
-            frData.slice(10).length === 0
+            allNews.filter((el) => el.airTrans === "fr").slice(10).length === 0
               ? "hidden"
               : "w-full min-h-40 bg-white border-t-[.5px] border-primary relative flex flex-col justify-start items-center pb-[20px]"
           }
@@ -471,164 +503,170 @@ function Actualites() {
           </span>
           {/* One card in others parts */}
           {language === "fr"
-            ? frData.slice(10).map((post, index) => {
-                const createdAt = new Date(post?.airDateAdded);
-                // transform date to french format
-                const date =
-                  createdAt.getDate() +
-                  "/" +
-                  (createdAt.getMonth() + 1) +
-                  "/" +
-                  createdAt.getFullYear();
-                return (
-                  <div
-                    key={index}
-                    className="w-full h-[200px] bg-white shadow-lg mt-[20px] rounded-[12px] p-[12px] overflow-hidden"
-                  >
-                    <div className="h-[46px] w-full flex justify-start items-center gap-x-[8px]">
-                      <div className="h-[40px] w-[40px] rounded-full overflow-hidden bg-slate-200">
-                        <img
-                          src={
-                            socialMedias.includes(post?.airLogo)
-                              ? logoPlaceholder
-                              : post?.airLogo
-                          }
-                          height={40}
-                          width={40}
-                          alt="logo"
-                        />
-                      </div>
-                      <div className="flex flex-col justify-start min-h-[46px]">
-                        <div>
-                          <span className="font-semibold md:text-lg">
-                            {post.airMedia}
-                          </span>
+            ? allNews
+                .filter((el) => el.airTrans === "fr")
+                .slice(10)
+                .map((post, index) => {
+                  const createdAt = new Date(post?.airDateAdded);
+                  // transform date to french format
+                  const date =
+                    createdAt.getDate() +
+                    "/" +
+                    (createdAt.getMonth() + 1) +
+                    "/" +
+                    createdAt.getFullYear();
+                  return (
+                    <div
+                      key={index}
+                      className="w-full h-[200px] bg-white shadow-lg mt-[20px] rounded-[12px] p-[12px] overflow-hidden"
+                    >
+                      <div className="h-[46px] w-full flex justify-start items-center gap-x-[8px]">
+                        <div className="h-[40px] w-[40px] rounded-full overflow-hidden bg-slate-200">
+                          <img
+                            src={
+                              socialMedias.includes(post?.airLogo)
+                                ? logoPlaceholder
+                                : post?.airLogo
+                            }
+                            height={40}
+                            width={40}
+                            alt="logo"
+                          />
                         </div>
-                        <div className="text-xs italic md:text-sm">
-                          Publié le {date}, language d' origine :{" "}
-                          <span className="text-primary">
-                            {post.airLanguage === "ENG"
-                              ? "Anglais"
-                              : "Français"}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="h-[90px] w-full text-primary hover:text-darkPrimary active:text-darkPrimary visited:text-darkPrimary font-bold flex items-center md:text-xl">
-                      <a
-                        href={post.airLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {post.title.length > 110
-                          ? post.title.slice(0, 110) + " . . ."
-                          : post.title}
-                      </a>
-                    </div>
-                    <div className="h-[40px] w-full flex justify-start items-center gap-x-[12px] overflow-x-scroll">
-                      {post.airTags.split(", ").map((tag) => {
-                        return (
-                          <div
-                            key={tag}
-                            className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray"
-                          >
-                            <div className="h-[35px] w-[35px] rounded-full border-2 scale-105 bg-transparent flex justify-center">
-                              <img
-                                src={tagSolid}
-                                height={20}
-                                width={18}
-                                alt="Tag"
-                              />
-                            </div>
-                            <span className="capitalize md:text-lg md:font-semibold">
-                              {tag}
+                        <div className="flex flex-col justify-start min-h-[46px]">
+                          <div>
+                            <span className="font-semibold md:text-lg">
+                              {post.airMedia}
                             </span>
                           </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              })
-            : engData.slice(10).map((post, index) => {
-                const createdAt = new Date(post?.airDateAdded);
-                // transform date to french format
-                const date =
-                  createdAt.getDate() +
-                  "/" +
-                  (createdAt.getMonth() + 1) +
-                  "/" +
-                  createdAt.getFullYear();
-                return (
-                  <div
-                    key={index}
-                    className="w-full h-[200px] bg-white shadow-lg mt-[20px] rounded-[12px] p-[12px] overflow-hidden"
-                  >
-                    <div className="h-[46px] w-full flex justify-start items-center gap-x-[8px]">
-                      <div className="h-[40px] w-[40px] rounded-full overflow-hidden bg-slate-200">
-                        <img
-                          src={
-                            socialMedias.includes(post?.airLogo)
-                              ? logoPlaceholder
-                              : post?.airLogo
-                          }
-                          height={40}
-                          width={40}
-                          alt="logo"
-                        />
-                      </div>
-                      <div className="flex flex-col justify-start min-h-[46px]">
-                        <div>
-                          <span className="font-semibold md:text-lg">
-                            {post.airMedia}
-                          </span>
-                        </div>
-                        <div className="text-xs italic md:text-sm">
-                          Publié le {date}, language d' origine :{" "}
-                          <span className="text-primary">
-                            {post.airLanguage === "ENG"
-                              ? "Anglais"
-                              : "Français"}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="h-[90px] w-full text-primary hover:text-darkPrimary active:text-darkPrimary visited:text-darkPrimary font-bold flex items-center md:text-xl">
-                      <a
-                        href={post.airLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {post.title.length > 110
-                          ? post.title.slice(0, 110) + " . . ."
-                          : post.title}
-                      </a>
-                    </div>
-                    <div className="h-[40px] w-full flex justify-start items-center gap-x-[12px] overflow-x-scroll">
-                      {post.airTags.split(", ").map((tag) => {
-                        return (
-                          <div
-                            key={tag}
-                            className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray"
-                          >
-                            <div className="h-[35px] w-[35px] rounded-full border-2 scale-105 bg-transparent flex justify-center">
-                              <img
-                                src={tagSolid}
-                                height={20}
-                                width={18}
-                                alt="Tag"
-                              />
-                            </div>
-                            <span className="capitalize md:text-lg md:font-semibold">
-                              {tag}
+                          <div className="text-xs italic md:text-sm">
+                            Publié le {date}, language d' origine :{" "}
+                            <span className="text-primary">
+                              {post.airLanguage === "ENG"
+                                ? "Anglais"
+                                : "Français"}
                             </span>
                           </div>
-                        );
-                      })}
+                        </div>
+                      </div>
+                      <div className="h-[90px] w-full text-primary hover:text-darkPrimary active:text-darkPrimary visited:text-darkPrimary font-bold flex items-center md:text-xl">
+                        <a
+                          href={post.airLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {post.title.length > 110
+                            ? post.title.slice(0, 110) + " . . ."
+                            : post.title}
+                        </a>
+                      </div>
+                      <div className="h-[40px] w-full flex justify-start items-center gap-x-[12px] overflow-x-scroll">
+                        {post.airTags.split(", ").map((tag) => {
+                          return (
+                            <div
+                              key={tag}
+                              className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray"
+                            >
+                              <div className="h-[35px] w-[35px] rounded-full border-2 scale-105 bg-transparent flex justify-center">
+                                <img
+                                  src={tagSolid}
+                                  height={20}
+                                  width={18}
+                                  alt="Tag"
+                                />
+                              </div>
+                              <span className="capitalize md:text-lg md:font-semibold">
+                                {tag}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+            : allNews
+                .filter((el) => el.airTrans === "eng")
+                .slice(10)
+                .map((post, index) => {
+                  const createdAt = new Date(post?.airDateAdded);
+                  // transform date to french format
+                  const date =
+                    createdAt.getDate() +
+                    "/" +
+                    (createdAt.getMonth() + 1) +
+                    "/" +
+                    createdAt.getFullYear();
+                  return (
+                    <div
+                      key={index}
+                      className="w-full h-[200px] bg-white shadow-lg mt-[20px] rounded-[12px] p-[12px] overflow-hidden"
+                    >
+                      <div className="h-[46px] w-full flex justify-start items-center gap-x-[8px]">
+                        <div className="h-[40px] w-[40px] rounded-full overflow-hidden bg-slate-200">
+                          <img
+                            src={
+                              socialMedias.includes(post?.airLogo)
+                                ? logoPlaceholder
+                                : post?.airLogo
+                            }
+                            height={40}
+                            width={40}
+                            alt="logo"
+                          />
+                        </div>
+                        <div className="flex flex-col justify-start min-h-[46px]">
+                          <div>
+                            <span className="font-semibold md:text-lg">
+                              {post.airMedia}
+                            </span>
+                          </div>
+                          <div className="text-xs italic md:text-sm">
+                            Publié le {date}, language d' origine :{" "}
+                            <span className="text-primary">
+                              {post.airLanguage === "ENG"
+                                ? "Anglais"
+                                : "Français"}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="h-[90px] w-full text-primary hover:text-darkPrimary active:text-darkPrimary visited:text-darkPrimary font-bold flex items-center md:text-xl">
+                        <a
+                          href={post.airLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {post.title.length > 110
+                            ? post.title.slice(0, 110) + " . . ."
+                            : post.title}
+                        </a>
+                      </div>
+                      <div className="h-[40px] w-full flex justify-start items-center gap-x-[12px] overflow-x-scroll">
+                        {post.airTags.split(", ").map((tag) => {
+                          return (
+                            <div
+                              key={tag}
+                              className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray"
+                            >
+                              <div className="h-[35px] w-[35px] rounded-full border-2 scale-105 bg-transparent flex justify-center">
+                                <img
+                                  src={tagSolid}
+                                  height={20}
+                                  width={18}
+                                  alt="Tag"
+                                />
+                              </div>
+                              <span className="capitalize md:text-lg md:font-semibold">
+                                {tag}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
         </div>
 
         <div

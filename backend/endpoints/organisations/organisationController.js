@@ -317,9 +317,9 @@ exports.cronOrganisationsFromAirtable = async () => {
       }
     });
 
-    res.status(200).json({ success: true, existing: existing });
+    return { success: true, existing: existing };
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    return { message: error.message };
   }
 };
 
