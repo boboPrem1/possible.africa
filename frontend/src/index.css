@@ -50,7 +50,7 @@ body {
   z-index: 1;
 }
 
-.scrollContainer::-webkit-scrollbar {
+body *::-webkit-scrollbar {
   display: none;
 }
 
