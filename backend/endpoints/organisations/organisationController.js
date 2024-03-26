@@ -164,54 +164,46 @@ exports.getOrganisationsFromAirtable = async (req, res) => {
               .join("")}.jpg`;
             const org = await Organisation.create({
               logo: urla,
-              name: organisation.name ? organisation.name : null,
+              name: organisation.name ? organisation.name : "",
               description: organisation.description
                 ? organisation.description
-                : null,
-              region: organisation.region
-                ? organisation.region.join(",")
-                : null,
+                : "",
+              region: organisation.region ? organisation.region.join(",") : "",
               operatingCountries: organisation.operatingCountries
                 ? organisation.operatingCountries.join(",")
-                : null,
-              sector: organisation.sector
-                ? organisation.sector.join(",")
-                : null,
+                : "",
+              sector: organisation.sector ? organisation.sector.join(",") : "",
               subSector: organisation.subSector
                 ? organisation.subSector.join(",")
-                : null,
-              active: organisation.active ? organisation.active : null,
-              website: organisation.website ? organisation.website : null,
-              source: organisation.source ? organisation.source : null,
-              tier: organisation.tier ? organisation.tier : null,
-              dateAdded: organisation.dateAdded ? organisation.dateAdded : null,
+                : "",
+              active: organisation.active ? organisation.active : "",
+              website: organisation.website ? organisation.website : "",
+              source: organisation.source ? organisation.source : "",
+              tier: organisation.tier ? organisation.tier : "",
+              dateAdded: organisation.dateAdded ? organisation.dateAdded : "",
             });
           } else {
             const urla =
               "https://api.possible.africa/storage/logos/placeholder_org.jpeg";
             const org = await Organisation.create({
               logo: urla,
-              name: organisation.name ? organisation.name : null,
+              name: organisation.name ? organisation.name : "",
               description: organisation.description
                 ? organisation.description
-                : null,
-              region: organisation.region
-                ? organisation.region.join(",")
-                : null,
+                : "",
+              region: organisation.region ? organisation.region.join(",") : "",
               operatingCountries: organisation.operatingCountries
                 ? organisation.operatingCountries.join(",")
-                : null,
-              sector: organisation.sector
-                ? organisation.sector.join(",")
-                : null,
+                : "",
+              sector: organisation.sector ? organisation.sector.join(",") : "",
               subSector: organisation.subSector
                 ? organisation.subSector.join(",")
-                : null,
-              active: organisation.active ? organisation.active : null,
-              website: organisation.website ? organisation.website : null,
-              source: organisation.source ? organisation.source : null,
-              tier: organisation.tier ? organisation.tier : null,
-              dateAdded: organisation.dateAdded ? organisation.dateAdded : null,
+                : "",
+              active: organisation.active ? organisation.active : "",
+              website: organisation.website ? organisation.website : "",
+              source: organisation.source ? organisation.source : "",
+              tier: organisation.tier ? organisation.tier : "",
+              dateAdded: organisation.dateAdded ? organisation.dateAdded : "",
             });
           }
         } catch (e) {
@@ -222,7 +214,7 @@ exports.getOrganisationsFromAirtable = async (req, res) => {
       }
     });
 
-    res.status(200).json({success: true, existing: existing});
+    res.status(200).json({ success: true, existing: existing });
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
@@ -259,54 +251,46 @@ exports.cronOrganisationsFromAirtable = async () => {
               .join("")}.jpg`;
             const org = await Organisation.create({
               logo: urla,
-              name: organisation.name ? organisation.name : null,
+              name: organisation.name ? organisation.name : "",
               description: organisation.description
                 ? organisation.description
-                : null,
-              region: organisation.region
-                ? organisation.region.join(",")
-                : null,
+                : "",
+              region: organisation.region ? organisation.region.join(",") : "",
               operatingCountries: organisation.operatingCountries
                 ? organisation.operatingCountries.join(",")
-                : null,
-              sector: organisation.sector
-                ? organisation.sector.join(",")
-                : null,
+                : "",
+              sector: organisation.sector ? organisation.sector.join(",") : "",
               subSector: organisation.subSector
                 ? organisation.subSector.join(",")
-                : null,
-              active: organisation.active ? organisation.active : null,
-              website: organisation.website ? organisation.website : null,
-              source: organisation.source ? organisation.source : null,
-              tier: organisation.tier ? organisation.tier : null,
-              dateAdded: organisation.dateAdded ? organisation.dateAdded : null,
+                : "",
+              active: organisation.active ? organisation.active : "",
+              website: organisation.website ? organisation.website : "",
+              source: organisation.source ? organisation.source : "",
+              tier: organisation.tier ? organisation.tier : "",
+              dateAdded: organisation.dateAdded ? organisation.dateAdded : "",
             });
           } else {
             const urla =
               "https://api.possible.africa/storage/logos/placeholder_org.jpeg";
             const org = await Organisation.create({
               logo: urla,
-              name: organisation.name ? organisation.name : null,
+              name: organisation.name ? organisation.name : "",
               description: organisation.description
                 ? organisation.description
-                : null,
-              region: organisation.region
-                ? organisation.region.join(",")
-                : null,
+                : "",
+              region: organisation.region ? organisation.region.join(",") : "",
               operatingCountries: organisation.operatingCountries
                 ? organisation.operatingCountries.join(",")
-                : null,
-              sector: organisation.sector
-                ? organisation.sector.join(",")
-                : null,
+                : "",
+              sector: organisation.sector ? organisation.sector.join(",") : "",
               subSector: organisation.subSector
                 ? organisation.subSector.join(",")
-                : null,
-              active: organisation.active ? organisation.active : null,
-              website: organisation.website ? organisation.website : null,
-              source: organisation.source ? organisation.source : null,
-              tier: organisation.tier ? organisation.tier : null,
-              dateAdded: organisation.dateAdded ? organisation.dateAdded : null,
+                : "",
+              active: organisation.active ? organisation.active : "",
+              website: organisation.website ? organisation.website : "",
+              source: organisation.source ? organisation.source : "",
+              tier: organisation.tier ? organisation.tier : "",
+              dateAdded: organisation.dateAdded ? organisation.dateAdded : "",
             });
           }
         } catch (e) {
@@ -372,6 +356,32 @@ exports.getAllOrganisations = async (req, res) => {
       .sort({ createdAt: -1, ...sort })
       .select(fields);
     res.status(200).json(orgs);
+
+    // const orgsToBeModified = await Organisation.find();
+    // orgsToBeModified.map(async (org) => {
+    //   const oooooo = await Organisation.findByIdAndUpdate(
+    //     org._id,
+    //     {
+    //       name: org.name ? org.name : "",
+    //       description: org.description ? org.description : "",
+    //       source: org.source ? org.source : "",
+    //       region: org.region ? org.region : "",
+    //       headquarter: org.headquarter ? org.headquarter : "",
+    //       operatingCountries: org.operatingCountries
+    //         ? org.operatingCountries
+    //         : "",
+    //       sector: org.sector ? org.sector : "",
+    //       subSector: org.subSector ? org.subSector : "",
+    //       active: org.active ? org.active : "",
+    //       fundraising: org.fundraising ? org.fundraising : "",
+    //       amountFundraised: org.amountFundraised ? org.amountFundraised : "",
+    //       tier: org.tier ? org.tier : "",
+    //       website: org.website ? org.website : "",
+    //     },
+    //     { new: true }
+    //   );
+    //   console.log(oooooo);
+    // });
   } catch (error) {
     res.status(404).json({ message: error.message });
   }

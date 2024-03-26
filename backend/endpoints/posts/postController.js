@@ -506,7 +506,7 @@ exports.getEnglishPostFromAirtable = async (req, res) => {
 exports.getAllPosts = async (req, res) => {
   let { limit, page, sort, fields, _start, _end, possible } = req.query;
   const queryObj = CustomUtils.advancedQuery(req.query);
-  // console.log(possible);
+  console.log(queryObj);
   try {
     if (_end && (_start || _start == 0)) {
       limit = _end - _start;

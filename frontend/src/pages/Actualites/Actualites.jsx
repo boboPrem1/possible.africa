@@ -254,7 +254,6 @@ function Actualites() {
               { field: "airLanguage", value: "" },
             ]);
             dispatch({ field: "reset", value: "" });
-            console.log(titleInputRef);
           }}
         >
           Réinitialiser les filtres
