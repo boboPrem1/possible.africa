@@ -8,7 +8,7 @@ const startOfYear = moment().startOf("year").toDate();
 const startOfMonth = moment().startOf("month").toDate();
 const startOfWeek = moment().startOf("week").toDate();
 const startOfDay = moment().startOf("day").toDate();
-console.log(startOfMonth);
+// console.log(startOfMonth);
 
 // Calculer la date actuelle pour marquer la fin de la période de recherche
 const now = new Date();

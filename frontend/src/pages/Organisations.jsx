@@ -1626,7 +1626,47 @@ function Organisations() {
             </button>
           </div>
         </div>
-        <div className="invisible h-[400px] bg-purple-600 hidden lg:inline-grid"></div>
+        <div className="min-h-[400px] max-h-[100vh] overflow-x-scroll hidden lg:flex lg:justify-start lg:flex-col lg:items-center lg:gap-5 lg:border-[.5px] rounded-[12px] lg:border-primary lg:p-5">
+          {(pageEqS[0].value ||
+            pageEqS[1].value ||
+            pageEqS[2].value ||
+            pageEqS[3].value ||
+            pageEqS[4].value ||
+            pageEqS[5].value ||
+            pageEqS[6].value ||
+            pageEqS[7].value ||
+            pageEqS[8].value ||
+            pageEqS[9].value ||
+            pageEqS[10].value ||
+            pageEqS[11].value) &&
+          (pageEq[0].value ||
+            pageEq[1].value ||
+            pageEq[2].value ||
+            pageEq[3].value ||
+            pageEq[4].value ||
+            pageEq[5].value ||
+            pageEq[6].value ||
+            pageEq[7].value ||
+            pageEq[8].value ||
+            pageEq[9].value ||
+            pageEq[10].value ||
+            pageEq[11].value) &&
+          !isFetching ? (
+            <div className="w-full">
+              <div className="font-bold text-2xl mb-4">
+                Résultats des filtres
+              </div>
+              <div className="font-semibold italic text-mediumGray">
+                Nous avons trouvé{" "}
+                <strong>
+                  {organisationsLength.length} résultats (dont{" "}
+                  {organisations.length} affichés)
+                </strong>{" "}
+                correspondant à vos filtres.
+              </div>
+            </div>
+          ) : null}
+        </div>
       </div>
     </>
   );

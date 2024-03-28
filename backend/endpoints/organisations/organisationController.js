@@ -145,7 +145,7 @@ exports.getOrganisationsFromAirtable = async (req, res) => {
       const ExistingOrg = await Organisation.find({
         name: { $eq: organisation.name },
       });
-      console.log(ExistingOrg);
+      // console.log(ExistingOrg);
 
       if (ExistingOrg.length === 0) {
         try {
@@ -232,7 +232,7 @@ exports.cronOrganisationsFromAirtable = async () => {
       const ExistingOrg = await Organisation.find({
         name: { $eq: organisation.name },
       });
-      console.log(ExistingOrg);
+      // console.log(ExistingOrg);
 
       if (ExistingOrg.length === 0) {
         try {

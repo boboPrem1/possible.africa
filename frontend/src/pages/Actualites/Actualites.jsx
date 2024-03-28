@@ -86,6 +86,7 @@ function Actualites() {
   const [page, setPage] = useState(1);
   const [mobileFilterIsVisible, setMobileFilterIsVisible] = useState(false);
   const [firstLoad, setFirstLoad] = useState(true);
+  const [filterIn, setFilterIn] = useState(true);
   const [pageS, setPageS] = useState(page + 1);
   const [engPage, setEngPage] = useState(1);
   const [frPage, setFrPage] = useState(1);
@@ -893,7 +894,26 @@ function Actualites() {
             </button>
           </div>
         </div>
-        <div className="invisible h-[400px] bg-purple-600 hidden lg:inline-grid"></div>
+        <div className="min-h-[400px] max-h-[100vh] overflow-x-scroll hidden lg:flex lg:justify-start lg:flex-col lg:items-center lg:gap-5 lg:border-[.5px] rounded-[12px] lg:border-primary lg:p-5">
+          {(pageEqS[1].value || pageEqS[2].value || pageEqS[3].value) &&
+          (pageEq[1].value || pageEq[2].value || pageEq[3].value) &&
+          !isFetching ? (
+            <div className="w-full">
+              <div className="font-bold text-2xl mb-4">
+                Résultats des filtres
+              </div>
+              <div className="font-semibold italic text-mediumGray">
+                Nous avons trouvé{" "}
+                <strong>
+                  {allNewsLength.length} résultats (dont{" "}
+                  {allNews.filter((el) => el.airTrans === language).length}{" "}
+                  affichés)
+                </strong>{" "}
+                correspondant à vos filtres.
+              </div>
+            </div>
+          ) : null}
+        </div>
       </div>
     </>
   );
