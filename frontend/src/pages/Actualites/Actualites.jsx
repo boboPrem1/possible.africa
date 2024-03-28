@@ -894,7 +894,7 @@ function Actualites() {
             </button>
           </div>
         </div>
-        <div className="sticky top-2 min-h-[400px] max-h-[100vh] overflow-x-scroll hidden lg:flex lg:justify-start lg:flex-col lg:items-center lg:gap-5 lg:border-[.5px] rounded-[12px] lg:border-primary lg:p-5">
+        <div className="sticky top-10 min-h-[400px] max-h-[100vh] overflow-x-scroll hidden lg:flex lg:justify-start lg:flex-col lg:items-center lg:gap-5 lg:border-[.5px] rounded-[12px] lg:border-primary lg:p-5">
           {(pageEqS[1].value || pageEqS[2].value || pageEqS[3].value) &&
           (pageEq[1].value || pageEq[2].value || pageEq[3].value) &&
           !isFetching ? (
