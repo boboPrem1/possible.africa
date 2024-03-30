@@ -21,6 +21,7 @@ import { userContext } from "../../UserContext";
 import ReactApexChart from "react-apexcharts";
 import RadialBarChart from "../../custom-components/RadialBarChart";
 import { ImageField } from "@refinedev/antd";
+import loader from "../../assets/logos/loader.svg";
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
@@ -28,27 +29,33 @@ function CustomSpiner(props) {
   return <Spin {...props} indicator={antIcon} />;
 }
 
- const socialMedias = [
-   "https://api.possible.africa/storage/logos/wwwlinkedincom.jpg",
-   "https://api.possible.africa/storage/logos/linkedincom.jpg",
-   "https://api.possible.africa/storage/logos/wwwtwittercom.jpg",
-   "https://api.possible.africa/storage/logos/twittercom.jpg",
-   "https://api.possible.africa/storage/logos/wwwfacebookcom.jpg",
-   "https://api.possible.africa/storage/logos/facebookcom.jpg",
-   "https://api.possible.africa/storage/logos/wwwinstagramcom.jpg",
-   "https://api.possible.africa/storage/logos/instagramcom.jpg",
-   "http://localhost:4534/storage/logos/wwwlinkedincom.jpg",
-   "http://localhost:4534/storage/logos/linkedincom.jpg",
-   "http://localhost:4534/storage/logos/wwwtwittercom.jpg",
-   "http://localhost:4534/storage/logos/twittercom.jpg",
-   "http://localhost:4534/storage/logos/wwwfacebookcom.jpg",
-   "http://localhost:4534/storage/logos/facebookcom.jpg",
-   "http://localhost:4534/storage/logos/wwwinstagramcom.jpg",
-   "http://localhost:4534/storage/logos/instagramcom.jpg",
-   "https://logo.clearbit.com/",
- ];
- const logoPlaceholder =
-   "https://api.possible.africa/storage/logos/placeholder_org.jpeg";
+const socialMedias = [
+  "https://api.possible.africa/storage/logos/wwwlinkedincom.jpg",
+  "https://api.possible.africa/storage/logos/linkedincom.jpg",
+  "https://api.possible.africa/storage/logos/wwwtwittercom.jpg",
+  "https://api.possible.africa/storage/logos/twittercom.jpg",
+  "https://api.possible.africa/storage/logos/wwwfacebookcom.jpg",
+  "https://api.possible.africa/storage/logos/facebookcom.jpg",
+  "https://api.possible.africa/storage/logos/wwwinstagramcom.jpg",
+  "https://api.possible.africa/storage/logos/instagramcom.jpg",
+  "http://localhost:4534/storage/logos/wwwlinkedincom.jpg",
+  "http://localhost:4534/storage/logos/linkedincom.jpg",
+  "http://localhost:4534/storage/logos/wwwtwittercom.jpg",
+  "http://localhost:4534/storage/logos/twittercom.jpg",
+  "http://localhost:4534/storage/logos/wwwfacebookcom.jpg",
+  "http://localhost:4534/storage/logos/facebookcom.jpg",
+  "http://localhost:4534/storage/logos/wwwinstagramcom.jpg",
+  "http://localhost:4534/storage/logos/instagramcom.jpg",
+  "https://logo.clearbit.com/",
+];
+const logoPlaceholder =
+  "https://api.possible.africa/storage/logos/placeholder_org.jpeg";
+
+function rechercheInsensitive(chaineSource, chaineRecherchee) {
+  // Créer une expression régulière avec l'indicateur "i" pour insensible à la casse
+  const regex = new RegExp(chaineRecherchee, "i");
+  return regex.test(chaineSource);
+}
 
 export default function CustomDashboard() {
   const apiUrl = useApiUrl();
@@ -57,7 +64,8 @@ export default function CustomDashboard() {
   const [synchWithAirtable, setSynchWithAirTable] = useState(false);
   const [synchWithArticleAirtable, setSynchWithArticleAirTable] =
     useState(false);
-
+  const [selectSectors, setSelectSectors] = useState([]);
+  const [actualSectorSelected, setActualSectorSelected] = useState("fmcg");
   const routerType = useRouterType();
   const NewLink = useLink();
   const { Link: LegacyLink } = useRouterContext();
@@ -186,6 +194,11 @@ export default function CustomDashboard() {
   }
 
   useEffect(() => {
+    if (dashboardData?.records?.sectors) {
+      setSelectSectors((s) => {
+        return [...dashboardData?.records?.sectors];
+      });
+    }
     if (dashboardData === null) {
       setLoading(true);
       axiosInstance
@@ -203,247 +216,30 @@ export default function CustomDashboard() {
           console.log(err);
         });
     }
-    // console.log(userD);
+    // console.log(dashboardData);
   }, [dashboardData, dashboardData?.data?.organisations, loading]);
 
   // if (!Object.keys(userD).length) <div>Chargement ...</div>;
 
   // if (userD?.role?.slug === "contact") return null;
 
+  if (dashboardData === null) {
+    return (
+      <div className="h-[400px] w-full m-auto flex justify-center items-center">
+        <img
+          src={loader}
+          style={{
+            transformOrigin: "bottom center",
+            translate: "-100px 0",
+          }}
+          alt="Loader possible"
+          className="w-16 animate-[loading_1s_ease-in-out_infinite_alternate]"
+        />
+      </div>
+    );
+  }
   return (
     <div>
-      {/* <Row gutter={[16, 16]}>
-        <Col span={6}>
-          <Link to="organisations">
-            <Card>
-              {loading ? (
-                <CustomSpiner />
-              ) : (
-                <>
-                  <Statistic
-                    style={{ color: "red" }}
-                    title={
-                      <h3>
-                        <CustomIconOrganisation />
-                        Total Organisations
-                      </h3>
-                    }
-                    value={dashboardData?.organisations}
-                  />
-                  <div
-                    style={{
-                      display: "flex",
-                      marginTop: "1rem",
-                    }}
-                  >
-                    <button className="btn-primary"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        console.log(e);
-                        setSynchWithAirTable(true);
-                        axiosInstance
-                          .get(`${apiUrl}/airtable_organisations`)
-                          .then((res) => {
-                            setSynchWithAirTable(false);
-                            setLoading(true);
-                            axiosInstance
-                              .get(`${apiUrl}/dashboard`)
-                              .then((res) => {
-                                setDashboardData(res.data);
-                                setLoading(false);
-                              })
-                              .catch((err) => {
-                                if (
-                                  err?.response?.data?.message === "jwt expired"
-                                ) {
-                                  mutateLogout();
-                                }
-                                console.log(err);
-                              });
-                          })
-                          .catch((err) => {
-                            if (
-                              err?.response?.data?.message === "jwt expired"
-                            ) {
-                              mutateLogout();
-                            }
-                            console.log(err);
-                          });
-                      }}
-                      
-                    >
-                      Synchroniser avec Airtable{" "}
-                      {synchWithAirtable ? (
-                        <CustomSpiner
-                          style={{ color: "white", marginLeft: "8px" }}
-                        />
-                      ) : null}
-                    </button>
-                  </div>
-                </>
-              )}
-            </Card>
-          </Link>
-        </Col>
-        <Col span={6}>
-          <Link to="jobs">
-            <Card>
-              {loading ? (
-                <CustomSpiner />
-              ) : (
-                <Statistic
-                  title={
-                    <h3>
-                      <CustomIconJob />
-                      Total Emplois
-                    </h3>
-                  }
-                  value={dashboardData?.jobs}
-                />
-              )}
-            </Card>
-          </Link>
-        </Col>
-        <Col span={6}>
-          <Link to="opportunities">
-            <Card>
-              {loading ? (
-                <CustomSpiner />
-              ) : (
-                <Statistic
-                  title={
-                    <h3>
-                      <CustomIconOpportunity />
-                      Total Opportunités
-                    </h3>
-                  }
-                  value={dashboardData?.opportunities}
-                />
-              )}
-            </Card>
-          </Link>
-        </Col>
-        <Col span={6}>
-          <Link to="events">
-            <Card>
-              {loading ? (
-                <CustomSpiner />
-              ) : (
-                <Statistic
-                  title={
-                    <h3>
-                      <CustomIconEvent />
-                      Total Evènements
-                    </h3>
-                  }
-                  value={dashboardData?.events}
-                />
-              )}
-            </Card>
-          </Link>
-        </Col>
-        <Col span={6}>
-          <Link to="posts">
-            <Card>
-              {loading ? (
-                <CustomSpiner />
-              ) : (
-                <>
-                  <Statistic
-                    title={
-                      <h3>
-                        <CustomIconArticle />
-                        Total Articles
-                      </h3>
-                    }
-                    value={dashboardData?.posts}
-                  />
-
-                  <div
-                    style={{
-                      display: "flex",
-                      marginTop: "1rem",
-                    }}
-                  >
-                    <button className="btn-primary"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        console.log(e);
-                            setSynchWithArticleAirTable(false);
-                        axiosInstance
-                          .get(`${apiUrl}/airtable_posts/all`)
-                          .then((res) => {
-                            setSynchWithArticleAirTable(false);
-                            setLoading(true);
-                            axiosInstance
-                              .get(`${apiUrl}/dashboard`)
-                              .then((res) => {
-                                setDashboardData(res.data);
-                                setLoading(false);
-                              })
-                              .catch((err) => {
-                                if (
-                                  err?.response?.data?.message === "jwt expired"
-                                ) {
-                                  mutateLogout();
-                                }
-                                console.log(err);
-                              });
-                          })
-                          .catch((err) => {
-                            if (
-                              err?.response?.data?.message === "jwt expired"
-                            ) {
-                              mutateLogout();
-                            }
-                            console.log(err);
-                          });
-                      }}
-                      
-                    >
-                      Synchroniser avec Airtable{" "}
-                      {synchWithArticleAirtable ? (
-                        <CustomSpiner
-                          style={{ color: "white", marginLeft: "8px" }}
-                        />
-                      ) : null}
-                    </button>
-                  </div>
-                </>
-              )}
-            </Card>
-          </Link>
-        </Col>
-        <AdminOrContributorOrUser>
-          <Col span={6}>
-            <Link to="users">
-              <Card>
-                {loading ? (
-                  <CustomSpiner />
-                ) : (
-                  <Statistic
-                    title={
-                      <h3>
-                        <UserOutlined
-                          style={{
-                            display: "inline-block",
-                            marginRight: "8px",
-                          }}
-                        />
-                        Total Utilisateurs
-                      </h3>
-                    }
-                    value={dashboardData?.users}
-                  />
-                )}
-              </Card>
-            </Link>
-          </Col>
-        </AdminOrContributorOrUser>
-      </Row> */}
-      {/* Add more cards and statistics as needed */}
       <div className="grid grid-cols-12 2xl:grid-cols-12 gap-x-5">
         <div className="col-span-12 md:order-3 lg:col-span-6 2xl:col-span-3 rounded-lg shadow-lg p-3 card">
           <div className="card-body">
@@ -620,6 +416,136 @@ export default function CustomDashboard() {
           </div>
         </div>
       </div>
+      <div className="w-full card p-5">
+        <div className="min-w-full font-semibold text-lg mb-3">
+          <span>Les organisations par secteurs</span>
+        </div>
+        <div className="flex justify-start 2xl:grid-cols-12 gap-x-5 overflow-x-scroll">
+          {dashboardData?.OrganisationsBySectors?.map((sector) => {
+            const tryToGetActualSector = sector._id.split(",");
+            let actualSector;
+            let actualSectorLength = sector.nb;
+            if (tryToGetActualSector.length === 1) {
+              actualSector = tryToGetActualSector;
+              // console.log(actualSector)
+              dashboardData?.OrganisationsBySectors?.map((el) => {
+                if (
+                  el._id.split(",").includes(actualSector[0]) &&
+                  el._id.split(",").length > 1
+                ) {
+                  // console.log(
+                  //   el._id.split(","),
+                  //   el._id.split(",").includes(actualSector[0])
+                  // );
+                  actualSectorLength = actualSectorLength + el.nb;
+                  // console.log(actualSectorLength);
+                }
+              });
+              return (
+                <div
+                  key={actualSector}
+                  className="card min-w-[80%] md:min-w-[250px] md:w-4/12 lg:min-w-[24%] lg:w-3/12 xl:w-2/12"
+                >
+                  <div className="text-center card-body">
+                    <div className="flex items-center justify-center mx-auto rounded-full size-14 bg-custom-100 text-custom-500 dark:bg-custom-500/20">
+                      <i data-lucide="wallet-2"></i>
+                    </div>
+                    <h5 className="mt-4 mb-2">
+                      <span className="counter-value" data-target="236.18">
+                        {actualSectorLength}
+                      </span>
+                    </h5>
+                    <p className="text-slate-500 dark:text-zink-200 capitalize">
+                      {actualSector}
+                    </p>
+                  </div>
+                </div>
+              );
+            }
+          })}
+        </div>
+      </div>
+      <div className="w-full card p-5">
+        <div className="min-w-full font-semibold text-lg mb-3 lg:flex lg:justify-between">
+          <span className="w-full">Les organisations par sous-secteurs</span>
+          <select
+            name=""
+            id=""
+            value={actualSectorSelected}
+            onChange={(e) => {
+              setActualSectorSelected(e.target.value);
+            }}
+            className="w-full p-2 rounded-lg bg-transparent border-medium-gray border-2 my-2"
+          >
+            {/* <option value="">Un</option> */}
+            {selectSectors?.map((sector) => {
+              return <option value={sector.toLowerCase()}>{sector}</option>;
+            })}
+          </select>
+        </div>
+        <div className="flex justify-start 2xl:grid-cols-12 gap-x-5 overflow-x-scroll">
+          {/* {console.log(actualSectorSelected.toLowerCase())} */}
+          {dashboardData?.records?.subSectors[
+            actualSectorSelected.toLowerCase()
+          ].map((subSector) => {
+            return (
+              <div
+                key={subSector}
+                className="card min-w-[80%] md:min-w-[250px] md:w-4/12 lg:min-w-[24%] lg:w-3/12 xl:w-2/12"
+              >
+                <div className="text-center card-body">
+                  <div className="flex items-center justify-center mx-auto rounded-full size-14 bg-custom-100 text-custom-500 dark:bg-custom-500/20">
+                    <i data-lucide="wallet-2"></i>
+                  </div>
+                  <h5 className="mt-4 mb-2">
+                    <span className="counter-value" data-target="236.18">
+                      {/* {subSector} */}
+                      {(function alo() {
+                        let length = 0;
+                        dashboardData?.OrganisationsBySubSectors?.map((sub) => {
+                          const actSubSector = sub._id.split(",");
+                          if (actSubSector.includes(subSector))
+                            length = length + sub.nb;
+                          // console.log(actSubSector, subSector);
+                        });
+
+                        return `${length}`;
+                      })()}
+                    </span>
+                  </h5>
+                  <p className="text-slate-500 dark:text-zink-200 capitalize">
+                    {subSector}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+          {/* {dashboardData?.records?.subSectors[
+            `${actualSectorSelected.toLowerCase()}`
+          ].map((subSector) => {
+            return (
+              <div
+                key={subSector}
+                className="card min-w-[80%] md:min-w-[250px] md:w-4/12 lg:min-w-[24%] lg:w-3/12 xl:w-2/12"
+              >
+                <div className="text-center card-body">
+                  <div className="flex items-center justify-center mx-auto rounded-full size-14 bg-custom-100 text-custom-500 dark:bg-custom-500/20">
+                    <i data-lucide="wallet-2"></i>
+                  </div>
+                  <h5 className="mt-4 mb-2">
+                    <span className="counter-value" data-target="236.18">
+                      {subSector}
+                    </span>
+                  </h5>
+                  <p className="text-slate-500 dark:text-zink-200 capitalize">
+                    Secteur {subSector}
+                  </p>
+                </div>
+              </div>
+            );
+          })} */}
+        </div>
+      </div>
       <div className="col-span-12 md:order-8 2xl:col-span-9 card mt-10">
         <div className="card-body">
           <div className="grid items-center grid-cols-1 gap-3 mb-5 xl:grid-cols-12">
@@ -701,8 +627,7 @@ export default function CustomDashboard() {
                               </h6>
                               <p className="text-primary dark:text-zink-200">
                                 {organisation?.source?.length > 30
-                                  ? organisation?.source?.slice(0, 30) +
-                                    "..."
+                                  ? organisation?.source?.slice(0, 30) + "..."
                                   : organisation?.source}
                               </p>
                             </div>
@@ -721,8 +646,7 @@ export default function CustomDashboard() {
                         <td className="px-3.5 py-2.5 first:pl-5 last:pr-5 border-y border-primary/20 dark:border-zink-500">
                           <span className="px-2.5 py-0.5 text-xs inline-block font-medium rounded border bg-green-100 border-green-200 text-green-500 dark:bg-green-500/20 dark:border-green-500/20">
                             {organisation?.headquarter?.length > 30
-                              ? organisation?.headquarter?.slice(0, 30) +
-                                "..."
+                              ? organisation?.headquarter?.slice(0, 30) + "..."
                               : organisation?.headquarter}
                           </span>
                         </td>

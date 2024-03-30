@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes loading {
+  0% {
+    opacity: .5;
+    rotate: 25deg;
+  }
+  50% {
+    scale: 1.2;
+    opacity: 1;
+  }
+  100% {
+    rotate: -25deg;
+    translate: 100px 0;
+    opacity: .5;
+    /* transform: translateX(200px); */
+  }
+}
+
 .btn-primary{
     @apply bg-[#6cd9cb] text-white text-sm px-3 py-2 rounded-md font-semibold hover:bg-gradient-to-r hover:from-[#6cd9cb] hover:to-[#53afa3] flex justify-center items-center transition-all duration-500;
 }

@@ -12,6 +12,192 @@ const startOfDay = moment().startOf("day").toDate();
 
 // Calculer la date actuelle pour marquer la fin de la période de recherche
 const now = new Date();
+
+const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
+const DATAPOINTS_BASE_ID = process.env.DATAPOINTS_BASE_ID;
+const DATAPOINTS_TABLE_ID = process.env.DATAPOINTS_TABLE_ID;
+const SUB_SECTORS_TABLE_ID = process.env.SUB_SECTORS_TABLE_ID;
+const INDEX_TIERS_TABLE_ID = process.env.INDEX_TIERS_TABLE_ID;
+const ENV = process.env.ENV;
+const PORT = process.env.PORT;
+var Airtable = require("airtable");
+
+const fetchAllDataPoints = async (apiKey, baseId, tableName) => {
+  var base = new Airtable({
+    apiKey: AIRTABLE_API_KEY,
+  }).base(DATAPOINTS_BASE_ID);
+
+  let allDatapointsRecords = [];
+  let allSubSectorsRecords = [];
+  let allIndexTiersRecords = [];
+  let regionsArray = [];
+  let headquartersArray = [];
+  let operatingCountriesArray = [];
+  let sectorsArray = [];
+  let tiersArray = [];
+  const subSectors = {
+    health: [],
+    education: [],
+    "mobility ": [],
+    "logistic ": [],
+    ["telecom "]: [],
+    "energy ": [],
+    "financial services ": [],
+    fmcg: [],
+    hospitality: [],
+    media: [],
+    ["retail "]: [],
+    climat: [],
+    vc: [],
+    hub: [],
+    data: [],
+    agribusiness: [],
+  };
+  try {
+    const datapointsRecords = await base(DATAPOINTS_TABLE_ID).select().all();
+    const subSectorsRecords = await base(SUB_SECTORS_TABLE_ID).select().all();
+    const indexTiersRecords = await base(INDEX_TIERS_TABLE_ID).select().all();
+
+    datapointsRecords.forEach((record) => {
+      allDatapointsRecords.push({
+        region: record.get("Region"),
+        headquarter: record.get("Headquarter"),
+        operatingCountries: record.get("Operating countries"),
+        sector: record.get("Sector"),
+      });
+    });
+    subSectorsRecords.forEach((record) => {
+      allSubSectorsRecords.push({
+        health: record.get("Health"),
+        education: record.get("Education"),
+        "mobility ": record.get("Mobility"),
+        "logistic ": record.get("Logistic"),
+        ["telecom "]: record.get("Telecom"),
+        "energy ": record.get("Energy"),
+        "financial services ": record.get("Financial Services"),
+        fmcg: record.get("FMCG"),
+        hospitality: record.get("Hospitality"),
+        media: record.get("Media"),
+        ["retail "]: record.get("Retail"),
+        climat: record.get("Climate"),
+        vc: record.get("VC"),
+        hub: record.get("Hub"),
+        data: record.get("Data"),
+        agribusiness: record.get("Agribusiness"),
+      });
+    });
+    indexTiersRecords.forEach((record) => {
+      allIndexTiersRecords.push({
+        notes: record.get("Notes"),
+      });
+    });
+
+    allDatapointsRecords.map((el) => {
+      if (el.region && el.region !== "All") {
+        regionsArray.push(el.region);
+      }
+      if (el.headquarter) {
+        if (el.headquarter.length <= 1 && el.headquarter[0] !== "All") {
+          headquartersArray.push(el.headquarter[0]);
+        } else {
+        }
+      }
+      if (el.operatingCountries) {
+        if (
+          el.operatingCountries.length <= 1 &&
+          el.operatingCountries[0] !== "All"
+        ) {
+          operatingCountriesArray.push(el.operatingCountries[0]);
+        } else {
+        }
+      }
+      if (el.sector && el.sector !== "All" && el.sector !== "Secteur ") {
+        sectorsArray.push(el.sector);
+      }
+    });
+    allSubSectorsRecords.map((el) => {
+      // if (el.region && el.region[0] !== "All" && !el.region[1]) {
+      //   subSectors.region.push(el.region[0]);
+      // }
+      if (el.health && el.health[0] !== "All" && !el.health[1]) {
+        subSectors.health.push(el.health[0]);
+      }
+      if (el.education && el.education[0] !== "All" && !el.education[1]) {
+        subSectors.education.push(el.education[0]);
+      }
+      if (
+        el["mobility "] &&
+        el["mobility "][0] !== "All" &&
+        !el["mobility "][1]
+      ) {
+        subSectors["mobility "].push(el["mobility "][0]);
+      }
+      if (el["logistic "] && el["logistic "][0] !== "All" && !el["logistic "][1]) {
+        subSectors["logistic "].push(el["logistic "][0]);
+      }
+      if (el["telecom "] && el["telecom "][0] !== "All" && !el["telecom "][1]) {
+        subSectors["telecom "].push(el["telecom "][0]);
+      }
+      if (el["energy "] && el["energy "][0] !== "All" && !el["energy "][1]) {
+        subSectors["energy "].push(el["energy "][0]);
+      }
+      if (
+        el["financial services "] &&
+        el["financial services "][0] !== "All" &&
+        !el["financial services "][1]
+      ) {
+        subSectors["financial services "].push(el["financial services "][0]);
+      }
+      if (el.fmcg && el.fmcg[0] !== "All" && !el.fmcg[1]) {
+        subSectors.fmcg.push(el.fmcg[0]);
+      }
+      if (el.hospitality && el.hospitality[0] !== "All" && !el.hospitality[1]) {
+        subSectors.hospitality.push(el.hospitality[0]);
+      }
+      if (el.media && el.media[0] !== "All" && !el.media[1]) {
+        subSectors.media.push(el.media[0]);
+      }
+      if (el["retail "] && el["retail "][0] !== "All" && !el["retail "][1]) {
+        subSectors["retail "].push(el["retail "][0]);
+      }
+      if (el.climat && el.climat[0] !== "All" && !el.climat[1]) {
+        subSectors.climat.push(el.climat[0]);
+      }
+      if (el.vc && el.vc[0] !== "All" && !el.vc[1]) {
+        subSectors.vc.push(el.vc[0]);
+      }
+      if (el.hub && el.hub[0] !== "All" && !el.hub[1]) {
+        subSectors.hub.push(el.hub[0]);
+      }
+      if (el.data && el.data[0] !== "All" && !el.data[1]) {
+        subSectors.data.push(el.data[0]);
+      }
+      if (
+        el.agribusiness &&
+        el.agribusiness[0] !== "All" &&
+        !el.agribusiness[1]
+      ) {
+        subSectors.agribusiness.push(el.agribusiness[0]);
+      }
+    });
+    allIndexTiersRecords.map((el) => {
+      tiersArray.push(el.notes);
+    });
+
+    // console.log(allRecords);
+    return {
+      regions: regionsArray,
+      headquarters: headquartersArray,
+      operatingCountries: operatingCountriesArray,
+      sectors: sectorsArray,
+      subSectors: subSectors,
+      indexTiers: tiersArray,
+    };
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 // @Get me
 // @route GET /api/v1/users/me
 // @access Private
@@ -22,6 +208,12 @@ exports.getAllTotaux = async (req, res) => {
       .skip(0)
       .sort({ dateAdded: -1 });
     let organisations = await Organisation.find().count();
+    const OrganisationsBySectors = await Organisation.aggregate([
+      { $group: { _id: "$sector", nb: { $sum: 1 } } },
+    ]);
+    const OrganisationsBySubSectors = await Organisation.aggregate([
+      { $group: { _id: "$subSector", nb: { $sum: 1 } } },
+    ]);
     let lastYearOrganisations = await Organisation.find({
       dateAdded: {
         $gte: startOfYear,
@@ -79,13 +271,13 @@ exports.getAllTotaux = async (req, res) => {
     }).count();
     const users = await User.find().count();
 
-    // if (!user)
-    //   return res
-    //     .status(404)
-    //     .json({ message: `User not found !` });
-    // console.log(users);
+    const records = await fetchAllDataPoints();
+    // console.log(records);
     res.status(200).json({
       users,
+      records,
+      OrganisationsBySectors,
+      OrganisationsBySubSectors,
       organisations: {
         all: organisations,
         last: lastOrganisations,
