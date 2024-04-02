@@ -483,31 +483,35 @@ export default function CustomDashboard() {
                 }
               })
             : dashboardData?.OrganisationsBySectors?.map((sector) => {
-                return (
-                  <div
-                    key={sector._id}
-                    className="card min-w-[80%] md:min-w-[250px] md:w-4/12 lg:min-w-[24%] lg:w-3/12 xl:w-2/12"
-                  >
-                    <div className="text-center card-body">
-                      <div className="flex items-center justify-center mx-auto rounded-full size-14 bg-custom-100 text-custom-500 dark:bg-custom-500/20">
-                        <i data-lucide="wallet-2"></i>
+                if (sector._id.split(",").length > 1) {
+                  return (
+                    <div
+                      key={sector._id}
+                      className="card min-w-[80%] md:min-w-[250px] md:w-4/12 lg:min-w-[24%] lg:w-3/12 xl:w-2/12"
+                    >
+                      <div className="text-center card-body">
+                        <div className="flex items-center justify-center mx-auto rounded-full size-14 bg-custom-100 text-custom-500 dark:bg-custom-500/20">
+                          <i data-lucide="wallet-2"></i>
+                        </div>
+                        <h5 className="mt-4 mb-2">
+                          <span className="counter-value" data-target="236.18">
+                            {sector.nb}
+                          </span>
+                        </h5>
+                        <p className="text-slate-500 dark:text-zink-200 capitalize overflow-scroll">
+                          {sector._id}
+                        </p>
                       </div>
-                      <h5 className="mt-4 mb-2">
-                        <span className="counter-value" data-target="236.18">
-                          {sector.nb}
-                        </span>
-                      </h5>
-                      <p className="text-slate-500 dark:text-zink-200 capitalize overflow-scroll">
-                        {sector._id}
-                      </p>
                     </div>
-                  </div>
-                );
+                  );
+                } else {
+                  return null;
+                }
               })}
         </div>
       </div>
       <div className="w-full card p-5">
-        <div className="min-w-full font-semibold text-lg mb-3 lg:flex lg:justify-between lg: gap-5">
+        <div className="min-w-full font-semibold text-lg mb-3 lg:flex lg:justify-between lg: gap-5git ">
           <span className="w-full">Les organisations par sous-secteurs</span>
           <select
             name=""
