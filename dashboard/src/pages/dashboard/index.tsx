@@ -76,6 +76,12 @@ export default function CustomDashboard() {
 
   const [organisationPeriode, setOrganisationsPeriode] = useState("week");
   const [postsPeriode, setPostsPeriode] = useState("week");
+  const [seeAll, setSeeAll] = useState({
+    sectors: false,
+    subSectors: false,
+    sectorsSelectValue: "unique",
+    subSectorsSelectValue: "unique",
+  });
 
   const authProvider = useActiveAuthProvider();
   const { mutate: mutateLogout } = useLogout({
@@ -417,56 +423,91 @@ export default function CustomDashboard() {
         </div>
       </div>
       <div className="w-full card p-5">
-        <div className="min-w-full font-semibold text-lg mb-3">
-          <span>Les organisations par secteurs</span>
+        <div className="w-full font-semibold text-lg mb-3 flex justify-between">
+          <span className="w-full">Les organisations par secteurs</span>
+          <select
+            value={seeAll.sectorsSelectValue}
+            onChange={(e) =>
+              setSeeAll((s) => {
+                return { ...s, sectorsSelectValue: e.target.value };
+              })
+            }
+            className="inline-block w-full md:w-2/12 p-2 rounded-lg bg-transparent border-light-gray/50 border-2 my-2"
+          >
+            <option value="unique">Secteur Unique</option>
+            <option value="group">Group de secteurs</option>
+          </select>
         </div>
         <div className="flex justify-start 2xl:grid-cols-12 gap-x-5 overflow-x-scroll">
-          {dashboardData?.OrganisationsBySectors?.map((sector) => {
-            const tryToGetActualSector = sector._id.split(",");
-            let actualSector;
-            let actualSectorLength = sector.nb;
-            if (tryToGetActualSector.length === 1) {
-              actualSector = tryToGetActualSector;
-              // console.log(actualSector)
-              dashboardData?.OrganisationsBySectors?.map((el) => {
-                if (
-                  el._id.split(",").includes(actualSector[0]) &&
-                  el._id.split(",").length > 1
-                ) {
-                  // console.log(
-                  //   el._id.split(","),
-                  //   el._id.split(",").includes(actualSector[0])
-                  // );
-                  actualSectorLength = actualSectorLength + el.nb;
-                  // console.log(actualSectorLength);
-                }
-              });
-              return (
-                <div
-                  key={actualSector}
-                  className="card min-w-[80%] md:min-w-[250px] md:w-4/12 lg:min-w-[24%] lg:w-3/12 xl:w-2/12"
-                >
-                  <div className="text-center card-body">
-                    <div className="flex items-center justify-center mx-auto rounded-full size-14 bg-custom-100 text-custom-500 dark:bg-custom-500/20">
-                      <i data-lucide="wallet-2"></i>
+          {seeAll.sectorsSelectValue === "unique"
+            ? dashboardData?.OrganisationsBySectors?.map((sector) => {
+                const tryToGetActualSector = sector._id.split(",");
+                let actualSector;
+                let actualSectorLength = sector.nb;
+                if (tryToGetActualSector.length === 1) {
+                  actualSector = tryToGetActualSector;
+                  // console.log(actualSector)
+                  dashboardData?.OrganisationsBySectors?.map((el) => {
+                    if (
+                      el._id.split(",").includes(actualSector[0]) &&
+                      el._id.split(",").length > 1
+                    ) {
+                      // console.log(
+                      //   el._id.split(","),
+                      //   el._id.split(",").includes(actualSector[0])
+                      // );
+                      actualSectorLength = actualSectorLength + el.nb;
+                      // console.log(actualSectorLength);
+                    }
+                  });
+                  return (
+                    <div
+                      key={actualSector}
+                      className="card min-w-[80%] md:min-w-[250px] md:w-4/12 lg:min-w-[24%] lg:w-3/12 xl:w-2/12"
+                    >
+                      <div className="text-center card-body">
+                        <div className="flex items-center justify-center mx-auto rounded-full size-14 bg-custom-100 text-custom-500 dark:bg-custom-500/20">
+                          <i data-lucide="wallet-2"></i>
+                        </div>
+                        <h5 className="mt-4 mb-2">
+                          <span className="counter-value" data-target="236.18">
+                            {actualSectorLength}
+                          </span>
+                        </h5>
+                        <p className="text-slate-500 dark:text-zink-200 capitalize">
+                          {actualSector}
+                        </p>
+                      </div>
                     </div>
-                    <h5 className="mt-4 mb-2">
-                      <span className="counter-value" data-target="236.18">
-                        {actualSectorLength}
-                      </span>
-                    </h5>
-                    <p className="text-slate-500 dark:text-zink-200 capitalize">
-                      {actualSector}
-                    </p>
+                  );
+                }
+              })
+            : dashboardData?.OrganisationsBySectors?.map((sector) => {
+                return (
+                  <div
+                    key={sector._id}
+                    className="card min-w-[80%] md:min-w-[250px] md:w-4/12 lg:min-w-[24%] lg:w-3/12 xl:w-2/12"
+                  >
+                    <div className="text-center card-body">
+                      <div className="flex items-center justify-center mx-auto rounded-full size-14 bg-custom-100 text-custom-500 dark:bg-custom-500/20">
+                        <i data-lucide="wallet-2"></i>
+                      </div>
+                      <h5 className="mt-4 mb-2">
+                        <span className="counter-value" data-target="236.18">
+                          {sector.nb}
+                        </span>
+                      </h5>
+                      <p className="text-slate-500 dark:text-zink-200 capitalize overflow-scroll">
+                        {sector._id}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              );
-            }
-          })}
+                );
+              })}
         </div>
       </div>
       <div className="w-full card p-5">
-        <div className="min-w-full font-semibold text-lg mb-3 lg:flex lg:justify-between">
+        <div className="min-w-full font-semibold text-lg mb-3 lg:flex lg:justify-between lg: gap-5">
           <span className="w-full">Les organisations par sous-secteurs</span>
           <select
             name=""
@@ -475,51 +516,105 @@ export default function CustomDashboard() {
             onChange={(e) => {
               setActualSectorSelected(e.target.value);
             }}
-            className="w-full p-2 rounded-lg bg-transparent border-medium-gray border-2 my-2"
+            className="w-full p-2 rounded-lg bg-transparent border-light-gray/50 border-2 my-2"
           >
             {/* <option value="">Un</option> */}
             {selectSectors?.map((sector) => {
               return <option value={sector.toLowerCase()}>{sector}</option>;
             })}
           </select>
+          <select
+            value={seeAll.subSectorsSelectValue}
+            onChange={(e) =>
+              setSeeAll((s) => {
+                return { ...s, subSectorsSelectValue: e.target.value };
+              })
+            }
+            className="w-full p-2 rounded-lg bg-transparent border-light-gray/50 border-2 my-2"
+          >
+            <option value="unique">Sous Secteur Unique</option>
+            <option value="group">Group de sous secteurs</option>
+          </select>
         </div>
         <div className="flex justify-start 2xl:grid-cols-12 gap-x-5 overflow-x-scroll">
           {/* {console.log(actualSectorSelected.toLowerCase())} */}
-          {dashboardData?.records?.subSectors[
-            actualSectorSelected.toLowerCase()
-          ].map((subSector) => {
-            return (
-              <div
-                key={subSector}
-                className="card min-w-[80%] md:min-w-[250px] md:w-4/12 lg:min-w-[24%] lg:w-3/12 xl:w-2/12"
-              >
-                <div className="text-center card-body">
-                  <div className="flex items-center justify-center mx-auto rounded-full size-14 bg-custom-100 text-custom-500 dark:bg-custom-500/20">
-                    <i data-lucide="wallet-2"></i>
-                  </div>
-                  <h5 className="mt-4 mb-2">
-                    <span className="counter-value" data-target="236.18">
-                      {/* {subSector} */}
-                      {(function alo() {
-                        let length = 0;
-                        dashboardData?.OrganisationsBySubSectors?.map((sub) => {
-                          const actSubSector = sub._id.split(",");
-                          if (actSubSector.includes(subSector))
-                            length = length + sub.nb;
-                          // console.log(actSubSector, subSector);
-                        });
+          {seeAll.subSectorsSelectValue === "unique"
+            ? dashboardData?.records?.subSectors[
+                actualSectorSelected.toLowerCase()
+              ].map((subSector) => {
+                return (
+                  <div
+                    key={subSector}
+                    className="card min-w-[80%] md:min-w-[250px] md:w-4/12 lg:min-w-[24%] lg:w-3/12 xl:w-2/12"
+                  >
+                    <div className="text-center card-body">
+                      <div className="flex items-center justify-center mx-auto rounded-full size-14 bg-custom-100 text-custom-500 dark:bg-custom-500/20">
+                        <i data-lucide="wallet-2"></i>
+                      </div>
+                      <h5 className="mt-4 mb-2">
+                        <span className="counter-value" data-target="236.18">
+                          {/* {subSector} */}
+                          {(function alo() {
+                            let length = 0;
+                            dashboardData?.OrganisationsBySubSectors?.map(
+                              (sub) => {
+                                const actSubSector = sub._id.split(",");
+                                if (actSubSector.includes(subSector))
+                                  length = length + sub.nb;
+                                // console.log(actSubSector, subSector);
+                              }
+                            );
 
-                        return `${length}`;
-                      })()}
-                    </span>
-                  </h5>
-                  <p className="text-slate-500 dark:text-zink-200 capitalize">
-                    {subSector}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
+                            return `${length}`;
+                          })()}
+                        </span>
+                      </h5>
+                      <p className="text-slate-500 dark:text-zink-200 capitalize">
+                        {subSector}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })
+            : dashboardData?.records?.subSectors[
+                actualSectorSelected.toLowerCase()
+              ].map((subSector) => {
+                let length = 0;
+                return dashboardData?.OrganisationsBySubSectors?.map((sub) => {
+                  const actSubSector = sub._id.split(",");
+                  if (
+                    actSubSector.includes(subSector) &&
+                    actSubSector.length > 1
+                  ) {
+                    return (
+                      <div
+                        key={sub._id}
+                        className="card min-w-[80%] md:min-w-[250px] md:w-4/12 lg:min-w-[24%] lg:w-3/12 xl:w-2/12"
+                      >
+                        <div className="text-center card-body">
+                          <div className="flex items-center justify-center mx-auto rounded-full size-14 bg-custom-100 text-custom-500 dark:bg-custom-500/20">
+                            <i data-lucide="wallet-2"></i>
+                          </div>
+                          <h5 className="mt-4 mb-2">
+                            <span
+                              className="counter-value"
+                              data-target="236.18"
+                            >
+                              {sub.nb}
+                            </span>
+                          </h5>
+                          <p className="text-slate-500 dark:text-zink-200 capitalize">
+                            {sub._id}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  } else {
+                    return null;
+                  }
+                  // console.log(actSubSector, subSector);
+                });
+              })}
           {/* {dashboardData?.records?.subSectors[
             `${actualSectorSelected.toLowerCase()}`
           ].map((subSector) => {
