@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 const pageSchema = mongoose.Schema(
   {
-    title: { type: String, required: true, unique: true },
-    path: { type: String, unique: true },
+    title: { type: String, required: true },
+    path: { type: String },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -12,7 +12,7 @@ const pageSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Site",
     },
-    code: { type: String },
+    uniqueCode: { type: String, unique: true },
   },
   {
     timestamps: true,

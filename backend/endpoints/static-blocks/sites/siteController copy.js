@@ -1,24 +1,24 @@
-const Page = require("./pageModel.js");
+const Site = require("./siteModel.js");
 const CustomUtils = require("../../../utils/index.js");
 
-// @Get all Pages
-// @route GET /api/v1/Pages
+// @Get all Sites
+// @route GET /api/v1/Sites
 // @access Public
 
-exports.getAllPages = async (req, res) => {
+exports.getAllSites = async (req, res) => {
   const user = req.user ? req.user : null;
   if (user && user.role.slug === "user") {
     const { limit, page, sort, fields } = req.query;
     const queryObj = CustomUtils.advancedQuery(req.query);
     try {
-      const pages = await Page.find({ ...queryObj, owner: { $eq: user._id } })
+      const sites = await Site.find({ ...queryObj, owner: { $eq: user._id } })
         .limit(limit * 1)
         .sort({
           createdAt: -1,
           ...sort,
         })
         .select(fields);
-      res.status(200).json(pages);
+      res.status(200).json(sites);
     } catch (error) {
       res.status(404).json({ message: error.message });
     }
@@ -26,14 +26,14 @@ exports.getAllPages = async (req, res) => {
     const { limit, page, sort, fields } = req.query;
     const queryObj = CustomUtils.advancedQuery(req.query);
     try {
-      const pages = await Page.find({ ...queryObj })
+      const sites = await Site.find({ ...queryObj })
         .limit(limit * 1)
         .sort({
           createdAt: -1,
           ...sort,
         })
         .select(fields);
-      res.status(200).json(pages);
+      res.status(200).json(sites);
     } catch (error) {
       res.status(404).json({ message: error.message });
     }
@@ -42,21 +42,21 @@ exports.getAllPages = async (req, res) => {
   }
 };
 
-// @Get Page by id
-// @route GET /api/v1/Pages/:id
+// @Get Site by id
+// @route GET /api/v1/Sites/:id
 // @access Public
 
-exports.getPageById = async (req, res) => {
+exports.getSiteById = async (req, res) => {
   const user = req.user ? req.user : null;
   if (user && user.role.slug === "user") {
     try {
-      // get Page by id
-      const page = await Page.find({
+      // get Site by id
+      const site = await Site.find({
         $and: [{ _id: { $eq: req.params.id } }, { owner: { $eq: user._id } }],
       });
-      if (!page)
+      if (!site)
         return res.status(404).json({ message: CustomUtils.consts.NOT_FOUND });
-      res.status(200).json(page);
+      res.status(200).json(site);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -64,11 +64,11 @@ exports.getPageById = async (req, res) => {
     const { limit, page, sort, fields } = req.query;
     const queryObj = CustomUtils.advancedQuery(req.query);
     try {
-      // get Page by id
-      const page = await Page.findById(req.params.id);
-      if (!page)
+      // get Site by id
+      const site = await Site.findById(req.params.id);
+      if (!site)
         return res.status(404).json({ message: CustomUtils.consts.NOT_FOUND });
-      res.status(200).json(page);
+      res.status(200).json(site);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -77,11 +77,11 @@ exports.getPageById = async (req, res) => {
   }
 };
 
-// @Create Page
-// @route POST /api/v1/Pages
+// @Create Site
+// @route POST /api/v1/Sites
 // @access Public
 
-exports.createPage = async (req, res) => {
+exports.createSite = async (req, res) => {
   const user = req.user ? req.user : null;
   const defaultPage = {
     title: "index.html",
@@ -93,8 +93,8 @@ exports.createPage = async (req, res) => {
     try {
       CustomBody.path = slug;
       if (!CustomBody.pages) CustomBody.pages = [defaultPage];
-      const page = await Page.create({ ...CustomBody, owner: user._id });
-      res.status(201).json(page);
+      const site = await Site.create({ ...CustomBody, owner: user._id });
+      res.status(201).json(site);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -103,10 +103,10 @@ exports.createPage = async (req, res) => {
     const slug = CustomUtils.slugify(CustomBody.title);
     try {
       CustomBody.path = slug;
-      // if (!CustomBody.pages) CustomBody.pages = [defaultPage];
-      // if (!CustomBody.owner) CustomBody.owner = user._id;
-      const page = await Page.create({ ...CustomBody });
-      res.status(201).json(page);
+      if (!CustomBody.pages) CustomBody.pages = [defaultPage];
+      if (!CustomBody.owner) CustomBody.owner = user._id;
+      const site = await Site.create({ ...CustomBody });
+      res.status(201).json(site);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -115,19 +115,19 @@ exports.createPage = async (req, res) => {
   }
 };
 
-// @Update Page
-// @route PUT /api/v1/Pages/:id
+// @Update Site
+// @route PUT /api/v1/Sites/:id
 // @access Public
 
-exports.updatePage = async (req, res) => {
+exports.updateSite = async (req, res) => {
   const user = req.user ? req.user : null;
   if (user && user.role.slug === "user") {
     try {
-      const page = await Page.findById(req.params.id);
-      if (!page) {
+      const site = await Site.findById(req.params.id);
+      if (!site) {
         return res.status(404).json({ message: CustomUtils.consts.NOT_FOUND });
       }
-      const updated = await Page.findByIdAndUpdate(
+      const updated = await Site.findByIdAndUpdate(
         req.params.id,
         { ...req.body, owner: user._id },
         {
@@ -140,13 +140,13 @@ exports.updatePage = async (req, res) => {
     }
   } else if (user && user.role.slug === "admin") {
     try {
-      const page = await Page.findById(req.params.id);
-      if (!page) {
+      const site = await Site.findById(req.params.id);
+      if (!site) {
         return res.status(404).json({ message: CustomUtils.consts.NOT_FOUND });
       }
       const CustomBody = req.body;
       if (!CustomBody.owner) CustomBody.owner = user._id;
-      const updated = await Page.findByIdAndUpdate(req.params.id, CustomBody, {
+      const updated = await Site.findByIdAndUpdate(req.params.id, CustomBody, {
         new: true,
       });
       return res.status(200).json(updated);
@@ -158,32 +158,32 @@ exports.updatePage = async (req, res) => {
   }
 };
 
-// @Delete Page
-// @route DELETE /api/v1/Pages/:id
+// @Delete Site
+// @route DELETE /api/v1/Sites/:id
 // @access Public
 
-exports.deletePage = async (req, res) => {
+exports.deleteSite = async (req, res) => {
   const user = req.user ? req.user : null;
   if (user && user.role.slug === "user") {
     try {
-      const page = await Page.find({
+      const site = await Site.find({
         $and: [{ _id: { $eq: req.params.id } }, { owner: { $eq: user._id } }],
       });
-      if (!page) {
+      if (!site) {
         return res.status(404).json({ message: CustomUtils.consts.NOT_FOUND });
       }
-      await Page.findByIdAndDelete(req.params.id);
+      await Site.findByIdAndDelete(req.params.id);
       return res.status(200).json({});
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
   } else if (user && user.role.slug === "admin") {
     try {
-      const page = await Page.findById(req.params.id);
-      if (!page) {
+      const site = await Site.findById(req.params.id);
+      if (!site) {
         return res.status(404).json({ message: CustomUtils.consts.NOT_FOUND });
       }
-      await Page.findByIdAndDelete(req.params.id);
+      await Site.findByIdAndDelete(req.params.id);
       return res.status(200).json({});
     } catch (error) {
       res.status(500).json({ message: error.message });

@@ -2,8 +2,9 @@ const mongoose = require("mongoose");
 
 const siteSchema = mongoose.Schema(
   {
-    title: { type: String, required: true, unique: true },
-    path: { type: String, unique: true },
+    title: { type: String, required: true },
+    path: { type: String },
+    uniqueCode: { type: String, unique: true },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

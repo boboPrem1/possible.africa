@@ -91,7 +91,7 @@ exports.createSite = async (req, res) => {
     const CustomBody = { ...req.body };
     const slug = CustomUtils.slugify(CustomBody.title);
     try {
-      CustomBody.path = slug;
+      // CustomBody.path = slug;
       if (!CustomBody.pages) CustomBody.pages = [defaultPage];
       const site = await Site.create({ ...CustomBody, owner: user._id });
       res.status(201).json(site);
@@ -102,9 +102,9 @@ exports.createSite = async (req, res) => {
     const CustomBody = { ...req.body };
     const slug = CustomUtils.slugify(CustomBody.title);
     try {
-      CustomBody.path = slug;
-      if (!CustomBody.pages) CustomBody.pages = [defaultPage];
-      if (!CustomBody.owner) CustomBody.owner = user._id;
+      // CustomBody.path = slug;
+      // if (!CustomBody.pages) CustomBody.pages = [defaultPage];
+      // if (!CustomBody.owner) CustomBody.owner = user._id;
       const site = await Site.create({ ...CustomBody });
       res.status(201).json(site);
     } catch (error) {

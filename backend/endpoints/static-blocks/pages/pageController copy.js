@@ -103,8 +103,8 @@ exports.createPage = async (req, res) => {
     const slug = CustomUtils.slugify(CustomBody.title);
     try {
       CustomBody.path = slug;
-      // if (!CustomBody.pages) CustomBody.pages = [defaultPage];
-      // if (!CustomBody.owner) CustomBody.owner = user._id;
+      if (!CustomBody.pages) CustomBody.pages = [defaultPage];
+      if (!CustomBody.owner) CustomBody.owner = user._id;
       const page = await Page.create({ ...CustomBody });
       res.status(201).json(page);
     } catch (error) {
