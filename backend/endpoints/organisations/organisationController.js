@@ -331,7 +331,7 @@ exports.getAllOrganisationsFromAirtable = async (req, res) => {
   try {
     const organisations = await Organisation.find(queryObj)
       .limit(limit * 1)
-      .sort({ createdAt: -1, ...sort })
+      .sort({ dateAdded: -1, ...sort })
       .select(fields);
     res.status(200).json(organisations);
   } catch (error) {
