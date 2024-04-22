@@ -49,6 +49,11 @@ const uploadRoutes = require("./endpoints/uploads/uploadRoutes");
 const searchRoutes = require("./endpoints/search/searchRoutes");
 const dashboardRoutes = require("./endpoints/tableauDeBord/dashboardRoutes");
 
+// Static Blocks 
+const staticBlockSitesRoutes = require("./endpoints/static-blocks/sites/siteRoutes.js");
+const staticBlockPagesRoutes = require("./endpoints/static-blocks/pages/pageRoutes.js");
+
+
 var whitelist = ["https://possible.africa", "https://app.possible.africa"];
 var corsOptions = {
   origin: function (origin, callback) {
@@ -89,6 +94,10 @@ app.use(API_URL_BASE + "airtable_posts", airtablePostRoutes);
 app.use(API_URL_BASE + "upload", uploadRoutes);
 app.use(API_URL_BASE + "search", searchRoutes);
 app.use(API_URL_BASE + "dashboard", dashboardRoutes);
+
+// Static Blocks urls
+app.use(API_URL_BASE + "page_builder/sites", staticBlockSitesRoutes);
+app.use(API_URL_BASE + "page_builder/pages", staticBlockPagesRoutes);
 
 // Routes
 app.get(API_URL_BASE, (req, res) => {

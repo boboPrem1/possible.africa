@@ -251,7 +251,7 @@ exports.cronOrganisationsFromAirtable = async () => {
               .join("")}.jpg`;
             const org = await Organisation.create({
               logo: urla,
-              name: organisation.name ? organisation.name : "",
+              name: organisation.name ? organisation.name : "Unknow",
               description: organisation.description
                 ? organisation.description
                 : "",
