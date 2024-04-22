@@ -32,7 +32,7 @@ function Organisations() {
     "https://api.possible.africa/storage/logos/facebookcom.jpg",
     "https://api.possible.africa/storage/logos/wwwinstagramcom.jpg",
     "https://api.possible.africa/storage/logos/instagramcom.jpg",
-    "https://logo.clearbit.com/",
+    "https://logo.clearbit.com/","https://api.possible.africa/storage/logos/wwwredditcom.jpg"
   ];
   const logoPlaceholder =
     "https://api.possible.africa/storage/logos/placeholder_org.jpeg";
