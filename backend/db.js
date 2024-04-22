@@ -17,7 +17,6 @@ mongoose.set("toJSON", {
   versionKey: false,
   transform: function (doc, ret) {
     delete ret.__v;
-    delete ret.updatedAt;
     delete ret.password;
     return ret;
   },
