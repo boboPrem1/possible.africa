@@ -3,10 +3,11 @@ const jwt = require("jsonwebtoken");
 class CustomUtils {
   static consts = {
     MISSING_DATA: "Missing Data",
+    DUPLICATED_DATA: "Duplicating Data Not Allowed",
     NOT_EXIST: "Not Exist",
     INVALID_CREDENTIALS: "Invalid Credentials",
     METHOD_NOT_ALLOWED: "Method not allowed",
-    EXISTING_ACCOUNT: "Un compte existe déjà avec les données fournies",
+    EXISTING_ACCOUNT: "An account exists corresponding to datas send",
     NOT_FOUND: "Not Found",
     TOKEN_KEY: "miam_auth",
     SUCCESS: "Success",
@@ -63,7 +64,7 @@ class CustomUtils {
       "fields",
       "_end",
       "_start",
-      "possible"
+      "possible",
     ];
     excludedFields.forEach((element) => {
       delete queryObj[element];

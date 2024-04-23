@@ -12,7 +12,7 @@ const pageSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Site",
     },
-    uniqueCode: { type: String, unique: true },
+    uniqueCode: { type: String },
   },
   {
     timestamps: true,

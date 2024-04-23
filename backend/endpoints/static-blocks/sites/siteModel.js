@@ -4,7 +4,7 @@ const siteSchema = mongoose.Schema(
   {
     title: { type: String, required: true },
     path: { type: String },
-    uniqueCode: { type: String, unique: true },
+    uniqueCode: { type: String },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

@@ -83,10 +83,6 @@ exports.getPageById = async (req, res) => {
 
 exports.createPage = async (req, res) => {
   const user = req.user ? req.user : null;
-  const defaultPage = {
-    title: "index.html",
-    slug: "index"
-  };
   if (user && user.role.slug === "user") {
     const CustomBody = { ...req.body };
     const slug = CustomUtils.slugify(CustomBody.title);
@@ -105,6 +101,8 @@ exports.createPage = async (req, res) => {
       CustomBody.path = slug;
       // if (!CustomBody.pages) CustomBody.pages = [defaultPage];
       // if (!CustomBody.owner) CustomBody.owner = user._id;
+      const existingPage = await Page.find({ ...CustomBody });
+      if(existingPage) return res.status(400).json({ message: CustomUtils.consts.DUPLICATED_DATA });
       const page = await Page.create({ ...CustomBody });
       res.status(201).json(page);
     } catch (error) {
