@@ -4,6 +4,7 @@ const siteSchema = mongoose.Schema(
   {
     title: { type: String, required: true },
     path: { type: String },
+    phpPath: { type: String },
     uniqueCode: { type: String },
     owner: {
       type: mongoose.Schema.Types.ObjectId,

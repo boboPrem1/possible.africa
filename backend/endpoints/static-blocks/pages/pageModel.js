@@ -4,6 +4,7 @@ const pageSchema = mongoose.Schema(
   {
     title: { type: String, required: true },
     path: { type: String },
+    phpPath: { type: String },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
