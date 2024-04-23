@@ -102,7 +102,13 @@ exports.createPage = async (req, res) => {
       // if (!CustomBody.pages) CustomBody.pages = [defaultPage];
       // if (!CustomBody.owner) CustomBody.owner = user._id;
       console.log(CustomBody);
-      const existingPage = await Page.find({ ...CustomBody });
+      const existingPage = await Page.find({
+        $and: [
+          { uniqueCode: { $eq: CustomBody.uniqueCode } },
+          { title: { $eq: CustomBody.title } },
+          { path: { $eq: CustomBody.path } },
+        ],
+      });
       if(existingPage) return res.status(400).json({ message: CustomUtils.consts.DUPLICATED_DATA });
       const page = await Page.create({ ...CustomBody });
       res.status(201).json(page);
