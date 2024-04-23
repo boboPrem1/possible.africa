@@ -101,7 +101,7 @@ exports.createPage = async (req, res) => {
       CustomBody.path = slug;
       // if (!CustomBody.pages) CustomBody.pages = [defaultPage];
       // if (!CustomBody.owner) CustomBody.owner = user._id;
-      console.log(CustomBody);
+      // console.log(CustomBody);
       const existingPage = await Page.find({
         $and: [
           { uniqueCode: { $eq: CustomBody.uniqueCode } },
