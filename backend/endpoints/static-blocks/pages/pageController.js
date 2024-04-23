@@ -109,8 +109,8 @@ exports.createPage = async (req, res) => {
           { path: { $eq: CustomBody.path } },
         ],
       });
-      console.log(existingPage);
-      if (existingPage)
+      // console.log(existingPage);
+      if (existingPage.length >= 0)
         return res
           .status(400)
           .json({ message: CustomUtils.consts.DUPLICATED_DATA });
