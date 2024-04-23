@@ -5,6 +5,7 @@ const pageSchema = mongoose.Schema(
     title: { type: String, required: true },
     path: { type: String },
     phpPath: { type: String },
+    neverEditedBefore: { type: Boolean, default: true },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
