@@ -110,7 +110,7 @@ exports.createPage = async (req, res) => {
         ],
       });
       // console.log(existingPage);
-      if (existingPage.length >= 0)
+      if (existingPage.length > 0)
         return res
           .status(400)
           .json({ message: CustomUtils.consts.DUPLICATED_DATA });
