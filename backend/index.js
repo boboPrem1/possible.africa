@@ -53,6 +53,9 @@ const dashboardRoutes = require("./endpoints/tableauDeBord/dashboardRoutes");
 const staticBlockSitesRoutes = require("./endpoints/static-blocks/sites/siteRoutes.js");
 const staticBlockPagesRoutes = require("./endpoints/static-blocks/pages/pageRoutes.js");
 
+// Ai Generator 
+const aiGeneratorRoutes = require("./endpoints/ai-generator/aiRoutes.js");
+
 
 var whitelist = ["https://possible.africa", "https://app.possible.africa"];
 var corsOptions = {
@@ -98,6 +101,9 @@ app.use(API_URL_BASE + "dashboard", dashboardRoutes);
 // Static Blocks urls
 app.use(API_URL_BASE + "page_builder/sites", staticBlockSitesRoutes);
 app.use(API_URL_BASE + "page_builder/pages", staticBlockPagesRoutes);
+
+// AI Generator
+app.use(API_URL_BASE + "ai", aiGeneratorRoutes);
 
 // Routes
 app.get(API_URL_BASE, (req, res) => {
