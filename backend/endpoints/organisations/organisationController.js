@@ -142,76 +142,82 @@ exports.getOrganisationsFromAirtable = async (req, res) => {
     );
     let existing = 0;
     const organisations = await result.map(async (organisation) => {
-      const ExistingOrg = await Organisation.find({
+      Organisation.find({
         name: { $eq: organisation.name },
-      });
+      })
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
       // console.log(ExistingOrg);
 
-      if (ExistingOrg.length === 0) {
-        try {
-          let domain_racine = extraireDomaine(organisation.website);
-          // console.log(domain_racine);
-          if (domain_racine) {
-            domain_racine = domain_racine.slice(8);
-            const url = `https://logo.clearbit.com/${domain_racine}`;
-            const path = `${Path.resolve(
-              __dirname,
-              "../../public/storage/logos"
-            )}/${domain_racine.split(".").join("")}.jpg`;
-            await downloadImage(url, path);
-            let urla = `https://api.possible.africa/storage/logos/${domain_racine
-              .split(".")
-              .join("")}.jpg`;
-            const org = await Organisation.create({
-              logo: urla,
-              name: organisation.name ? organisation.name : "",
-              description: organisation.description
-                ? organisation.description
-                : "",
-              region: organisation.region ? organisation.region.join(",") : "",
-              operatingCountries: organisation.operatingCountries
-                ? organisation.operatingCountries.join(",")
-                : "",
-              sector: organisation.sector ? organisation.sector.join(",") : "",
-              subSector: organisation.subSector
-                ? organisation.subSector.join(",")
-                : "",
-              active: organisation.active ? organisation.active : "",
-              website: organisation.website ? organisation.website : "",
-              source: organisation.source ? organisation.source : "",
-              tier: organisation.tier ? organisation.tier : "",
-              dateAdded: organisation.dateAdded ? organisation.dateAdded : "",
-            });
-          } else {
-            const urla =
-              "https://api.possible.africa/storage/logos/placeholder_org.jpeg";
-            const org = await Organisation.create({
-              logo: urla,
-              name: organisation.name ? organisation.name : "",
-              description: organisation.description
-                ? organisation.description
-                : "",
-              region: organisation.region ? organisation.region.join(",") : "",
-              operatingCountries: organisation.operatingCountries
-                ? organisation.operatingCountries.join(",")
-                : "",
-              sector: organisation.sector ? organisation.sector.join(",") : "",
-              subSector: organisation.subSector
-                ? organisation.subSector.join(",")
-                : "",
-              active: organisation.active ? organisation.active : "",
-              website: organisation.website ? organisation.website : "",
-              source: organisation.source ? organisation.source : "",
-              tier: organisation.tier ? organisation.tier : "",
-              dateAdded: organisation.dateAdded ? organisation.dateAdded : "",
-            });
-          }
-        } catch (e) {
-          console.log(e);
-        }
-      } else {
-        existing = existing + 1;
-      }
+      // if (ExistingOrg.length === 0) {
+      //   try {
+      //     let domain_racine = extraireDomaine(organisation.website);
+      //     // console.log(domain_racine);
+      //     if (domain_racine) {
+      //       domain_racine = domain_racine.slice(8);
+      //       const url = `https://logo.clearbit.com/${domain_racine}`;
+      //       const path = `${Path.resolve(
+      //         __dirname,
+      //         "../../public/storage/logos"
+      //       )}/${domain_racine.split(".").join("")}.jpg`;
+      //       await downloadImage(url, path);
+      //       let urla = `https://api.possible.africa/storage/logos/${domain_racine
+      //         .split(".")
+      //         .join("")}.jpg`;
+      //       const org = await Organisation.create({
+      //         logo: urla,
+      //         name: organisation.name ? organisation.name : "",
+      //         description: organisation.description
+      //           ? organisation.description
+      //           : "",
+      //         region: organisation.region ? organisation.region.join(",") : "",
+      //         operatingCountries: organisation.operatingCountries
+      //           ? organisation.operatingCountries.join(",")
+      //           : "",
+      //         sector: organisation.sector ? organisation.sector.join(",") : "",
+      //         subSector: organisation.subSector
+      //           ? organisation.subSector.join(",")
+      //           : "",
+      //         active: organisation.active ? organisation.active : "",
+      //         website: organisation.website ? organisation.website : "",
+      //         source: organisation.source ? organisation.source : "",
+      //         tier: organisation.tier ? organisation.tier : "",
+      //         dateAdded: organisation.dateAdded ? organisation.dateAdded : "",
+      //       });
+      //     } else {
+      //       const urla =
+      //         "https://api.possible.africa/storage/logos/placeholder_org.jpeg";
+      //       const org = await Organisation.create({
+      //         logo: urla,
+      //         name: organisation.name ? organisation.name : "",
+      //         description: organisation.description
+      //           ? organisation.description
+      //           : "",
+      //         region: organisation.region ? organisation.region.join(",") : "",
+      //         operatingCountries: organisation.operatingCountries
+      //           ? organisation.operatingCountries.join(",")
+      //           : "",
+      //         sector: organisation.sector ? organisation.sector.join(",") : "",
+      //         subSector: organisation.subSector
+      //           ? organisation.subSector.join(",")
+      //           : "",
+      //         active: organisation.active ? organisation.active : "",
+      //         website: organisation.website ? organisation.website : "",
+      //         source: organisation.source ? organisation.source : "",
+      //         tier: organisation.tier ? organisation.tier : "",
+      //         dateAdded: organisation.dateAdded ? organisation.dateAdded : "",
+      //       });
+      //     }
+      //   } catch (e) {
+      //     console.log(e);
+      //   }
+      // } else {
+      //   existing = existing + 1;
+      // }
     });
 
     res.status(200).json({ success: true, existing: existing });
@@ -378,7 +384,7 @@ exports.getAllOrganisationsFromAirtable = async (req, res) => {
 exports.getAllOrganisations = async (req, res) => {
   let { limit, page, sort, fields, _start, _end } = req.query;
   const queryObj = CustomUtils.advancedQuery(req.query);
-  console.log(queryObj);
+  // console.log(queryObj);
   try {
     if (_end && (_start || _start == 0)) {
       limit = _end - _start;

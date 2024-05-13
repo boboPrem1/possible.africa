@@ -73,9 +73,13 @@ class CustomUtils {
     const queryObjKeys = Object.keys(queryObj);
     queryObjKeys.map((item) => {
       if (!(queryObj[item].length === 24 && queryObj[item].includes("64"))) {
-        const regex = new RegExp(queryObj[item], "i");
-        // console.log(regex);
-        queryObj[item] = { $regex: regex };
+        if (queryObj[item].length > 0) {
+          const regex = new RegExp(queryObj[item], "i");
+          // console.log(regex);
+          queryObj[item] = { $regex: regex };
+        } else {
+          delete queryObj[item];
+        }
       }
     });
     return queryObj;
