@@ -83,6 +83,13 @@ app.use(express.static("public"));
 
 //protections
 app.use(API_URL_BASE, authRoutes);
+// Static Blocks urls
+app.use(API_URL_BASE + "page_builder/sites", staticBlockSitesRoutes);
+app.use(API_URL_BASE + "page_builder/pages", staticBlockPagesRoutes);
+
+// AI Generator
+app.use(API_URL_BASE + "ai", aiGeneratorRoutes);
+
 app.use(protect);
 app.use(API_URL_BASE + "users", userRoutes);
 app.use(API_URL_BASE + "permissions", permissionRoutes);
