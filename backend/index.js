@@ -56,16 +56,16 @@ const staticBlockPagesRoutes = require("./endpoints/static-blocks/pages/pageRout
 // Ai Generator
 const aiGeneratorRoutes = require("./endpoints/ai-generator/aiRoutes.js");
 
-var whitelist = ["https://possible.africa", "https://app.possible.africa"];
-var corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-};
+// var whitelist = ["https://possible.africa", "https://app.possible.africa"];
+// var corsOptions = {
+//   origin: function (origin, callback) {
+//     if (whitelist.indexOf(origin) !== -1 || !origin) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not allowed by CORS"));
+//     }
+//   },
+// };
 
 const corsOptions = {
   origin: function (origin, callback) {
@@ -94,6 +94,12 @@ const corsOptions = {
 // Middleware
 //
 app.use(cors(corsOptions));
+// app.use((req, res, next) => {
+//     res.header('Access-Control-Allow-Origin', 'http://example.com'); // Remplacez 'http://example.com' par le domaine autorisé
+//     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+//     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+//     next();
+// });
 const { protect } = require("./endpoints/auth/authController.js");
 const {
   getAllPostFromAirtable,
