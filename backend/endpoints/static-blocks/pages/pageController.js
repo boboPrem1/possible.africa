@@ -42,6 +42,23 @@ exports.getAllPages = async (req, res) => {
   }
 };
 
+exports.getAllPages = async (req, res) => {
+  const { limit, page, sort, fields } = req.query;
+  const queryObj = CustomUtils.advancedQuery(req.query);
+  try {
+    const pages = await Page.find({ ...queryObj })
+      .limit(limit * 1)
+      .sort({
+        createdAt: -1,
+        ...sort,
+      })
+      .select(fields);
+    res.status(200).json(pages);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
 // @Get Page by id
 // @route GET /api/v1/Pages/:id
 // @access Public
@@ -82,45 +99,14 @@ exports.getPageById = async (req, res) => {
 // @access Public
 
 exports.createPage = async (req, res) => {
-  const user = req.user ? req.user : null;
-  if (user && user.role.slug === "user") {
-    const CustomBody = { ...req.body };
-    const slug = CustomUtils.slugify(CustomBody.title);
-    try {
-      CustomBody.path = slug;
-      if (!CustomBody.pages) CustomBody.pages = [defaultPage];
-      const page = await Page.create({ ...CustomBody, owner: user._id });
-      res.status(201).json(page);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  } else if (user && user.role.slug === "admin") {
-    const CustomBody = { ...req.body };
-    const slug = CustomUtils.slugify(CustomBody.title);
-    try {
-      CustomBody.path = slug;
-      // if (!CustomBody.pages) CustomBody.pages = [defaultPage];
-      // if (!CustomBody.owner) CustomBody.owner = user._id;
-      // console.log(CustomBody);
-      const existingPage = await Page.find({
-        $and: [
-          { uniqueCode: { $eq: CustomBody.uniqueCode } },
-          { title: { $eq: CustomBody.title } },
-          { path: { $eq: CustomBody.path } },
-        ],
-      });
-      // console.log(existingPage);
-      if (existingPage.length > 0)
-        return res
-          .status(400)
-          .json({ message: CustomUtils.consts.DUPLICATED_DATA });
-      const page = await Page.create({ ...CustomBody });
-      res.status(201).json(page);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  } else {
-    res.status(400).json({ message: CustomUtils.consts.MISSING_DATA });
+  const CustomBody = { ...req.body };
+  const slug = CustomUtils.slugify(CustomBody.title);
+  try {
+    CustomBody.path = slug;
+    const page = await Page.create({ ...CustomBody });
+    res.status(201).json(page);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 

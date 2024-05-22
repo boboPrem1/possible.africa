@@ -151,8 +151,8 @@ const fetchIcpsRecords = async (apiKey, baseId, tableName) => {
 
     records.forEach((record) => {
       allRecords.push({
-        icp: record.get("ICP Lookup")[0],
-        organisation: record.get("Organization Lookup")[0],
+        icp: record.get("Name"),
+        organisation: record.get("Organisation"),
       });
     });
 
