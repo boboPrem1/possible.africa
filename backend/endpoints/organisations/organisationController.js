@@ -13,6 +13,8 @@ require("dotenv").config();
 const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
 const ORGANISATIONS_BASE_ID = process.env.ORGANISATIONS_BASE_ID;
 const ORGANISATION_TABLE_ID = process.env.ORGANISATION_TABLE_ID;
+const ICPS_BASE_ID = process.env.ICPS_BASE_ID;
+const ICPS_TABLE_ID = process.env.ICPS_TABLE_ID;
 const ENV = process.env.ENV;
 const PORT = process.env.PORT;
 var Airtable = require("airtable");
@@ -133,6 +135,42 @@ const fetchAllRecords = async (apiKey, baseId, tableName) => {
   }
 };
 
+const fetchIcpsRecords = async (apiKey, baseId, tableName) => {
+  var base = new Airtable({
+    apiKey: apiKey,
+  }).base(baseId);
+
+  let allRecords = [];
+  try {
+    const records = await base(tableName)
+      .select({
+        // Selecting the first 3 records in Grid view:
+        view: "Grid view",
+      })
+      .all();
+
+    records.forEach((record) => {
+      allRecords.push({
+        icp: record.get("ICP Lookup")[0],
+        organisation: record.get("Organization Lookup")[0],
+      });
+    });
+
+    // base(tableName).find("WareFlow", function (err, record) {
+    //   if (err) {
+    //     console.error(err);
+    //     return;
+    //   }
+    //   console.log("Retrieved", record.id);
+    // });
+
+    // console.log(allRecords);
+    return allRecords;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 exports.getOrganisationsFromAirtable = async (req, res) => {
   try {
     const result = await fetchAllRecords(
@@ -221,6 +259,39 @@ exports.getOrganisationsFromAirtable = async (req, res) => {
     });
 
     res.status(200).json({ success: true, existing: existing });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+};
+
+exports.getIcpsFromAirtable = async (req, res) => {
+  function searchSubstring(text, searchString) {
+    // Crée une expression régulière insensible à la casse pour rechercher la sous-chaîne
+    const regex = new RegExp(searchString, "i");
+    // Teste la chaîne de caractères pour voir si elle contient la sous-chaîne
+    return regex.test(text);
+  }
+  const { query } = req;
+  console.log(query);
+  try {
+    const result = await fetchIcpsRecords(
+      AIRTABLE_API_KEY,
+      ICPS_BASE_ID,
+      ICPS_TABLE_ID
+    );
+
+    const resultFiltered = [];
+    result.map((r) => {
+      if (query.organisation) {
+        if (searchSubstring(r.organisation, query.organisation)) {
+          return resultFiltered.push(r);
+        }
+        return undefined;
+      }
+      return undefined;
+    });
+
+    res.status(200).json(resultFiltered);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }

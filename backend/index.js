@@ -56,6 +56,8 @@ const staticBlockPagesRoutes = require("./endpoints/static-blocks/pages/pageRout
 // Ai Generator
 const aiGeneratorRoutes = require("./endpoints/ai-generator/aiRoutes.js");
 
+const icpsRoutes = require("./endpoints/organisations/airtableIcpRoutes.js")
+
 // var whitelist = ["https://possible.africa", "https://app.possible.africa"];
 // var corsOptions = {
 //   origin: function (origin, callback) {
@@ -136,6 +138,9 @@ app.use(API_URL_BASE + "page_builder/pages", staticBlockPagesRoutes);
 
 // AI Generator
 app.use(API_URL_BASE + "ai", aiGeneratorRoutes);
+
+// AI Generator
+app.use(API_URL_BASE + "icps", icpsRoutes);
 
 app.use(protect);
 app.use(API_URL_BASE + "users", userRoutes);
