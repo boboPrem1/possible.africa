@@ -272,7 +272,7 @@ exports.getIcpsFromAirtable = async (req, res) => {
     return regex.test(text);
   }
   const { query } = req;
-  console.log(query);
+  // console.log(query);
   try {
     const result = await fetchIcpsRecords(
       AIRTABLE_API_KEY,
