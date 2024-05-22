@@ -49,13 +49,12 @@ const uploadRoutes = require("./endpoints/uploads/uploadRoutes");
 const searchRoutes = require("./endpoints/search/searchRoutes");
 const dashboardRoutes = require("./endpoints/tableauDeBord/dashboardRoutes");
 
-// Static Blocks 
+// Static Blocks
 const staticBlockSitesRoutes = require("./endpoints/static-blocks/sites/siteRoutes.js");
 const staticBlockPagesRoutes = require("./endpoints/static-blocks/pages/pageRoutes.js");
 
-// Ai Generator 
+// Ai Generator
 const aiGeneratorRoutes = require("./endpoints/ai-generator/aiRoutes.js");
-
 
 var whitelist = ["https://possible.africa", "https://app.possible.africa"];
 var corsOptions = {
@@ -67,12 +66,43 @@ var corsOptions = {
     }
   },
 };
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      "http://possible.africa",
+      "https://possible.africa",
+      "http://www.possible.africa",
+      "https://www.possible.africa",
+      "http://www.africaleads.ai",
+      "https://www.africaleads.ai",
+      "http://pages.africaleads.ai",
+      "https://pages.africaleads.ai",
+      "http://app.possible.africa",
+      "https://app.possible.africa",
+    ];
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
 // Middleware
 //
+app.use(cors(corsOptions));
 const { protect } = require("./endpoints/auth/authController.js");
-const { getAllPostFromAirtable, cronAllPostFromAirtable } = require("./endpoints/posts/postController.js");
-const { getOrganisationsFromAirtable, cronOrganisationsFromAirtable } = require("./endpoints/organisations/organisationController.js");
-app.use(cors());
+const {
+  getAllPostFromAirtable,
+  cronAllPostFromAirtable,
+} = require("./endpoints/posts/postController.js");
+const {
+  getOrganisationsFromAirtable,
+  cronOrganisationsFromAirtable,
+} = require("./endpoints/organisations/organisationController.js");
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
@@ -126,7 +156,6 @@ cron.schedule("*/40 * * * *", () => {
 cron.schedule("*/30 * * * *", () => {
   cronOrganisationsFromAirtable();
 });
-
 
 // const io = new Server(server, {
 //   cors: {
