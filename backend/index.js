@@ -93,24 +93,24 @@ const aiGeneratorRoutes = require("./endpoints/ai-generator/aiRoutes.js");
 // };
 // Middleware
 //
-// app.use(cors(corsOptions));
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", [
-    "http://possible.africa",
-    "https://possible.africa",
-    "http://www.possible.africa",
-    "https://www.possible.africa",
-    "http://www.africaleads.ai",
-    "https://www.africaleads.ai",
-    "http://pages.africaleads.ai",
-    "https://pages.africaleads.ai",
-    "http://app.possible.africa",
-    "https://app.possible.africa",
-  ]); // Remplacez 'http://example.com' par le domaine autorisé
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  next();
-});
+app.use(cors());
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", [
+//     "http://possible.africa",
+//     "https://possible.africa",
+//     "http://www.possible.africa",
+//     "https://www.possible.africa",
+//     "http://www.africaleads.ai",
+//     "https://www.africaleads.ai",
+//     "http://pages.africaleads.ai",
+//     "https://pages.africaleads.ai",
+//     "http://app.possible.africa",
+//     "https://app.possible.africa",
+//   ]); // Remplacez 'http://example.com' par le domaine autorisé
+//   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+//   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+//   next();
+// });
 const { protect } = require("./endpoints/auth/authController.js");
 const {
   getAllPostFromAirtable,
