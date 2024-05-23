@@ -115,41 +115,21 @@ exports.createPage = async (req, res) => {
 // @access Public
 
 exports.updatePage = async (req, res) => {
-  const user = req.user ? req.user : null;
-  if (user && user.role.slug === "user") {
-    try {
-      const page = await Page.findById(req.params.id);
-      if (!page) {
-        return res.status(404).json({ message: CustomUtils.consts.NOT_FOUND });
-      }
-      const updated = await Page.findByIdAndUpdate(
-        req.params.id,
-        { ...req.body, owner: user._id },
-        {
-          new: true,
-        }
-      );
-      return res.status(200).json(updated);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
+  try {
+    const page = await Page.findById(req.params.id);
+    if (!page) {
+      return res.status(404).json({ message: CustomUtils.consts.NOT_FOUND });
     }
-  } else if (user && user.role.slug === "admin") {
-    try {
-      const page = await Page.findById(req.params.id);
-      if (!page) {
-        return res.status(404).json({ message: CustomUtils.consts.NOT_FOUND });
-      }
-      const CustomBody = req.body;
-      if (!CustomBody.owner) CustomBody.owner = user._id;
-      const updated = await Page.findByIdAndUpdate(req.params.id, CustomBody, {
+    const updated = await Page.findByIdAndUpdate(
+      req.params.id,
+      { ...req.body },
+      {
         new: true,
-      });
-      return res.status(200).json(updated);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  } else {
-    res.status(400).json({ message: CustomUtils.consts.MISSING_DATA });
+      }
+    );
+    return res.status(200).json(updated);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -158,32 +138,14 @@ exports.updatePage = async (req, res) => {
 // @access Public
 
 exports.deletePage = async (req, res) => {
-  const user = req.user ? req.user : null;
-  if (user && user.role.slug === "user") {
-    try {
-      const page = await Page.find({
-        $and: [{ _id: { $eq: req.params.id } }, { owner: { $eq: user._id } }],
-      });
-      if (!page) {
-        return res.status(404).json({ message: CustomUtils.consts.NOT_FOUND });
-      }
-      await Page.findByIdAndDelete(req.params.id);
-      return res.status(200).json({});
-    } catch (error) {
-      res.status(500).json({ message: error.message });
+  try {
+    const page = await Page.findById(req.params.id);
+    if (!page) {
+      return res.status(404).json({ message: CustomUtils.consts.NOT_FOUND });
     }
-  } else if (user && user.role.slug === "admin") {
-    try {
-      const page = await Page.findById(req.params.id);
-      if (!page) {
-        return res.status(404).json({ message: CustomUtils.consts.NOT_FOUND });
-      }
-      await Page.findByIdAndDelete(req.params.id);
-      return res.status(200).json({});
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  } else {
-    res.status(400).json({ message: CustomUtils.consts.MISSING_DATA });
+    await Page.findByIdAndDelete(req.params.id);
+    return res.status(200).json({});
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };

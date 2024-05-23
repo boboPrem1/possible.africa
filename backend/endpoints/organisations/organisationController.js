@@ -455,7 +455,7 @@ exports.getAllOrganisationsFromAirtable = async (req, res) => {
 exports.getAllOrganisations = async (req, res) => {
   let { limit, page, sort, fields, _start, _end } = req.query;
   const queryObj = CustomUtils.advancedQuery(req.query);
-  // console.log(queryObj);
+  console.log(queryObj);
   try {
     if (_end && (_start || _start == 0)) {
       limit = _end - _start;
