@@ -522,6 +522,8 @@ exports.getAllPosts = async (req, res) => {
         .skip(_start ? _start : 0)
         .sort({ airDateAdded: -1, ...sort })
         .select(fields);
+      
+      console.log(postsFrFin);
 
       return res.status(200).json([...postsFrFin, ...postsEngFin]);
     }

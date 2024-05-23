@@ -20,6 +20,7 @@ import subSectorSolid from "../assets/icons/subSector.svg";
 import tierSolid from "../assets/icons/tier.svg";
 import filterSolid from "../assets/icons/filter-solid.svg";
 import xmarkSolid from "../assets/icons/xmark-solid.svg";
+import headquarterSolid from "../assets/icons/building-flag-solid.svg";
 
 const countries = {
   all: [
@@ -391,7 +392,8 @@ const socialMedias = [
   "https://api.possible.africa/storage/logos/facebookcom.jpg",
   "https://api.possible.africa/storage/logos/wwwinstagramcom.jpg",
   "https://api.possible.africa/storage/logos/instagramcom.jpg",
-  "https://logo.clearbit.com/","https://api.possible.africa/storage/logos/wwwredditcom.jpg"
+  "https://logo.clearbit.com/",
+  "https://api.possible.africa/storage/logos/wwwredditcom.jpg",
 ];
 const logoPlaceholder =
   "https://api.possible.africa/storage/logos/placeholder_org.jpeg";
@@ -1531,6 +1533,26 @@ function Organisations() {
                             ? organisation.operatingCountries.slice(0, 20) +
                               " . . ."
                             : organisation.operatingCountries}
+                        </span>
+                      </div>
+                    ) : null}
+
+                    {organisation.headquarter ? (
+                      <div className="inline-flex justify-start items-center gap-x-2 rounded-full border-2 pe-3 text-mediumGray">
+                        <div className="h-[35px] w-[35px] rounded-full border-2 scale-105 bg-transparent flex justify-center">
+                          <img
+                            src={headquarterSolid}
+                            height={20}
+                            width={18}
+                            alt="Tier"
+                          />
+                        </div>
+                        <span className="capitalize md:text-lg md:font-semibold text-nowrap">
+                          {/* {organisation.headquarter} */}
+                          {organisation.headquarter.length > 20
+                            ? organisation.headquarter.slice(0, 20) +
+                              " . . ."
+                            : organisation.headquarter}
                         </span>
                       </div>
                     ) : null}

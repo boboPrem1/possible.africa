@@ -95,6 +95,7 @@ const fetchAllRecords = async (apiKey, baseId, tableName) => {
         logo: record.get("Logo"),
         description: record.get("Description"),
         region: record.get("Region"),
+        headquarter: record.get("Headquarter"),
         operatingCountries: record.get("Operating Countries"),
         sector: record.get("Sector"),
         subSector: record.get("Sub-Sector"),
@@ -114,6 +115,7 @@ const fetchAllRecords = async (apiKey, baseId, tableName) => {
         name: el.name ? el.name : null,
         description: el.description ? el.description : null,
         region: el.region ? el.region : null,
+        headquarter: el.headquarter ? el.headquarter : null,
         operatingCountries: el.operatingCountries
           ? el.operatingCountries.join(" ")
           : null,
@@ -144,7 +146,6 @@ const fetchIcpsRecords = async (apiKey, baseId, tableName) => {
   try {
     const records = await base(tableName)
       .select({
-        // Selecting the first 3 records in Grid view:
         view: "Grid view",
       })
       .all();
@@ -156,15 +157,6 @@ const fetchIcpsRecords = async (apiKey, baseId, tableName) => {
       });
     });
 
-    // base(tableName).find("WareFlow", function (err, record) {
-    //   if (err) {
-    //     console.error(err);
-    //     return;
-    //   }
-    //   console.log("Retrieved", record.id);
-    // });
-
-    // console.log(allRecords);
     return allRecords;
   } catch (err) {
     console.error(err);
@@ -179,83 +171,95 @@ exports.getOrganisationsFromAirtable = async (req, res) => {
       ORGANISATION_TABLE_ID
     );
     let existing = 0;
-    const organisations = await result.map(async (organisation) => {
-      Organisation.find({
+    result.map(async (organisation) => {
+      const ExistingOrg = await Organisation.find({
         name: { $eq: organisation.name },
-      })
-        .then((result) => {
-          console.log(result);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-      // console.log(ExistingOrg);
-
-      // if (ExistingOrg.length === 0) {
-      //   try {
-      //     let domain_racine = extraireDomaine(organisation.website);
-      //     // console.log(domain_racine);
-      //     if (domain_racine) {
-      //       domain_racine = domain_racine.slice(8);
-      //       const url = `https://logo.clearbit.com/${domain_racine}`;
-      //       const path = `${Path.resolve(
-      //         __dirname,
-      //         "../../public/storage/logos"
-      //       )}/${domain_racine.split(".").join("")}.jpg`;
-      //       await downloadImage(url, path);
-      //       let urla = `https://api.possible.africa/storage/logos/${domain_racine
-      //         .split(".")
-      //         .join("")}.jpg`;
-      //       const org = await Organisation.create({
-      //         logo: urla,
-      //         name: organisation.name ? organisation.name : "",
-      //         description: organisation.description
-      //           ? organisation.description
-      //           : "",
-      //         region: organisation.region ? organisation.region.join(",") : "",
-      //         operatingCountries: organisation.operatingCountries
-      //           ? organisation.operatingCountries.join(",")
-      //           : "",
-      //         sector: organisation.sector ? organisation.sector.join(",") : "",
-      //         subSector: organisation.subSector
-      //           ? organisation.subSector.join(",")
-      //           : "",
-      //         active: organisation.active ? organisation.active : "",
-      //         website: organisation.website ? organisation.website : "",
-      //         source: organisation.source ? organisation.source : "",
-      //         tier: organisation.tier ? organisation.tier : "",
-      //         dateAdded: organisation.dateAdded ? organisation.dateAdded : "",
-      //       });
-      //     } else {
-      //       const urla =
-      //         "https://api.possible.africa/storage/logos/placeholder_org.jpeg";
-      //       const org = await Organisation.create({
-      //         logo: urla,
-      //         name: organisation.name ? organisation.name : "",
-      //         description: organisation.description
-      //           ? organisation.description
-      //           : "",
-      //         region: organisation.region ? organisation.region.join(",") : "",
-      //         operatingCountries: organisation.operatingCountries
-      //           ? organisation.operatingCountries.join(",")
-      //           : "",
-      //         sector: organisation.sector ? organisation.sector.join(",") : "",
-      //         subSector: organisation.subSector
-      //           ? organisation.subSector.join(",")
-      //           : "",
-      //         active: organisation.active ? organisation.active : "",
-      //         website: organisation.website ? organisation.website : "",
-      //         source: organisation.source ? organisation.source : "",
-      //         tier: organisation.tier ? organisation.tier : "",
-      //         dateAdded: organisation.dateAdded ? organisation.dateAdded : "",
-      //       });
-      //     }
-      //   } catch (e) {
-      //     console.log(e);
-      //   }
-      // } else {
-      //   existing = existing + 1;
+      });
+      // if (org.length) {
+      //   const customBody = {
+      //     headquarter: organisation.headquarter
+      //       ? organisation.headquarter.join(",")
+      //       : "",
+      //   };
+      //   const newOrg = await Organisation.findByIdAndUpdate(org[0]._id, customBody, {
+      //     new: true,
+      //   });
+      //   console.log(newOrg);
       // }
+      // return org;
+      // console.log(org);
+
+      if (ExistingOrg.length === 0) {
+        try {
+          let domain_racine = extraireDomaine(organisation.website);
+          // console.log(domain_racine);
+          if (domain_racine) {
+            domain_racine = domain_racine.slice(8);
+            const url = `https://logo.clearbit.com/${domain_racine}`;
+            const path = `${Path.resolve(
+              __dirname,
+              "../../public/storage/logos"
+            )}/${domain_racine.split(".").join("")}.jpg`;
+            await downloadImage(url, path);
+            let urla = `https://api.possible.africa/storage/logos/${domain_racine
+              .split(".")
+              .join("")}.jpg`;
+            const org = await Organisation.create({
+              logo: urla,
+              name: organisation.name ? organisation.name : "",
+              description: organisation.description
+                ? organisation.description
+                : "",
+              region: organisation.region ? organisation.region.join(",") : "",
+              operatingCountries: organisation.operatingCountries
+                ? organisation.operatingCountries.join(",")
+                : "",
+              sector: organisation.sector ? organisation.sector.join(",") : "",
+              subSector: organisation.subSector
+                ? organisation.subSector.join(",")
+                : "",
+              headquarter: organisation.headquarter
+                ? organisation.headquarter.join(",")
+                : "",
+              active: organisation.active ? organisation.active : "",
+              website: organisation.website ? organisation.website : "",
+              source: organisation.source ? organisation.source : "",
+              tier: organisation.tier ? organisation.tier : "",
+              dateAdded: organisation.dateAdded ? organisation.dateAdded : "",
+            });
+          } else {
+            const urla =
+              "https://api.possible.africa/storage/logos/placeholder_org.jpeg";
+            const org = await Organisation.create({
+              logo: urla,
+              name: organisation.name ? organisation.name : "",
+              description: organisation.description
+                ? organisation.description
+                : "",
+              region: organisation.region ? organisation.region.join(",") : "",
+              operatingCountries: organisation.operatingCountries
+                ? organisation.operatingCountries.join(",")
+                : "",
+              sector: organisation.sector ? organisation.sector.join(",") : "",
+              subSector: organisation.subSector
+                ? organisation.subSector.join(",")
+                : "",
+              headquarter: organisation.headquarter
+                ? organisation.headquarter.join(",")
+                : "",
+              active: organisation.active ? organisation.active : "",
+              website: organisation.website ? organisation.website : "",
+              source: organisation.source ? organisation.source : "",
+              tier: organisation.tier ? organisation.tier : "",
+              dateAdded: organisation.dateAdded ? organisation.dateAdded : "",
+            });
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      } else {
+        existing = existing + 1;
+      }
     });
 
     res.status(200).json({ success: true, existing: existing });
@@ -341,6 +345,9 @@ exports.cronOrganisationsFromAirtable = async () => {
                 sector: organisation.sector
                   ? organisation.sector.join(",")
                   : "",
+                headquarter: organisation.headquarter
+                  ? organisation.headquarter.join(",")
+                  : "",
                 subSector: organisation.subSector
                   ? organisation.subSector.join(",")
                   : "",
@@ -367,6 +374,9 @@ exports.cronOrganisationsFromAirtable = async () => {
                   : "",
                 sector: organisation.sector
                   ? organisation.sector.join(",")
+                  : "",
+                headquarter: organisation.headquarter
+                  ? organisation.headquarter.join(",")
                   : "",
                 subSector: organisation.subSector
                   ? organisation.subSector.join(",")
@@ -455,7 +465,7 @@ exports.getAllOrganisationsFromAirtable = async (req, res) => {
 exports.getAllOrganisations = async (req, res) => {
   let { limit, page, sort, fields, _start, _end } = req.query;
   const queryObj = CustomUtils.advancedQuery(req.query);
-  console.log(queryObj);
+  // console.log(queryObj);
   try {
     if (_end && (_start || _start == 0)) {
       limit = _end - _start;

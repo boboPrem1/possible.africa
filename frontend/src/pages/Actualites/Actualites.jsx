@@ -35,6 +35,18 @@ const socialMedias = [
 const logoPlaceholder =
   "https://api.possible.africa/storage/logos/placeholder_org.jpeg";
 
+function getPageEqValue(key, state) {
+  if (state.length) {
+    state.forEach(s => {
+      if (s.field === key) {
+        return s.value;
+      }
+    });
+  } else {
+    return false;
+  }
+}
+
 function pageEqReducer(state, action) {
   let modifieState = [
     { field: "possible", value: true },
@@ -228,7 +240,8 @@ function Actualites() {
             label="Rechercher par titre"
             placeholder="Entrez le titre de l'article ."
             type="text"
-            value={pageEq[1].value}
+            // value={pageEq[1].value}
+            value={getPageEqValue("title", pageEq)}
             onChange={(e) => {
               dispatch({ field: "title", value: e.target.value });
             }}
@@ -237,7 +250,7 @@ function Actualites() {
             label="Rechercher par tag"
             placeholder="Entrez un tag de l'article ."
             type="text"
-            value={pageEq[2].value}
+            value={getPageEqValue("airTags", pageEq)}
             onChange={(e) => {
               dispatch({ field: "airTags", value: e.target.value });
             }}
@@ -257,7 +270,7 @@ function Actualites() {
             label="Langue d'écriture de l'article"
             placeholder="Choisissez une langue."
             // value={pageEq[3].value}
-            value={pageEq[3].value}
+            value={getPageEqValue("airLanguage", pageEq)}
             onChange={(e) => {
               dispatch({ field: "airLanguage", value: e.target.value });
             }}
