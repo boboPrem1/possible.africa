@@ -49,6 +49,9 @@ const uploadRoutes = require("./endpoints/uploads/uploadRoutes");
 const searchRoutes = require("./endpoints/search/searchRoutes");
 const dashboardRoutes = require("./endpoints/tableauDeBord/dashboardRoutes");
 
+// Mass Actions
+const massActionsRoutes = require("./endpoints/mass-actions/mass-actions-routes.js");
+
 // Static Blocks
 const staticBlockSitesRoutes = require("./endpoints/static-blocks/sites/siteRoutes.js");
 const staticBlockPagesRoutes = require("./endpoints/static-blocks/pages/pageRoutes.js");
@@ -132,6 +135,12 @@ app.use(express.static("public"));
 
 //protections
 app.use(API_URL_BASE, authRoutes);
+
+
+// mass_actions
+app.use(API_URL_BASE + "mass_actions", massActionsRoutes);
+
+
 // Static Blocks urls
 app.use(API_URL_BASE + "page_builder/sites", staticBlockSitesRoutes);
 app.use(API_URL_BASE + "page_builder/pages", staticBlockPagesRoutes);

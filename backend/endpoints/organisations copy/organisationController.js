@@ -1,4 +1,4 @@
-const Organisation = require("./organisationModel");
+const Organisation = require("./organisationModel.js");
 const download = require("image-downloader");
 const CustomUtils = require("../../utils/index.js");
 const axios = require("axios");
@@ -463,15 +463,7 @@ exports.getAllOrganisationsFromAirtable = async (req, res) => {
 // @route GET /api/v1/organisations
 // @access Public
 exports.getAllOrganisations = async (req, res) => {
-  let {
-    limit,
-    page,
-    sort,
-    fields,
-    _start,
-    _end,
-    response_mode = "basic",
-  } = req.query;
+  let { limit, page, sort, fields, _start, _end } = req.query;
   const queryObj = CustomUtils.advancedQuery(req.query);
   // console.log(queryObj);
   try {
@@ -483,14 +475,7 @@ exports.getAllOrganisations = async (req, res) => {
       .skip(_start ? _start : 0)
       .sort({ dateAdded: -1, ...sort })
       .select(fields);
-    if (response_mode === "basic") {
-      res.status(200).json(orgs);
-    } else {
-      res.status(200).json({
-        data: orgs,
-        totalCount: orgs.length,
-      });
-    }
+    res.status(200).json(orgs);
 
     // const orgsToBeModified = await Organisation.find();
     // orgsToBeModified.map(async (org) => {
