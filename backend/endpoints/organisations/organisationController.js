@@ -478,6 +478,7 @@ exports.getAllOrganisations = async (req, res) => {
     if (_end && (_start || _start == 0)) {
       limit = _end - _start;
     }
+    const allDataLength = await Organisation.find().count();
     const orgs = await Organisation.find(queryObj)
       .limit(limit * 1)
       .skip(_start ? _start : 0)
@@ -489,6 +490,7 @@ exports.getAllOrganisations = async (req, res) => {
       res.status(200).json({
         data: orgs,
         totalCount: orgs.length,
+        allDataLength
       });
     }
 
