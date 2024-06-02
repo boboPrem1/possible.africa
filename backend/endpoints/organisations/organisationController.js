@@ -481,7 +481,7 @@ exports.getAllOrganisations = async (req, res) => {
     const allDataLength = await Organisation.find().count();
     const allQueryLength = await Organisation.find(queryObj)
       .sort({ dateAdded: -1, ...sort })
-      .select(fields);
+      .select(fields).count();
     const orgs = await Organisation.find(queryObj)
       .limit(limit * 1)
       .skip(_start ? _start : 0)
