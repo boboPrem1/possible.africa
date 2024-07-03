@@ -180,12 +180,14 @@ app.get(API_URL_BASE, (req, res) => {
   });
 });
 
-cron.schedule("*/40 * * * *", () => {
+cron.schedule("0 12 * * *", () => {
   cronAllPostFromAirtable();
+  console.log('cronAllPostFromAirtable executed at ' + new Date().toISOString());
 });
 
-cron.schedule("*/30 * * * *", () => {
+cron.schedule("30 12 * * *", () => {
   cronOrganisationsFromAirtable();
+  console.log('cronAllOrganisationFromAirtable executed at ' + new Date().toISOString());
 });
 
 // const io = new Server(server, {
