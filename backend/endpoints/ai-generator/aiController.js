@@ -71,7 +71,7 @@ exports.generateAny = async (req, res, next) => {
       });
     }
     // res.json({ email: response.data.choices[0].text.trim() });
-    res.json({ email: completion.choices[0].message.content });
+    res.json({ completion: completion.choices[0].message.content });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
