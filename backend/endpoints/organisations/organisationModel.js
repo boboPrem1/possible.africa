@@ -26,26 +26,5 @@ const organisationSchema = mongoose.Schema(
   }
 );
 
-// organisationSchema.index({
-//   name: "text",
-//   description: "text",
-//   source: "text",
-//   region: "text",
-//   headquarter: "text",
-//   operatingCountries: "text",
-//   sector: "text",
-//   subSector: "text",
-//   active: "text",
-//   fundraising: "text",
-//   amountFundraised: "text",
-//   tier: "text",
-//   website: "text",
-// });
-
-// populate response with organisationType
-// organisationSchema.pre(/^find/, function (next) {
-//   next();
-// });
-
 const Organisation = mongoose.model("Organisation", organisationSchema);
 module.exports = Organisation;

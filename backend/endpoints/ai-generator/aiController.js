@@ -5,110 +5,74 @@ const CustomUtils = require("../../utils/index.js");
 
 // const openai = new OpenAI();
 
-// @Get all opportunity types
-// @Route: /api/v1/opportunity_targets
+// @Get all generate email
+// @Route: /api/v1/generate_email
 // @Access: Public
 exports.generateEmail = async (req, res, next) => {
   try {
     const prompt = req.body.prompt;
-    const completion = await openai.chat.completions.create({
-      messages: [{ role: "user", content: prompt }],
-      model: "gpt-3.5-turbo",
-    });
+    // const completion = await openai.chat.completions.create({
+    //   messages: [{ role: "user", content: prompt }],
+    //   model: "gpt-3.5-turbo",
+    // });
+    // // res.json({ email: response.data.choices[0].text.trim() });
+    // res.json({ email: completion.choices[0].message.content });
+    let completion;
+    try {
+      // Essayer d'utiliser GPT-4
+      completion = await openai.chat.completions.create({
+        messages: [{ role: "user", content: prompt }],
+        model: "gpt-4",
+      });
+    } catch (error) {
+      console.error(
+        "GPT-4 non disponible, utilisation de GPT-3.5-turbo à la place.",
+        error
+      );
+
+      // Fallback vers GPT-3.5-turbo si GPT-4 échoue
+      completion = await openai.chat.completions.create({
+        messages: [{ role: "user", content: prompt }],
+        model: "gpt-3.5-turbo",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// @Get all generate any
+// @Route: /api/v1/generate_any
+// @Access: Public
+exports.generateAny = async (req, res, next) => {
+  try {
+    const prompt = req.body.prompt;
+    // const completion = await openai.chat.completions.create({
+    //   messages: [{ role: "user", content: prompt }],
+    //   model: "gpt-3.5-turbo",
+    // });
+    let completion;
+    try {
+      // Essayer d'utiliser GPT-4
+      completion = await openai.chat.completions.create({
+        messages: [{ role: "user", content: prompt }],
+        model: "gpt-4",
+      });
+    } catch (error) {
+      console.error(
+        "GPT-4 non disponible, utilisation de GPT-3.5-turbo à la place.",
+        error
+      );
+
+      // Fallback vers GPT-3.5-turbo si GPT-4 échoue
+      completion = await openai.chat.completions.create({
+        messages: [{ role: "user", content: prompt }],
+        model: "gpt-3.5-turbo",
+      });
+    }
     // res.json({ email: response.data.choices[0].text.trim() });
     res.json({ email: completion.choices[0].message.content });
   } catch (error) {
     res.status(500).json({ error: error.message });
-  }
-
-  // console.log(completion.choices[0]);
-};
-
-// @Get all opportunity types
-// @Route: /api/v1/opportunity_targets
-// @Access: Public
-exports.getAllPermissions = async (req, res, next) => {
-  const { limit, page, sort, fields } = req.query;
-  const queryObj = CustomUtils.advancedQuery(req.query);
-  try {
-    const Permissions = await Permission.find(queryObj)
-      .limit(limit * 1)
-      .sort({
-        createdAt: -1,
-        ...sort,
-      })
-      .select(fields);
-    res.status(200).json(Permissions);
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
-};
-
-// @Get opportunity type by id
-// @Route: /api/v1/opportunity_targets/:id
-// @Access: Public
-exports.getPermissionById = async (req, res) => {
-  try {
-    // get opportunity type by id
-    const permission = await Permission.findById(req.params.id);
-    if (!permission)
-      return res.status(404).json({
-        message: CustomUtils.consts.NOT_FOUND,
-      });
-    res.status(200).json(permission);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-// @Create new opportunity type
-// @Route: /api/v1/opportunity_targets
-// @Access: Private
-exports.createPermission = async (req, res) => {
-  const CustomBody = { ...req.body };
-  const slug = CustomUtils.slugify(CustomBody.name);
-  try {
-    CustomBody.slug = slug;
-    // create new opportunity type
-    const permission = await Permission.create(CustomBody);
-    res.status(201).json(permission);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
-// @Update opportunity type by id
-// @Route: /api/v1/opportunity_targets/:id
-// @Access: Private
-exports.updatePermission = async (req, res) => {
-  try {
-    const permission = await Permission.findById(req.params.id);
-    if (!permission) {
-      return res.status(404).json({ message: "permission not found !" });
-    }
-
-    const updated = await Permission.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    return res.status(200).json(updated);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-// @Delete opportunity type by id
-// @Route: /api/v1/opportunity_targets/:id
-// @Access: Private
-exports.deletePermission = async (req, res, next) => {
-  try {
-    const permission = await Permission.findById(req.params.id);
-    if (!permission)
-      return res.status(404).json({ message: `permission not found !` });
-    await Permission.findByIdAndDelete(req.params.id);
-    res.status(200).json({ message: "permission deleted successfully !" });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
   }
 };
