@@ -36,6 +36,7 @@ exports.generateEmail = async (req, res, next) => {
         model: "gpt-3.5-turbo",
       });
     }
+    res.json({ email: completion.choices[0].message.content });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
