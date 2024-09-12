@@ -58,6 +58,7 @@ const staticBlockPagesRoutes = require("./endpoints/static-blocks/pages/pageRout
 
 // Ai Generator
 const aiGeneratorRoutes = require("./endpoints/ai-generator/aiRoutes.js");
+const speechToTextRoutes = require("./endpoints/speech-to-text/textToSpeechRoutes.js");
 
 const icpsRoutes = require("./endpoints/organisations/airtableIcpRoutes.js")
 
@@ -150,6 +151,7 @@ app.use(API_URL_BASE + "ai", aiGeneratorRoutes);
 
 // AI Generator
 app.use(API_URL_BASE + "icps", icpsRoutes);
+app.use(API_URL_BASE + "speech_to_text", speechToTextRoutes);
 
 app.use(protect);
 app.use(API_URL_BASE + "users", userRoutes);
