@@ -65,7 +65,7 @@ exports.textToSpeech = async (req, res, next) => {
 
     const config = {
       encoding: "LINEAR16", // Utilisé pour les fichiers WAV
-      // sampleRateHertz: 16000, // Assurez-vous d'envoyer le bon taux d'échantillonnage
+      sampleRateHertz: 48000, // Assurez-vous d'envoyer le bon taux d'échantillonnage
       languageCode: "fr-FR", // Changez la langue selon vos besoins
     };
 
