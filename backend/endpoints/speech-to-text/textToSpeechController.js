@@ -50,6 +50,40 @@ const speechClient = new SpeechClient();
 // @Access: Public
 exports.textToSpeech = async (req, res, next) => {
   // Vérifier si un fichier a été envoyé
+  // if (!req.file || !req.file.buffer) {
+  //   return res.status(400).json({ error: "Aucun fichier audio trouvé" });
+  // }
+
+  // try {
+  //   // Convertir le buffer audio en base64
+  //   const audioBytes = req.file.buffer.toString("base64");
+
+  //   // Paramétrer l'audio et la configuration pour Google Speech-to-Text
+  //   const audio = {
+  //     content: audioBytes,
+  //   };
+
+  //   const config = {
+  //     encoding: "WEBM_OPUS", // Utilisé pour les fichiers WAV
+  //     sampleRateHertz: 48000, // Assurez-vous d'envoyer le bon taux d'échantillonnage
+  //     languageCode: "fr-FR", // Changez la langue selon vos besoins
+  //   };
+
+  //   const request = {
+  //     audio: audio,
+  //     config: config,
+  //   };
+
+  //   // Appel à l'API Google Cloud Speech-to-Text pour la reconnaissance vocale
+  //   const [response] = await speechClient.recognize(request);
+
+  //   // Extraire la transcription à partir de la réponse
+  //   const transcription = response.results
+  //     .map((result) => result.alternatives[0].transcript)
+  //     .join("\n");
+
+  //   // Retourner la transcription en JSON
+  //   return res.json({ transcription });
   if (!req.file || !req.file.buffer) {
     return res.status(400).json({ error: "Aucun fichier audio trouvé" });
   }
@@ -64,7 +98,7 @@ exports.textToSpeech = async (req, res, next) => {
     };
 
     const config = {
-      encoding: "WEBM_OPUS", // Utilisé pour les fichiers WAV
+      encoding: "WEBM_OPUS", // Utilisé pour les fichiers en format Opus
       sampleRateHertz: 48000, // Assurez-vous d'envoyer le bon taux d'échantillonnage
       languageCode: "fr-FR", // Changez la langue selon vos besoins
     };
@@ -74,19 +108,42 @@ exports.textToSpeech = async (req, res, next) => {
       config: config,
     };
 
-    // Appel à l'API Google Cloud Speech-to-Text pour la reconnaissance vocale
-    const [response] = await speechClient.recognize(request);
+    // Vérifier si la longueur de l'audio dépasse 1 minute
+    const audioDurationSeconds = req.file.size / (48000 * 2); // Taille du fichier en secondes
 
-    // Extraire la transcription à partir de la réponse
-    const transcription = response.results
-      .map((result) => result.alternatives[0].transcript)
-      .join("\n");
+    if (audioDurationSeconds > 60) {
+      // Pour un fichier audio long, utiliser longRunningRecognize
+      const [operation] = await speechClient.longRunningRecognize(request);
+      const [response] = await operation.promise();
 
-    // Retourner la transcription en JSON
-    return res.json({ transcription });
+      // Extraire la transcription à partir de la réponse
+      const transcription = response.results
+        .map((result) => result.alternatives[0].transcript)
+        .join("\n");
+
+      // Retourner la transcription en JSON
+      return res.json({ transcription });
+    } else {
+      // Si l'audio est court, utiliser recognize pour une réponse rapide
+      const [response] = await speechClient.recognize(request);
+
+      // Extraire la transcription à partir de la réponse
+      const transcription = response.results
+        .map((result) => result.alternatives[0].transcript)
+        .join("\n");
+
+      // Retourner la transcription en JSON
+      return res.json({ transcription });
+    }
   } catch (err) {
     // Gérer les erreurs de transcription
     console.error("Erreur lors de la transcription:", err);
     return res.status(500).json({ error: "Erreur lors de la transcription" });
   }
+
+  // } catch (err) {
+  //   // Gérer les erreurs de transcription
+  //   console.error("Erreur lors de la transcription:", err);
+  //   return res.status(500).json({ error: "Erreur lors de la transcription" });
+  // }
 };

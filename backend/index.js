@@ -5,6 +5,8 @@ const connection = require("./db");
 const http = require("http");
 const multer = require("multer");
 const cron = require("node-cron");
+const fs = require("fs");
+const socketIo = require("socket.io");
 // const cron = require("node-cron");
 // import dotenv
 require("dotenv").config();
@@ -24,6 +26,65 @@ require("dotenv").config();
 
 const app = express();
 const server = http.createServer(app);
+
+const io = socketIo(server, {
+  cors: {
+    origin: "*", // Permet toutes les origines
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Méthodes autorisées
+    allowedHeaders: ["Content-Type"], // Headers autorisés
+    credentials: true, // Autorise l'envoi de cookies si nécessaire
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("Un client est connecté");
+
+  const clientId = socket.id;
+
+  // const audioStream = fs.createWriteStream("audio-stream.wav", { flags: "a" });
+
+  socket.on("recordStarted", (filename) => {
+    console.log("Chunk d'audio reçu");
+
+    const audioStream = fs.createWriteStream(
+      "/public/storage/audios/".filename,
+      {
+        flags: "a",
+      }
+    );
+
+    io.to(clientId).emit("audioStreamCreated", "Audio stream created");
+
+    socket.on("audioChunk", (chunk) => {
+      console.log("Chunk d'audio reçu");
+      audioStream.write(chunk); // Écriture du chunk dans le fichier
+
+      io.to(clientId).emit("chunckEcrit", "Chunck écrit");
+    });
+
+    socket.on("recordEnd", () => {
+      console.log("Enrégistrement arrêté");
+      audioStream.end(); // Assurez-vous de terminer correctement l'écriture si le client se déconnecte
+
+      io.to(clientId).emit("dernierChunkEcrit", "Dernier chunck écrit");
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Client déconnecté");
+      audioStream.end(); // Assurez-vous de terminer correctement l'écriture si le client se déconnecte
+    });
+  });
+
+  // socket.on("audioChunk", (chunk) => {
+  //   console.log("Chunk d'audio reçu");
+  //   audioStream.write(chunk); // Écriture du chunk dans le fichier
+  // });
+
+  // socket.on("endStream", () => {
+  //   console.log("Fin du streaming audio");
+  //   audioStream.end(); // Fermeture du fichier une fois l'enregistrement terminé
+  // });
+});
 // const { Server } = require("socket.io");
 
 const PORT = process.env.SERVER_PORT || 4534;
@@ -60,7 +121,7 @@ const staticBlockPagesRoutes = require("./endpoints/static-blocks/pages/pageRout
 const aiGeneratorRoutes = require("./endpoints/ai-generator/aiRoutes.js");
 const speechToTextRoutes = require("./endpoints/speech-to-text/textToSpeechRoutes.js");
 
-const icpsRoutes = require("./endpoints/organisations/airtableIcpRoutes.js")
+const icpsRoutes = require("./endpoints/organisations/airtableIcpRoutes.js");
 
 // var whitelist = ["https://possible.africa", "https://app.possible.africa"];
 // var corsOptions = {
@@ -137,10 +198,8 @@ app.use(express.static("public"));
 //protections
 app.use(API_URL_BASE, authRoutes);
 
-
 // mass_actions
 app.use(API_URL_BASE + "mass_actions", massActionsRoutes);
-
 
 // Static Blocks urls
 app.use(API_URL_BASE + "page_builder/sites", staticBlockSitesRoutes);
@@ -184,12 +243,16 @@ app.get(API_URL_BASE, (req, res) => {
 
 cron.schedule("0 12 * * *", () => {
   cronAllPostFromAirtable();
-  console.log('cronAllPostFromAirtable executed at ' + new Date().toISOString());
+  console.log(
+    "cronAllPostFromAirtable executed at " + new Date().toISOString()
+  );
 });
 
 cron.schedule("30 12 * * *", () => {
   cronOrganisationsFromAirtable();
-  console.log('cronAllOrganisationFromAirtable executed at ' + new Date().toISOString());
+  console.log(
+    "cronAllOrganisationFromAirtable executed at " + new Date().toISOString()
+  );
 });
 
 // const io = new Server(server, {
