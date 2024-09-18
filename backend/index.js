@@ -44,10 +44,10 @@ io.on("connection", (socket) => {
   // const audioStream = fs.createWriteStream("audio-stream.wav", { flags: "a" });
 
   socket.on("recordStarted", (filename) => {
-    console.log("Chunk d'audio reçu");
+    console.log("Record started");
 
     const audioStream = fs.createWriteStream(
-      "/public/storage/audios/".filename,
+      "/public/storage/audios/" + filename,
       {
         flags: "a",
       }
