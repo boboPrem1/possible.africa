@@ -36,54 +36,77 @@ const io = socketIo(server, {
   },
 });
 
+// Chemin où seront stockés les fichiers audio
+const AUDIO_STORAGE_PATH = path.join(__dirname, "public", "storage", "audios");
+
 io.on("connection", (socket) => {
-  console.log("Un client est connecté");
 
   const clientId = socket.id;
-
-  // const audioStream = fs.createWriteStream("audio-stream.wav", { flags: "a" });
+  console.log(`Client connecté avec ID: ${clientId}`);
+  let audioStream = null;
 
   socket.on("recordStarted", (filename) => {
-    console.log("Record started");
+    console.log(`Enregistrement démarré pour le fichier: ${filename}`);
 
-    const audioStream = fs.createWriteStream(
-      "/public/storage/audios/" + filename,
+    audioStream = fs.createWriteStream(
+      path.join(AUDIO_STORAGE_PATH, filename),
       {
-        flags: "a",
+        flags: "a", // Ajouter les chunks au fichier
       }
     );
 
-    io.to(clientId).emit("audioStreamCreated", "Audio stream created");
+    // Vérifier si le stream est bien créé
+    audioStream.on("open", () => {
+      console.log("Flux audio créé et prêt pour l'écriture.");
+      socket.emit("audioStreamCreated", "Flux audio créé");
+    });
+
+    audioStream.on("error", (error) => {
+      console.error("Erreur lors de la création du flux:", error);
+      socket.emit("error", "Erreur lors de la création du flux audio");
+    });
 
     socket.on("audioChunk", (chunk) => {
-      console.log("Chunk d'audio reçu");
-      audioStream.write(chunk); // Écriture du chunk dans le fichier
+      try {
+        console.log("Chunk d'audio reçu, en cours d'écriture...");
 
-      io.to(clientId).emit("chunckEcrit", "Chunck écrit");
+        // Écrire les chunks dans le fichier
+        audioStream.write(chunk, (err) => {
+          if (err) {
+            console.error("Erreur lors de l'écriture du chunk:", err);
+            socket.emit("error", "Erreur lors de l'écriture du chunk");
+          } else {
+            socket.emit("chunkWritten", "Chunk écrit avec succès");
+          }
+        });
+      } catch (err) {
+        console.error("Erreur lors de la réception du chunk:", err);
+        socket.emit("error", "Erreur lors de la réception du chunk");
+      }
     });
 
     socket.on("recordEnd", () => {
-      console.log("Enrégistrement arrêté");
-      audioStream.end(); // Assurez-vous de terminer correctement l'écriture si le client se déconnecte
-
-      io.to(clientId).emit("dernierChunkEcrit", "Dernier chunck écrit");
+      console.log("Enregistrement terminé.");
+      if (audioStream) {
+        audioStream.end(() => {
+          console.log("Flux audio fermé proprement.");
+          socket.emit(
+            "recordingCompleted",
+            "Enregistrement terminé et fichier fermé"
+          );
+        });
+      }
     });
 
     socket.on("disconnect", () => {
-      console.log("Client déconnecté");
-      audioStream.end(); // Assurez-vous de terminer correctement l'écriture si le client se déconnecte
+      console.log(`Client déconnecté: ${socket.id}`);
+      if (audioStream) {
+        audioStream.end(() => {
+          console.log("Flux audio fermé suite à la déconnexion.");
+        });
+      }
     });
   });
-
-  // socket.on("audioChunk", (chunk) => {
-  //   console.log("Chunk d'audio reçu");
-  //   audioStream.write(chunk); // Écriture du chunk dans le fichier
-  // });
-
-  // socket.on("endStream", () => {
-  //   console.log("Fin du streaming audio");
-  //   audioStream.end(); // Fermeture du fichier une fois l'enregistrement terminé
-  // });
 });
 // const { Server } = require("socket.io");
 
