@@ -43,8 +43,6 @@ exports.io = socketIo(server, {
 
 realTimeTextToSpeech();
 
-// const { Server } = require("socket.io");
-
 const PORT = process.env.SERVER_PORT || 4534;
 const API_URL_BASE = process.env.API_URL_BASE ? process.env.API_URL_BASE : "/";
 // const DASH_URL =
