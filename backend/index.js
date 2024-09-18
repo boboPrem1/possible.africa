@@ -54,17 +54,16 @@ io.on("connection", (socket) => {
         flags: "a", // Ajouter les chunks au fichier
       }
     );
-  });
+    // Vérifier si le stream est bien créé
+    audioStream.on("open", () => {
+      console.log("Flux audio créé et prêt pour l'écriture.");
+      socket.emit("audioStreamCreated", "Flux audio créé");
+    });
 
-  // Vérifier si le stream est bien créé
-  audioStream.on("open", () => {
-    console.log("Flux audio créé et prêt pour l'écriture.");
-    socket.emit("audioStreamCreated", "Flux audio créé");
-  });
-
-  audioStream.on("error", (error) => {
-    console.error("Erreur lors de la création du flux:", error);
-    socket.emit("error", "Erreur lors de la création du flux audio");
+    audioStream.on("error", (error) => {
+      console.error("Erreur lors de la création du flux:", error);
+      socket.emit("error", "Erreur lors de la création du flux audio");
+    });
   });
 
   socket.on("audioChunk", (chunk) => {
