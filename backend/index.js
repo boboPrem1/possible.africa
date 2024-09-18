@@ -32,7 +32,7 @@ require("dotenv").config();
 const app = express();
 const server = http.createServer(app);
 
-export const io = socketIo(server, {
+exports.io = socketIo(server, {
   cors: {
     origin: "*", // Permet toutes les origines
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Méthodes autorisées
