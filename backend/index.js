@@ -1,4 +1,6 @@
-import { realTimeTextToSpeech } from "./endpoints/realTime/speechToTextController.js";
+const {
+  realTimeTextToSpeech,
+} = require("./endpoints/realTime/speechToTextController.js");
 
 const express = require("express");
 const cors = require("cors");
@@ -40,7 +42,6 @@ export const io = socketIo(server, {
 });
 
 realTimeTextToSpeech();
-
 
 // const { Server } = require("socket.io");
 
