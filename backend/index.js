@@ -1,6 +1,4 @@
-const {
-  realTimeTextToSpeech,
-} = require("./endpoints/realTime/speechToTextController.js");
+const {realTimeTextToSpeech} = require("./endpoints/realTime/speechToTextController.js");
 
 const express = require("express");
 const cors = require("cors");
@@ -32,7 +30,7 @@ require("dotenv").config();
 const app = express();
 const server = http.createServer(app);
 
-exports.io = socketIo(server, {
+const io = socketIo(server, {
   cors: {
     origin: "*", // Permet toutes les origines
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Méthodes autorisées
@@ -42,6 +40,9 @@ exports.io = socketIo(server, {
 });
 
 realTimeTextToSpeech();
+
+
+// const { Server } = require("socket.io");
 
 const PORT = process.env.SERVER_PORT || 4534;
 const API_URL_BASE = process.env.API_URL_BASE ? process.env.API_URL_BASE : "/";
@@ -228,4 +229,4 @@ cron.schedule("30 12 * * *", () => {
 // Start server
 server.listen(PORT, () => console.log(`Serveur démarré sur le port ${PORT}`));
 connection(URL_CONNECT_DEV);
-// module.exports.io = io;
+module.exports.io = io;
