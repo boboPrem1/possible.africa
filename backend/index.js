@@ -9,6 +9,21 @@ const fs = require("fs");
 const socketIo = require("socket.io");
 const path = require("path");
 const { SpeechClient } = require("@google-cloud/speech");
+const language = require('@google-cloud/language');
+const client = new language.LanguageServiceClient();
+
+async function analyzeText(text) {
+  const document = {
+    content: text,
+    type: 'PLAIN_TEXT',
+  };
+
+  // Appel à l'API pour l'analyse des sentiments
+  const [result] = await client.analyzeSentiment({document});
+  const sentiment = result.documentSentiment;
+  console.log(`Text sentiment score: ${sentiment.score}`);
+  return sentiment;
+}
 
 // Initialiser le client Google Cloud Speech
 const speechClient = new SpeechClient();
@@ -103,7 +118,7 @@ io.on("connection", (socket) => {
         transcriptionStream.write(transcript + "\n");
 
         // Envoyer la transcription partielle à l'utilisateur
-        socket.emit("transcriptionChunk", transcript);
+        socket.emit("transcriptionChunk", analyzeText(transcript));
       });
 
     // Vérifier si le stream est bien créé
