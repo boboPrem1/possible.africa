@@ -16,14 +16,17 @@ exports.realTimeTextToSpeech = async () => {
     let audioStream = null;
 
     socket.on("recordStarted", (filename) => {
-      console.log(`Enregistrement démarré pour le fichier: ${filename}`);
+      console.log(`Enregistrement démarré pour le fichier: ${filename}.webm`);
 
       audioStream = fs.createWriteStream(
-        path.join(AUDIO_STORAGE_PATH, filename),
+        path.join(AUDIO_STORAGE_PATH, filename + ".webm"),
         {
           flags: "a", // Ajouter les chunks au fichier
         }
       );
+
+      socket.emit("audioFileCreated", filename);
+
       // Vérifier si le stream est bien créé
       audioStream.on("open", () => {
         console.log("Flux audio créé et prêt pour l'écriture.");
@@ -34,6 +37,15 @@ exports.realTimeTextToSpeech = async () => {
         console.error("Erreur lors de la création du flux:", error);
         socket.emit("error", "Erreur lors de la création du flux audio");
       });
+    });
+
+    socket.on("audioFileCreated", (filename) => {
+        transcriptionFile = fs.createWriteStream(
+          `/public/storage/transcriptions/${filename}.txt`,
+          {
+            flags: "a", // Appendre au fichier
+          }
+        );
     });
 
     socket.on("audioChunk", (chunk) => {

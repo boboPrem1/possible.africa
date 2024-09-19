@@ -44,6 +44,18 @@ io.on("connection", (socket) => {
   const clientId = socket.id;
   console.log(`Client connecté avec ID: ${clientId}`);
   let audioStream = null;
+  let transcriptionFile = null;
+  let recognizeStream = null;
+
+  // Créer un flux audio pour la transcription
+  const requestConfig = {
+    config: {
+      encoding: "WEBM_OPUS", // Codec WebM par défaut
+      sampleRateHertz: 48000, // Assurez-vous que cela correspond à l'audio envoyé
+      languageCode: "fr-FR", // La langue à utiliser pour la transcription
+    },
+    interimResults: true, // Recevoir des résultats partiels
+  };
 
   socket.on("recordStarted", (filename) => {
     console.log(`Enregistrement démarré pour le fichier: ${filename}`);
@@ -54,6 +66,29 @@ io.on("connection", (socket) => {
         flags: "a", // Ajouter les chunks au fichier
       }
     );
+
+    socket.emit("audioFileCreated", filename);
+
+    recognizeStream = speechClient
+      .streamingRecognize(requestConfig)
+      .on("error", (error) => {
+        console.error("Erreur lors de la transcription:", error);
+        socket.emit("transcriptionError", "Erreur de transcription.");
+      })
+      .on("data", (data) => {
+        const transcript = data.results
+          .map((result) => result.alternatives[0].transcript)
+          .join("\n");
+
+        console.log("Transcription:", transcript);
+
+        // Écrire la transcription dans le fichier .txt
+        transcriptionFile.write(transcript + "\n");
+
+        // Envoyer la transcription partielle à l'utilisateur
+        socket.emit("transcriptionChunk", transcript);
+      });
+
     // Vérifier si le stream est bien créé
     audioStream.on("open", () => {
       console.log("Flux audio créé et prêt pour l'écriture.");
@@ -66,10 +101,18 @@ io.on("connection", (socket) => {
     });
   });
 
+  socket.on("audioFileCreated", (filename) => {
+    transcriptionFile = fs.createWriteStream(
+      `/public/storage/transcriptions/${filename}.txt`,
+      {
+        flags: "a", // Appendre au fichier
+      }
+    );
+  });
+
   socket.on("audioChunk", (chunk) => {
     try {
       console.log("Chunk d'audio reçu, en cours d'écriture...");
-
       // Écrire les chunks dans le fichier
       audioStream.write(chunk, (err) => {
         if (err) {
@@ -79,6 +122,9 @@ io.on("connection", (socket) => {
           socket.emit("chunkWritten", "Chunk écrit avec succès");
         }
       });
+
+      console.log("Chunk de transcription, en cours d'écriture...");
+      recognizeStream.write(chunk);
     } catch (err) {
       console.error("Erreur lors de la réception du chunk:", err);
       socket.emit("error", "Erreur lors de la réception du chunk");
@@ -96,6 +142,18 @@ io.on("connection", (socket) => {
         );
       });
     }
+    if (recognizeStream && transcriptionFile) {
+      recognizeStream.end(); // Terminer le flux si le client se déconnecte
+      transcriptionFile.end(() => {
+        
+        console.log("Flux de transcription fermé proprement.");
+        
+        socket.emit(
+          "transcriptionCompleted",
+          "Transcription terminée et fichier fermé"
+        );
+      });
+    }
   });
 
   socket.on("disconnect", () => {
@@ -103,6 +161,12 @@ io.on("connection", (socket) => {
     if (audioStream) {
       audioStream.end(() => {
         console.log("Flux audio fermé suite à la déconnexion.");
+      });
+    }
+    if (recognizeStream && transcriptionFile) {
+      recognizeStream.end(); // Terminer le flux si le client se déconnecte
+      transcriptionFile.end(() => {
+        console.log("Flux de transcription fermé suite à la déconnexion.");
       });
     }
   });
