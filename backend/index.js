@@ -63,6 +63,7 @@ io.on("connection", (socket) => {
       encoding: "WEBM_OPUS", // Codec WebM par défaut
       sampleRateHertz: 48000, // Assurez-vous que cela correspond à l'audio envoyé
       languageCode: "fr-FR", // La langue à utiliser pour la transcription
+      enableAutomaticPunctuation: true,
     },
     interimResults: true, // Recevoir des résultats partiels
   };
