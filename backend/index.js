@@ -8,6 +8,10 @@ const cron = require("node-cron");
 const fs = require("fs");
 const socketIo = require("socket.io");
 const path = require("path");
+const { SpeechClient } = require("@google-cloud/speech");
+
+// Initialiser le client Google Cloud Speech
+const speechClient = new SpeechClient();
 // const cron = require("node-cron");
 // import dotenv
 require("dotenv").config();
@@ -145,9 +149,8 @@ io.on("connection", (socket) => {
     if (recognizeStream && transcriptionFile) {
       recognizeStream.end(); // Terminer le flux si le client se déconnecte
       transcriptionFile.end(() => {
-        
         console.log("Flux de transcription fermé proprement.");
-        
+
         socket.emit(
           "transcriptionCompleted",
           "Transcription terminée et fichier fermé"
