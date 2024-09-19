@@ -43,12 +43,18 @@ const io = socketIo(server, {
 
 // Chemin où seront stockés les fichiers audio
 const AUDIO_STORAGE_PATH = path.join(__dirname, "public", "storage", "audios");
+const TRANSCRIPTION_STORAGE_PATH = path.join(
+  __dirname,
+  "public",
+  "storage",
+  "transcriptions"
+);
 
 io.on("connection", (socket) => {
   const clientId = socket.id;
   console.log(`Client connecté avec ID: ${clientId}`);
   let audioStream = null;
-  let transcriptionFile = null;
+  let transcriptionStream = null;
   let recognizeStream = null;
 
   // Créer un flux audio pour la transcription
@@ -65,13 +71,19 @@ io.on("connection", (socket) => {
     console.log(`Enregistrement démarré pour le fichier: ${filename}`);
 
     audioStream = fs.createWriteStream(
-      path.join(AUDIO_STORAGE_PATH, filename),
+      path.join(AUDIO_STORAGE_PATH, filename + ".webm"),
       {
         flags: "a", // Ajouter les chunks au fichier
       }
     );
 
-    socket.emit("audioFileCreated", filename);
+    // socket.emit("audioFileCreated", filename);
+    transcriptionStream = fs.createWriteStream(
+      path.join(TRANSCRIPTION_STORAGE_PATH, filename + ".txt"),
+      {
+        flags: "a", // Appendre au fichier
+      }
+    );
 
     recognizeStream = speechClient
       .streamingRecognize(requestConfig)
@@ -87,7 +99,7 @@ io.on("connection", (socket) => {
         console.log("Transcription:", transcript);
 
         // Écrire la transcription dans le fichier .txt
-        transcriptionFile.write(transcript + "\n");
+        transcriptionStream.write(transcript + "\n");
 
         // Envoyer la transcription partielle à l'utilisateur
         socket.emit("transcriptionChunk", transcript);
@@ -105,14 +117,9 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("audioFileCreated", (filename) => {
-    transcriptionFile = fs.createWriteStream(
-      `/public/storage/transcriptions/${filename}.txt`,
-      {
-        flags: "a", // Appendre au fichier
-      }
-    );
-  });
+  // socket.on("audioFileCreated", (filename) => {
+
+  // });
 
   socket.on("audioChunk", (chunk) => {
     try {
@@ -146,9 +153,9 @@ io.on("connection", (socket) => {
         );
       });
     }
-    if (recognizeStream && transcriptionFile) {
+    if (recognizeStream && transcriptionStream) {
       recognizeStream.end(); // Terminer le flux si le client se déconnecte
-      transcriptionFile.end(() => {
+      transcriptionStream.end(() => {
         console.log("Flux de transcription fermé proprement.");
 
         socket.emit(
@@ -166,9 +173,9 @@ io.on("connection", (socket) => {
         console.log("Flux audio fermé suite à la déconnexion.");
       });
     }
-    if (recognizeStream && transcriptionFile) {
+    if (recognizeStream && transcriptionStream) {
       recognizeStream.end(); // Terminer le flux si le client se déconnecte
-      transcriptionFile.end(() => {
+      transcriptionStream.end(() => {
         console.log("Flux de transcription fermé suite à la déconnexion.");
       });
     }
