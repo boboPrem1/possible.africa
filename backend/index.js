@@ -21,7 +21,7 @@ async function analyzeText(text) {
   // Appel à l'API pour l'analyse des sentiments
   const [result] = await client.analyzeSentiment({document});
   const sentiment = result.documentSentiment;
-  console.log(`Text sentiment score: ${sentiment.score}`);
+  console.log(sentiment);
   return sentiment;
 }
 
