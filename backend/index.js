@@ -151,8 +151,7 @@ io.on("connection", (socket) => {
           "recordingCompleted",
           "Enregistrement terminé et fichier fermé"
         );
-        console.log("audioStream: ", audioStream.path);
-        // fs.unlinkSync(path.join(AUDIO_STORAGE_PATH, filename));
+        fs.unlinkSync(path.join(audioStream.path));
       });
     }
     if (recognizeStream && transcriptionStream) {
@@ -164,6 +163,8 @@ io.on("connection", (socket) => {
           "transcriptionCompleted",
           "Transcription terminée et fichier fermé"
         );
+        
+        fs.unlinkSync(path.join(transcriptionStream.path));
       });
     }
   });
@@ -173,12 +174,14 @@ io.on("connection", (socket) => {
     if (audioStream) {
       audioStream.end(() => {
         console.log("Flux audio fermé suite à la déconnexion.");
+        fs.unlinkSync(path.join(audioStream.path));
       });
     }
     if (recognizeStream && transcriptionStream) {
       recognizeStream.end(); // Terminer le flux si le client se déconnecte
       transcriptionStream.end(() => {
         console.log("Flux de transcription fermé suite à la déconnexion.");
+        fs.unlinkSync(path.join(transcriptionStream.path));
       });
     }
   });
