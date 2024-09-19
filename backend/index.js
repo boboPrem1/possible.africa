@@ -151,6 +151,8 @@ io.on("connection", (socket) => {
           "recordingCompleted",
           "Enregistrement terminé et fichier fermé"
         );
+        console.log("audioStream: ", audioStream);
+        // fs.unlinkSync(path.join(AUDIO_STORAGE_PATH, filename));
       });
     }
     if (recognizeStream && transcriptionStream) {
