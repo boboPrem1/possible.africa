@@ -422,7 +422,7 @@ export default function CustomDashboard() {
           </div>
         </div>
       </div>
-      <div className="w-full card p-5">
+      <div className="w-full card p-5 no-scroll">
         <div className="w-full font-semibold text-lg mb-3 flex justify-between">
           <span className="w-full">Les organisations par secteurs</span>
           <select
@@ -438,7 +438,7 @@ export default function CustomDashboard() {
             <option value="group">Group de secteurs</option>
           </select>
         </div>
-        <div className="flex justify-start 2xl:grid-cols-12 gap-x-5 overflow-x-scroll">
+        <div className="grid grid-cols-5 items-center justify-center">
           {seeAll.sectorsSelectValue === "unique"
             ? dashboardData?.OrganisationsBySectors?.map((sector) => {
                 const tryToGetActualSector = sector._id.split(",");
@@ -463,7 +463,8 @@ export default function CustomDashboard() {
                   return (
                     <div
                       key={actualSector}
-                      className="card min-w-[80%] md:min-w-[250px] md:w-4/12 lg:min-w-[24%] lg:w-3/12 xl:w-2/12"
+                      // className="card min-w-[80%] md:min-w-[250px] md:w-4/12 lg:min-w-[24%] lg:w-3/12 xl:w-2/12"
+                      className="card w-[250px]"
                     >
                       <div className="text-center card-body">
                         <div className="flex items-center justify-center mx-auto rounded-full size-14 bg-custom-100 text-custom-500 dark:bg-custom-500/20">
@@ -485,10 +486,7 @@ export default function CustomDashboard() {
             : dashboardData?.OrganisationsBySectors?.map((sector) => {
                 if (sector._id.split(",").length > 1) {
                   return (
-                    <div
-                      key={sector._id}
-                      className="card min-w-[80%] md:min-w-[250px] md:w-4/12 lg:min-w-[24%] lg:w-3/12 xl:w-2/12"
-                    >
+                    <div key={sector._id} className="card w-[250px]">
                       <div className="text-center card-body">
                         <div className="flex items-center justify-center mx-auto rounded-full size-14 bg-custom-100 text-custom-500 dark:bg-custom-500/20">
                           <i data-lucide="wallet-2"></i>
@@ -510,7 +508,7 @@ export default function CustomDashboard() {
               })}
         </div>
       </div>
-      <div className="w-full card p-5">
+      <div className="w-full card p-5 no-scroll">
         <div className="min-w-full font-semibold text-lg mb-3 lg:flex lg:justify-between lg: gap-5git ">
           <span className="w-full">Les organisations par sous-secteurs</span>
           <select
@@ -524,7 +522,7 @@ export default function CustomDashboard() {
           >
             {/* <option value="">Un</option> */}
             {selectSectors?.map((sector) => {
-              return <option value={sector.toLowerCase()}>{sector}</option>;
+              return <option value={sector ? sector : ""}>{sector}</option>;
             })}
           </select>
           <select
@@ -540,17 +538,14 @@ export default function CustomDashboard() {
             <option value="group">Group de sous secteurs</option>
           </select>
         </div>
-        <div className="flex justify-start 2xl:grid-cols-12 gap-x-5 overflow-x-scroll">
+        <div className="grid grid-cols-5 items-center justify-center max">
           {/* {console.log(actualSectorSelected.toLowerCase())} */}
           {seeAll.subSectorsSelectValue === "unique"
             ? dashboardData?.records?.subSectors[
                 actualSectorSelected.toLowerCase()
               ].map((subSector) => {
                 return (
-                  <div
-                    key={subSector}
-                    className="card min-w-[80%] md:min-w-[250px] md:w-4/12 lg:min-w-[24%] lg:w-3/12 xl:w-2/12"
-                  >
+                  <div key={subSector} className="card w-[250px]">
                     <div className="text-center card-body">
                       <div className="flex items-center justify-center mx-auto rounded-full size-14 bg-custom-100 text-custom-500 dark:bg-custom-500/20">
                         <i data-lucide="wallet-2"></i>
@@ -591,10 +586,7 @@ export default function CustomDashboard() {
                     actSubSector.length > 1
                   ) {
                     return (
-                      <div
-                        key={sub._id}
-                        className="card min-w-[80%] md:min-w-[250px] md:w-4/12 lg:min-w-[24%] lg:w-3/12 xl:w-2/12"
-                      >
+                      <div key={sub._id} className="card w-[250px]">
                         <div className="text-center card-body">
                           <div className="flex items-center justify-center mx-auto rounded-full size-14 bg-custom-100 text-custom-500 dark:bg-custom-500/20">
                             <i data-lucide="wallet-2"></i>
