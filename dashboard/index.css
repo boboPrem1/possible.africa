@@ -4,7 +4,7 @@
 
 @keyframes loading {
   0% {
-    opacity: .5;
+    opacity: 0.5;
     rotate: 25deg;
   }
   50% {
@@ -14,11 +14,30 @@
   100% {
     rotate: -25deg;
     translate: 100px 0;
-    opacity: .5;
+    opacity: 0.5;
     /* transform: translateX(200px); */
   }
 }
 
-.btn-primary{
-    @apply bg-[#6cd9cb] text-white text-sm px-3 py-2 rounded-md font-semibold hover:bg-gradient-to-r hover:from-[#6cd9cb] hover:to-[#53afa3] flex justify-center items-center transition-all duration-500;
+.btn-primary {
+  @apply bg-[#6cd9cb] text-white text-sm px-3 py-2 rounded-md font-semibold hover:bg-gradient-to-r hover:from-[#6cd9cb] hover:to-[#53afa3] flex justify-center items-center transition-all duration-500;
+}
+
+.no-scroll {
+  ::-webkit-scrollbar {
+    width: 0px; /* Largeur de la barre de défilement verticale */
+    height: 0px; /* Hauteur de la barre de défilement horizontale */
+  }
+
+  /* Personnaliser le curseur de la barre de défilement */
+  ::-webkit-scrollbar-thumb {
+    background-color: #888; /* Couleur du curseur */
+    border-radius: 0px; /* Coins arrondis */
+  }
+
+  /* Personnaliser la piste (fond de la barre de défilement) */
+  ::-webkit-scrollbar-track {
+    background-color: #f1f1f1; /* Couleur de la piste */
+    border-radius: 0px; /* Coins arrondis */
+  }
 }
