@@ -278,13 +278,23 @@ exports.getAllTotaux = async (req, res) => {
     // Get stats
     const regions = await Organisation.aggregate([
       {
-        $group: {
-          _id: "$region", // Regrouper par le champ "region"
-          nb: { $sum: 1 },
+        $project: {
+          region: {
+            $split: ["$region", ", "], // Sépare les régions s'il s'agit d'une chaîne délimitée par une virgule et un espace
+          },
         },
       },
       {
-        $sort: { count: -1 }, // Trier par nombre d'organisations (optionnel)
+        $unwind: "$region", // Décompose les listes de régions en documents individuels
+      },
+      {
+        $group: {
+          _id: "$region", // Regroupe par région unique
+          count: { $sum: 1 }, // Compte les occurrences de chaque région
+        },
+      },
+      {
+        $sort: { count: -1 }, // Trie par nombre décroissant
       },
     ]);
 
