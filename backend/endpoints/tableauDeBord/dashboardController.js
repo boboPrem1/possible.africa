@@ -302,7 +302,6 @@ exports.getAllTotaux = async (req, res) => {
     ]);
 
     res.status(200).json({
-      stats: stats[0],
       users,
       records,
       OrganisationsBySectors,
