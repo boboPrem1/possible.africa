@@ -278,28 +278,36 @@ exports.getAllTotaux = async (req, res) => {
     // Get stats
     const stats = await Organisation.aggregate([
       {
+        $set: {
+          operatingCountries: {
+            $cond: {
+              if: { $isArray: "$operatingCountries" },
+              then: "$operatingCountries", // Conserve le tableau si c'est déjà un tableau
+              else: { $split: ["$operatingCountries", ", "] }, // Transforme une chaîne délimitée par des virgules en tableau
+            },
+          },
+        },
+      },
+      // Étape 2 : Pipeline d'agrégation
+      {
         $facet: {
           totalOrganisations: [{ $count: "count" }], // Compte total des organisations
           uniqueSectors: [
-            { $group: { _id: "$sector" } }, // Regroupe par secteur
-            { $count: "count" }, // Compte les secteurs uniques
+            { $group: { _id: "$sector" } },
+            { $count: "count" },
           ],
           uniqueSubSectors: [
-            { $group: { _id: "$subSector" } }, // Regroupe par sous-secteur
-            { $count: "count" }, // Compte les sous-secteurs uniques
+            { $group: { _id: "$subSector" } },
+            { $count: "count" },
           ],
           uniqueCountries: [
-            { 
-              $project: { 
-                country: { $split: ["$operatingCountries", ", "] } // Si les pays sont séparés par des virgules
-              }
-            },
-            { $unwind: "$country" }, // Décompose les pays en documents distincts
-            { $group: { _id: "$country" } }, // Regroupe par pays unique
+            { $unwind: "$operatingCountries" }, // Décompose le tableau des pays en documents distincts
+            { $group: { _id: "$operatingCountries" } }, // Regroupe par pays unique
             { $count: "count" }, // Compte les pays uniques
           ],
         },
       },
+      // Étape 3 : Simplifie les résultats
       {
         $project: {
           totalOrganisations: { $arrayElemAt: ["$totalOrganisations.count", 0] },
