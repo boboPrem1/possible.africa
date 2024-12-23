@@ -273,7 +273,40 @@ exports.getAllTotaux = async (req, res) => {
 
     const records = await fetchAllDataPoints();
     // console.log(records);
+
+    
+    // Get stats
+    const stats = await Organisation.aggregate([
+      {
+        $facet: {
+          totalOrganisations: [{ $count: "count" }], // Compte total des organisations
+          uniqueSectors: [
+            { $group: { _id: "$sector" } }, // Regroupe par secteur
+            { $count: "count" }, // Compte les secteurs uniques
+          ],
+          uniqueSubSectors: [
+            { $group: { _id: "$subSector" } }, // Regroupe par sous-secteur
+            { $count: "count" }, // Compte les sous-secteurs uniques
+          ],
+          uniqueCountries: [
+            { $unwind: { path: "$operatingCountries", preserveNullAndEmptyArrays: true } }, // Décompose les pays s'ils sont sous forme de tableau
+            { $group: { _id: "$operatingCountries" } }, // Regroupe par pays
+            { $count: "count" }, // Compte les pays uniques
+          ],
+        },
+      },
+      {
+        $project: {
+          totalOrganisations: { $arrayElemAt: ["$totalOrganisations.count", 0] },
+          uniqueSectors: { $arrayElemAt: ["$uniqueSectors.count", 0] },
+          uniqueSubSectors: { $arrayElemAt: ["$uniqueSubSectors.count", 0] },
+          uniqueCountries: { $arrayElemAt: ["$uniqueCountries.count", 0] },
+        },
+      },
+    ]);
+
     res.status(200).json({
+      stats: stats[0],
       users,
       records,
       OrganisationsBySectors,
