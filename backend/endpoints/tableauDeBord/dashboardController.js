@@ -308,6 +308,17 @@ exports.getAllTotaux = async (req, res) => {
         $sort: { count: -1 }, // Trie par nombre décroissant
       },
     ]);
+    const headquarters = await Organisation.aggregate([
+      {
+        $group: {
+          _id: "$headquarter", // Regroupe par région unique
+          count: { $sum: 1 }, // Compte les occurrences de chaque région
+        },
+      },
+      {
+        $sort: { count: -1 }, // Trie par nombre décroissant
+      },
+    ]);
 
     res.status(200).json({
       users,
@@ -317,6 +328,7 @@ exports.getAllTotaux = async (req, res) => {
       organisations: {
         regions: regions.filter((region) => !(region._id.split(", ").length > 1)),
         tiers: tiers,
+        headquarters: headquarters,
         all: organisations,
         last: lastOrganisations,
         year: {
