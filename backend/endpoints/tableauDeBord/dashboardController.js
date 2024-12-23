@@ -282,16 +282,19 @@ exports.getAllTotaux = async (req, res) => {
           totalOrganisations: [{ $count: "count" }], // Compte total des organisations
           uniqueSectors: [
             { $group: { _id: "$sector" } }, // Regroupe par secteur
-            { $count: "count" }, // Compte les secteurs uniques
+            // { $count: "count" }, // Compte les secteurs uniques
+            { $group: { _id: null, count: { $sum: 1 } } },
           ],
           uniqueSubSectors: [
             { $group: { _id: "$subSector" } }, // Regroupe par sous-secteur
-            { $count: "count" }, // Compte les sous-secteurs uniques
+            // { $count: "count" }, // Compte les sous-secteurs uniques
+            { $group: { _id: null, count: { $sum: 1 } } },
           ],
           uniqueCountries: [
             { $unwind: { path: "$operatingCountries", preserveNullAndEmptyArrays: true } }, // Décompose les pays s'ils sont sous forme de tableau
             { $group: { _id: "$operatingCountries" } }, // Regroupe par pays
-            { $count: "count" }, // Compte les pays uniques
+            // Count countries without double counting
+            { $group: { _id: null, count: { $sum: 1 } } },
           ],
         },
       },
