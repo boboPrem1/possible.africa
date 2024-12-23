@@ -74,7 +74,7 @@ const fetchAllDataPoints = async (apiKey, baseId, tableName) => {
         "logistic ": record.get("Logistic"),
         ["telecom "]: record.get("Telecom"),
         "energy ": record.get("Energy"),
-        "financial services ": record.get("Financial Services"),
+        "financial services ": record.get("Financial services"),
         fmcg: record.get("FMCG"),
         hospitality: record.get("Hospitality"),
         media: record.get("Media"),
