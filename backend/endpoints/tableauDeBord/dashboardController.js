@@ -277,11 +277,11 @@ exports.getAllTotaux = async (req, res) => {
     
     // Get stats
     const regions = await Organisation.aggregate([
-      {
-        $match: {
-          region: { $in: ["all", "north", "west", "central", "east", "southern"] },
-        },
-      },
+      // {
+      //   $match: {
+      //     region: { $in: ["all", "north", "west", "central", "east", "southern"] },
+      //   },
+      // },
       {
         $group: {
           _id: "$region", // Regrouper par le champ "region"
@@ -289,9 +289,6 @@ exports.getAllTotaux = async (req, res) => {
           organisations: {
             $push: {
               name: "$name",
-              logo: "$logo",
-              description: "$description",
-              website: "$website",
             },
           }, // Inclure les informations nécessaires
         },
