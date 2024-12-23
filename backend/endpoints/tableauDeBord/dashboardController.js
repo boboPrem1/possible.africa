@@ -276,45 +276,28 @@ exports.getAllTotaux = async (req, res) => {
 
     
     // Get stats
-    const stats = await Organisation.aggregate([
+    const regions = await Organisation.aggregate([
       {
-        $set: {
-          operatingCountries: {
-            $cond: {
-              if: { $isArray: "$operatingCountries" },
-              then: "$operatingCountries", // Conserve le tableau si c'est déjà un tableau
-              else: { $split: ["$operatingCountries", ", "] }, // Transforme une chaîne délimitée par des virgules en tableau
+        $match: {
+          region: { $in: ["all", "north", "west", "central", "east", "southern"] },
+        },
+      },
+      {
+        $group: {
+          _id: "$region", // Regrouper par le champ "region"
+          count: { $sum: 1 }, // Compter le nombre d'organisations par région
+          organisations: {
+            $push: {
+              name: "$name",
+              logo: "$logo",
+              description: "$description",
+              website: "$website",
             },
-          },
+          }, // Inclure les informations nécessaires
         },
       },
-      // Étape 2 : Pipeline d'agrégation
       {
-        $facet: {
-          totalOrganisations: [{ $count: "count" }], // Compte total des organisations
-          uniqueSectors: [
-            { $group: { _id: "$sector" } },
-            { $count: "count" },
-          ],
-          uniqueSubSectors: [
-            { $group: { _id: "$subSector" } },
-            { $count: "count" },
-          ],
-          uniqueCountries: [
-            { $unwind: "$operatingCountries" }, // Décompose le tableau des pays en documents distincts
-            { $group: { _id: "$operatingCountries" } }, // Regroupe par pays unique
-            { $count: "count" }, // Compte les pays uniques
-          ],
-        },
-      },
-      // Étape 3 : Simplifie les résultats
-      {
-        $project: {
-          totalOrganisations: { $arrayElemAt: ["$totalOrganisations.count", 0] },
-          uniqueSectors: { $arrayElemAt: ["$uniqueSectors.count", 0] },
-          uniqueSubSectors: { $arrayElemAt: ["$uniqueSubSectors.count", 0] },
-          uniqueCountries: { $arrayElemAt: ["$uniqueCountries.count", 0] },
-        },
+        $sort: { count: -1 }, // Trier par nombre d'organisations (optionnel)
       },
     ]);
 
@@ -325,6 +308,7 @@ exports.getAllTotaux = async (req, res) => {
       OrganisationsBySectors,
       OrganisationsBySubSectors,
       organisations: {
+        regions: regions,
         all: organisations,
         last: lastOrganisations,
         year: {
