@@ -297,6 +297,27 @@ exports.getAllTotaux = async (req, res) => {
         $sort: { count: -1 }, // Trie par nombre décroissant
       },
     ]);
+    const tiers = await Organisation.aggregate([
+      {
+        $project: {
+          tier: {
+            $split: ["$tier", ", "], // Sépare les régions s'il s'agit d'une chaîne délimitée par une virgule et un espace
+          },
+        },
+      },
+      {
+        $unwind: "$tier", // Décompose les listes de régions en documents individuels
+      },
+      {
+        $group: {
+          _id: "$tier", // Regroupe par région unique
+          count: { $sum: 1 }, // Compte les occurrences de chaque région
+        },
+      },
+      {
+        $sort: { count: -1 }, // Trie par nombre décroissant
+      },
+    ]);
 
     res.status(200).json({
       users,
@@ -305,6 +326,7 @@ exports.getAllTotaux = async (req, res) => {
       OrganisationsBySubSectors,
       organisations: {
         regions: regions,
+        tiers: tiers,
         all: organisations,
         last: lastOrganisations,
         year: {
