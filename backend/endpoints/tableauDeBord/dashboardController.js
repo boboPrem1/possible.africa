@@ -315,7 +315,7 @@ exports.getAllTotaux = async (req, res) => {
       OrganisationsBySectors,
       OrganisationsBySubSectors,
       organisations: {
-        regions: regions.filter((region) => region._id.split(", ").length === 1),
+        regions: regions.filter((region) => !(region._id.split(", ").length > 1)),
         tiers: tiers,
         all: organisations,
         last: lastOrganisations,
