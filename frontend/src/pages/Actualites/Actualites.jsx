@@ -593,7 +593,7 @@ function Actualites() {
                           </a>
                         </div>
                         <div className="h-[40px] w-full flex justify-start items-center gap-x-[12px] overflow-x-scroll">
-                          {post.airTags.split(", ").map((tag) => {
+                          {post?.airTags?.split(", ")?.map((tag) => {
                             return (
                               <div
                                 key={tag}
@@ -675,7 +675,7 @@ function Actualites() {
                           </a>
                         </div>
                         <div className="h-[40px] w-full flex justify-start items-center gap-x-[12px] overflow-x-scroll">
-                          {post.airTags.split(", ").map((tag) => {
+                          {post?.airTags?.split(", ")?.map((tag) => {
                             return (
                               <div
                                 key={tag}
@@ -771,7 +771,7 @@ function Actualites() {
                           </a>
                         </div>
                         <div className="h-[40px] w-full flex justify-start items-center gap-x-[12px] overflow-x-scroll">
-                          {post.airTags.split(", ").map((tag) => {
+                          {post?.airTags?.split(", ")?.map((tag) => {
                             return (
                               <div
                                 key={tag}
@@ -853,7 +853,7 @@ function Actualites() {
                           </a>
                         </div>
                         <div className="h-[40px] w-full flex justify-start items-center gap-x-[12px] overflow-x-scroll">
-                          {post.airTags.split(", ").map((tag) => {
+                          {post?.airTags?.split(", ")?.map((tag) => {
                             return (
                               <div
                                 key={tag}

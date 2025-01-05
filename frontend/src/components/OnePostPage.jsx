@@ -31,7 +31,7 @@ function OnePostPage({ iconSx, backUrl, news }) {
     const wordsPerMinute = 200; // Change this value according to your preference
 
     const wordCount = news?.content
-      ? news?.content.trim().split(/\s+/).length
+      ? news?.content?.trim()?.split(/\s+/)?.length
       : "Pas de contenu".trim().split(/\s+/).length;
     const readingTimeMinutes = Math.ceil(wordCount / wordsPerMinute);
 
