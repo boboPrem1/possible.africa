@@ -506,7 +506,7 @@ function Organisations() {
     isSuccess,
     error,
     refetch,
-  } = useGetOrgan isationsQuery({
+  } = useGetOrganisationsQuery({
     limit: firstLoad ? 10 * page : 10 * (page + 1),
     page: firstLoad ? page : page + 1,
     fields: [],
